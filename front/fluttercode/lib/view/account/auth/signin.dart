@@ -1,13 +1,10 @@
 import 'package:Benefeer/component/defaultButton.dart';
 import 'package:Benefeer/view/dashboard/screen.dart';
-import 'package:Benefeer/view/posts/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/component/texts.dart';
-import 'package:Benefeer/controller/controllers.dart';
 import 'package:Benefeer/extention/string_extention.dart';
-import 'package:Benefeer/component/defaultTitleButtom.dart';
 import 'package:Benefeer/component/inputdefault.dart';
 
 import 'signup.dart';

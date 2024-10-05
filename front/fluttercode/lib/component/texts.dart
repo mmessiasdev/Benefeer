@@ -59,8 +59,8 @@ class SecundaryText extends StatelessWidget {
   }
 }
 
-class ButtomText extends StatelessWidget {
-  ButtomText({
+class ButtonText extends StatelessWidget {
+  ButtonText({
     required this.text,
   });
   String text;

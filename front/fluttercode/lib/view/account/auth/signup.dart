@@ -1,12 +1,9 @@
 import 'package:Benefeer/component/padding.dart';
-import 'package:Benefeer/component/widgets/inputRegister.dart';
 import 'package:Benefeer/component/widgets/title.dart';
-import 'package:Benefeer/extention/string_extention.dart';
 import 'package:Benefeer/view/dashboard/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/texts.dart';
-import 'package:Benefeer/controller/controllers.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -61,77 +58,77 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-              Column(
-                children: [
-                  InputRegister(
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(40),
-                        topLeft: Radius.circular(40)),
-                    padding: defaultPaddingHorizon,
-                    ftitle: true,
-                    textController: usernameController,
-                    title: "Seu nickname",
-                    subdesc:
-                        "No Benefeer, você não precisa ser feliz o tempo todo. ",
-                    subdescwid: "Apenas seja você!",
-                  ),
-                  InputRegister(
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(40),
-                        topLeft: Radius.circular(40)),
-                    padding: defaultPaddingHorizon,
-                    ftitle: true,
-                    textController: fnameController,
-                    title: "Seu primeiro nome: (o nome que será chamado)",
-                    subdesc:
-                        "No Benefeer, você não precisa ser feliz o tempo todo. ",
-                    subdescwid: "Apenas seja você!",
-                  ),
-                  InputRegister(
-                    borderRadius: const BorderRadius.only(
-                        bottomRight: Radius.circular(40),
-                        topRight: Radius.circular(40)),
-                    padding: defaultPaddingHorizon,
-                    ftitle: false,
-                    textController: lnameController,
-                    title: "Seu segundo nome:",
-                    subdesc: "Não se trata de uma rede social... ",
-                    subdescwid: "O Benefeer é um diário social.",
-                  ),
-                  InputRegister(
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(40),
-                        topLeft: Radius.circular(40)),
-                    padding: defaultPaddingHorizon,
-                    ftitle: false,
-                    textController: emailController,
-                    title: "Seu email:",
-                    subdesc: "Poste o que quiser, aonde quiser e ",
-                    subdescwid: "para quem quiser!",
-                    textCondition: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return "Esse campo não pode ficar vazio.";
-                      } else if (!value.isValidEmail) {
-                        return "Insira os caracteres válido.";
-                      }
-                      return null;
-                    },
-                  ),
-                  InputRegister(
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(40),
-                        topLeft: Radius.circular(40)),
-                    padding: defaultPaddingHorizon,
-                    ftitle: true,
-                    password: true,
-                    textController: passwordController,
-                    title: "Sua senha:",
-                    subdesc: "Aqui, a sua única obrigação é não ter medo. ",
-                    subdescwid:
-                        "Todas suas postagens são criptografadas por você.",
-                  ),
-                ],
-              ),
+              // Column(
+              //   children: [
+              //     InputRegister(
+              //       borderRadius: const BorderRadius.only(
+              //           bottomLeft: Radius.circular(40),
+              //           topLeft: Radius.circular(40)),
+              //       padding: defaultPaddingHorizon,
+              //       ftitle: true,
+              //       textController: usernameController,
+              //       title: "Seu nickname",
+              //       subdesc:
+              //           "No Benefeer, você não precisa ser feliz o tempo todo. ",
+              //       subdescwid: "Apenas seja você!",
+              //     ),
+              //     InputRegister(
+              //       borderRadius: const BorderRadius.only(
+              //           bottomLeft: Radius.circular(40),
+              //           topLeft: Radius.circular(40)),
+              //       padding: defaultPaddingHorizon,
+              //       ftitle: true,
+              //       textController: fnameController,
+              //       title: "Seu primeiro nome: (o nome que será chamado)",
+              //       subdesc:
+              //           "No Benefeer, você não precisa ser feliz o tempo todo. ",
+              //       subdescwid: "Apenas seja você!",
+              //     ),
+              //     InputRegister(
+              //       borderRadius: const BorderRadius.only(
+              //           bottomRight: Radius.circular(40),
+              //           topRight: Radius.circular(40)),
+              //       padding: defaultPaddingHorizon,
+              //       ftitle: false,
+              //       textController: lnameController,
+              //       title: "Seu segundo nome:",
+              //       subdesc: "Não se trata de uma rede social... ",
+              //       subdescwid: "O Benefeer é um diário social.",
+              //     ),
+              //     InputRegister(
+              //       borderRadius: const BorderRadius.only(
+              //           bottomLeft: Radius.circular(40),
+              //           topLeft: Radius.circular(40)),
+              //       padding: defaultPaddingHorizon,
+              //       ftitle: false,
+              //       textController: emailController,
+              //       title: "Seu email:",
+              //       subdesc: "Poste o que quiser, aonde quiser e ",
+              //       subdescwid: "para quem quiser!",
+              //       textCondition: (String? value) {
+              //         if (value == null || value.isEmpty) {
+              //           return "Esse campo não pode ficar vazio.";
+              //         } else if (!value.isValidEmail) {
+              //           return "Insira os caracteres válido.";
+              //         }
+              //         return null;
+              //       },
+              //     ),
+              //     InputRegister(
+              //       borderRadius: const BorderRadius.only(
+              //           bottomLeft: Radius.circular(40),
+              //           topLeft: Radius.circular(40)),
+              //       padding: defaultPaddingHorizon,
+              //       ftitle: true,
+              //       password: true,
+              //       textController: passwordController,
+              //       title: "Sua senha:",
+              //       subdesc: "Aqui, a sua única obrigação é não ter medo. ",
+              //       subdescwid:
+              //           "Todas suas postagens são criptografadas por você.",
+              //     ),
+              //   ],
+              // ),
               const SizedBox(height: 40),
               Padding(
                 padding: defaultPaddingHorizon,
