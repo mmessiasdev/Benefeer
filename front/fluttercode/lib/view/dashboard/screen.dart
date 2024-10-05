@@ -1,5 +1,6 @@
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/view/account/auth/signin.dart';
+import 'package:Benefeer/view/search/searchscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:Benefeer/view/posts/homepage.dart';
@@ -42,10 +43,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             body: SafeArea(
               child: IndexedStack(
                 index: controller.tabIndex,
-                children: [
-                  const HomePage(),
-                  MyContents(),
-                  const SignInScreen(),
+                children: const [
+                  HomePage(),
+                  SearchScreen(),
+                  SignInScreen(),
                 ],
               ),
             ),

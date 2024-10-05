@@ -10,7 +10,16 @@ class SearchInput extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: 45,
-        color: PrimaryColor,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: PrimaryColor,
+        ),
+        child: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Icon(Icons.search, size: 25,)),
+        ),
       ),
     );
   }

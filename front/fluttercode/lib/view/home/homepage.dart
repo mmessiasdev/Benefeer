@@ -1,21 +1,14 @@
 import 'package:Benefeer/component/containersLoading.dart';
 import 'package:Benefeer/component/contentproduct.dart';
-import 'package:Benefeer/component/inputdefault.dart';
 import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/component/widgets/iconlist.dart';
 import 'package:Benefeer/component/widgets/listTitle.dart';
-import 'package:Benefeer/component/widgets/logincont.dart';
-import 'package:Benefeer/component/post.dart';
 import 'package:Benefeer/component/widgets/searchInput.dart';
-import 'package:Benefeer/component/widgets/title.dart';
-import 'package:Benefeer/controller/controllers.dart';
-import 'package:Benefeer/model/postsnauth.dart';
 import 'package:flutter/material.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/service/local/auth.dart';
-import 'package:Benefeer/service/remote/auth.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
