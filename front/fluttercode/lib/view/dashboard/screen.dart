@@ -1,13 +1,13 @@
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/view/account/auth/signin.dart';
 import 'package:Benefeer/view/search/searchscreen.dart';
+import 'package:Benefeer/view/wallet/walletscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
-import 'package:Benefeer/view/posts/homepage.dart';
+import 'package:Benefeer/view/home/homepage.dart';
 import 'package:get/get.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/controller/dashboard.dart';
-import 'package:Benefeer/view/home/mycontents.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -46,7 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: const [
                   HomePage(),
                   SearchScreen(),
-                  SignInScreen(),
+                  WalletScreen(),
                 ],
               ),
             ),
