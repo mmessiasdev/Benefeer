@@ -27,7 +27,7 @@ class WalletScreen extends StatelessWidget {
           ),
           Expanded(
             child: Container(
-              color: FourtyColor,
+              color: EighthColor,
               child: Padding(
                 padding: defaultPaddingHorizon,
                 child: ListView(

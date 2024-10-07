@@ -72,9 +72,9 @@ class ButtonText extends StatelessWidget {
         text,
         textAlign: TextAlign.center,
         style: GoogleFonts.montserrat(
-          fontSize: 20,
+          fontSize: 24,
           textStyle: TextStyle(
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
             color: Color.fromARGB(255, 0, 0, 0),
             decoration: TextDecoration.none,
           ),

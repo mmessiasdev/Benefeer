@@ -21,6 +21,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var client = http.Client();
 
+  String screen = "online";
+
   String? token;
   String? fname;
   var id;
@@ -116,15 +118,15 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 40,
           ),
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: SecudaryColor,
-              borderRadius:
-                  const BorderRadius.only(topLeft: Radius.circular(75)),
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(75),
             ),
-            child: Padding(
-              padding: defaultPaddingVertical,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: SecudaryColor,
+              ),
               child: Column(
                 children: [
                   Padding(
@@ -132,96 +134,146 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        SubText(text: "Online", align: TextAlign.center),
-                        SubText(text: "Perto de você", align: TextAlign.center),
+                        GestureDetector(
+                          child: SubText(
+                            text: "Online",
+                            align: TextAlign.center,
+                            color: screen == "online" ? nightColor : OffColor,
+                          ),
+                          onTap: () {
+                            setState(() {
+                              screen = "online";
+                            });
+                          },
+                        ),
+                        GestureDetector(
+                          child: SubText(
+                            text: "Perto de você",
+                            align: TextAlign.center,
+                            color: screen == "close" ? nightColor : OffColor,
+                          ),
+                          onTap: () {
+                            setState(() {
+                              screen = "close";
+                            });
+                          },
+                        ),
                       ],
                     ),
-                  ),
-                  const SizedBox(
-                    height: 40,
                   ),
                   Padding(
-                    padding: defaultPaddingHorizon,
-                    child: const SizedBox(
-                      width: double.infinity,
-                      child: ListTitle(
-                        title: "Destaques",
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 240,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: const [
-                        ContentProduct(
-                            drules: "7% de cashback",
-                            title: "Magaluasdascascas  asc asasc a"),
-                        ContentProduct(
-                            drules: "7% de cashback", title: "Magalu"),
-                        ContentProduct(
-                            drules: "7% de cashback", title: "Magalu"),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  Padding(
-                    padding: defaultPaddingHorizon,
-                    child: const SizedBox(
-                      width: double.infinity,
-                      child: ListTitle(
-                        title: "Destaques",
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 240,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: const [
-                        ContentProduct(
-                            drules: "7% de cashback",
-                            title: "Magaluasdascascas  asc asasc a"),
-                        ContentProduct(
-                            drules: "7% de cashback", title: "Magalu"),
-                        ContentProduct(
-                            drules: "7% de cashback", title: "Magalu"),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  Padding(
-                    padding: defaultPaddingHorizon,
-                    child: const SizedBox(
-                      width: double.infinity,
-                      child: ListTitle(
-                        title: "Destaques",
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 240,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: const [
-                        ContentProduct(
-                            drules: "7% de cashback",
-                            title: "Magaluasdascascas  asc asasc a"),
-                        ContentProduct(
-                            drules: "7% de cashback", title: "Magalu"),
-                        ContentProduct(
-                            drules: "7% de cashback", title: "Magalu"),
-                      ],
-                    ),
-                  ),
+                    padding: defaultPaddingVertical,
+                    child: screen == "online"
+                        ? Expanded(
+                            // Aqui é onde você usa o Expanded
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 40,
+                                ),
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: defaultPaddingHorizon,
+                                      child: const SizedBox(
+                                        width: double.infinity,
+                                        child: ListTitle(
+                                          title: "Destaques",
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 240,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        children: const [
+                                          ContentProduct(
+                                              drules: "7% de cashback",
+                                              title:
+                                                  "Magaluasdascascas  asc asasc a"),
+                                          ContentProduct(
+                                              drules: "7% de cashback",
+                                              title: "Magalu"),
+                                          ContentProduct(
+                                              drules: "7% de cashback",
+                                              title: "Magalu"),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 40,
+                                    ),
+                                    Padding(
+                                      padding: defaultPaddingHorizon,
+                                      child: const SizedBox(
+                                        width: double.infinity,
+                                        child: ListTitle(
+                                          title: "Destaques",
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 240,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        children: const [
+                                          ContentProduct(
+                                              drules: "7% de cashback",
+                                              title:
+                                                  "Magaluasdascascas  asc asasc a"),
+                                          ContentProduct(
+                                              drules: "7% de cashback",
+                                              title: "Magalu"),
+                                          ContentProduct(
+                                              drules: "7% de cashback",
+                                              title: "Magalu"),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 40,
+                                    ),
+                                    Padding(
+                                      padding: defaultPaddingHorizon,
+                                      child: const SizedBox(
+                                        width: double.infinity,
+                                        child: ListTitle(
+                                          title: "Destaques",
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 240,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        children: const [
+                                          ContentProduct(
+                                            drules: "7% de cashback",
+                                            title:
+                                                "Magaluasdascascas  asc asasc a",
+                                          ),
+                                          ContentProduct(
+                                            drules: "7% de cashback",
+                                            title: "Magalu",
+                                          ),
+                                          ContentProduct(
+                                            drules: "7% de cashback",
+                                            title: "Magalu",
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        : ErrorPost(text: "Em breve!"),
+                  ), // Aqui deverá ficar em expanded
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
