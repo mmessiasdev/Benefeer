@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                       onClick: () {},
                     ),
                     IconList(
-                      title: "Ofertas Relampago",
+                      title: "Ofertas Relâmpago",
                       icon: Icons.flash_on,
                       onClick: () {},
                     ),
@@ -123,155 +123,196 @@ class _HomePageState extends State<HomePage> {
               topLeft: Radius.circular(75),
             ),
             child: Container(
+              height: 100,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: SecudaryColor,
               ),
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Padding(
-                    padding: defaultPadding,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        GestureDetector(
-                          child: SubText(
-                            text: "Online",
-                            align: TextAlign.center,
-                            color: screen == "online" ? nightColor : OffColor,
-                          ),
-                          onTap: () {
-                            setState(() {
-                              screen = "online";
-                            });
-                          },
-                        ),
-                        GestureDetector(
-                          child: SubText(
-                            text: "Perto de você",
-                            align: TextAlign.center,
-                            color: screen == "close" ? nightColor : OffColor,
-                          ),
-                          onTap: () {
-                            setState(() {
-                              screen = "close";
-                            });
-                          },
-                        ),
-                      ],
+                  GestureDetector(            
+                    child: SubText(
+                      text: "Online",
+                      align: TextAlign.center,
+                      color: screen == "online" ? nightColor : OffColor,
                     ),
+                    onTap: () {
+                      setState(() {
+                        screen = "online";
+                      });
+                    },
                   ),
-                  Padding(
-                    padding: defaultPaddingVertical,
-                    child: screen == "online"
-                        ? Expanded(
-                            // Aqui é onde você usa o Expanded
-                            child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 40,
-                                ),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: defaultPaddingHorizon,
-                                      child: const SizedBox(
-                                        width: double.infinity,
-                                        child: ListTitle(
-                                          title: "Destaques",
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 240,
-                                      child: ListView(
-                                        scrollDirection: Axis.horizontal,
-                                        children: const [
-                                          ContentProduct(
-                                              drules: "7% de cashback",
-                                              title:
-                                                  "Magaluasdascascas  asc asasc a"),
-                                          ContentProduct(
-                                              drules: "7% de cashback",
-                                              title: "Magalu"),
-                                          ContentProduct(
-                                              drules: "7% de cashback",
-                                              title: "Magalu"),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 40,
-                                    ),
-                                    Padding(
-                                      padding: defaultPaddingHorizon,
-                                      child: const SizedBox(
-                                        width: double.infinity,
-                                        child: ListTitle(
-                                          title: "Destaques",
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 240,
-                                      child: ListView(
-                                        scrollDirection: Axis.horizontal,
-                                        children: const [
-                                          ContentProduct(
-                                              drules: "7% de cashback",
-                                              title:
-                                                  "Magaluasdascascas  asc asasc a"),
-                                          ContentProduct(
-                                              drules: "7% de cashback",
-                                              title: "Magalu"),
-                                          ContentProduct(
-                                              drules: "7% de cashback",
-                                              title: "Magalu"),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 40,
-                                    ),
-                                    Padding(
-                                      padding: defaultPaddingHorizon,
-                                      child: const SizedBox(
-                                        width: double.infinity,
-                                        child: ListTitle(
-                                          title: "Destaques",
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 240,
-                                      child: ListView(
-                                        scrollDirection: Axis.horizontal,
-                                        children: const [
-                                          ContentProduct(
-                                            drules: "7% de cashback",
-                                            title:
-                                                "Magaluasdascascas  asc asasc a",
-                                          ),
-                                          ContentProduct(
-                                            drules: "7% de cashback",
-                                            title: "Magalu",
-                                          ),
-                                          ContentProduct(
-                                            drules: "7% de cashback",
-                                            title: "Magalu",
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        : ErrorPost(text: "Em breve!"),
-                  ), // Aqui deverá ficar em expanded
+                  GestureDetector(
+                    child: SubText(
+                      text: "Perto de você",
+                      align: TextAlign.center,
+                      color: screen == "close" ? nightColor : OffColor,
+                    ),
+                    onTap: () {
+                      setState(() {
+                        screen = "close";
+                      });
+                    },
+                  ),
                 ],
               ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: SecudaryColor,
+              ),
+              child: screen == "online"
+                  ? Column(
+                      children: [
+                        const SizedBox(height: 40),
+                        Padding(
+                          padding: defaultPaddingHorizon,
+                          child: const SizedBox(
+                            width: double.infinity,
+                            child: ListTitle(
+                              title: "Destaques",
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 240,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: const [
+                              ContentProduct(
+                                drules: "7% de cashback",
+                                title: "Magalu",
+                              ),
+                              ContentProduct(
+                                drules: "7% de cashback",
+                                title: "Magalu",
+                              ),
+                              ContentProduct(
+                                drules: "7% de cashback",
+                                title: "Magalu",
+                              ),
+                              ContentProduct(
+                                drules: "7% de cashback",
+                                title: "Magalu",
+                              ),
+                              ContentProduct(
+                                drules: "7% de cashback",
+                                title: "Magalu",
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        Padding(
+                          padding: defaultPaddingHorizon,
+                          child: const SizedBox(
+                            width: double.infinity,
+                            child: ListTitle(
+                              title: "Destaques",
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 240,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: const [
+                              ContentProduct(
+                                drules: "7% de cashback",
+                                title: "Magalu",
+                              ),
+                              ContentProduct(
+                                drules: "7% de cashback",
+                                title: "Magalu",
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        Padding(
+                          padding: defaultPaddingHorizon,
+                          child: const SizedBox(
+                            width: double.infinity,
+                            child: ListTitle(
+                              title: "Destaques",
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 240,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: const [
+                              ContentProduct(
+                                drules: "7% de cashback",
+                                title: "Magalu",
+                              ),
+                              ContentProduct(
+                                drules: "7% de cashback",
+                                title: "Magalu",
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        Padding(
+                          padding: defaultPaddingHorizon,
+                          child: const SizedBox(
+                            width: double.infinity,
+                            child: ListTitle(
+                              title: "Destaques",
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 240,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: const [
+                              ContentProduct(
+                                drules: "7% de cashback",
+                                title: "Magalu",
+                              ),
+                              ContentProduct(
+                                drules: "7% de cashback",
+                                title: "Magalu",
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        Padding(
+                          padding: defaultPaddingHorizon,
+                          child: const SizedBox(
+                            width: double.infinity,
+                            child: ListTitle(
+                              title: "Destaques",
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 240,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: const [
+                              ContentProduct(
+                                drules: "7% de cashback",
+                                title: "Magalu",
+                              ),
+                              ContentProduct(
+                                drules: "7% de cashback",
+                                title: "Magalu",
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  : ErrorPost(text: "Em breve!"),
             ),
           ),
         ],

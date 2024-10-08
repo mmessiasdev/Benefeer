@@ -6,6 +6,6 @@ class DashboardBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(DashboardController());
-    // Get.put(AuthController());
+    Get.put(AuthController());
   }
 }

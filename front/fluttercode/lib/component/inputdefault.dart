@@ -95,7 +95,7 @@ class _InputTextFieldState extends State<InputTextField> {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
           filled: widget.fill,
-          fillColor: PrimaryColor,
+          fillColor: SecudaryColor,
           icon: widget.icon,
           hintText: widget.hint,
           labelText: widget.title,
