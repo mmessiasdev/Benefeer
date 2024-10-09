@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:Benefeer/model/postsnauth.dart';
 import 'package:Benefeer/model/profiles.dart';
+import 'package:Benefeer/model/stores.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:Benefeer/model/postFiles.dart';
@@ -107,15 +108,22 @@ class RemoteAuthService {
     return response;
   }
 
-  Future<List<PostsNoAuth>> getPostsNoAuth() async {
-    List<PostsNoAuth> listItens = [];
+  Future<List<StoresModel>> getStores({
+    required String? token,
+  }) async {
+    List<StoresModel> listItens = [];
     var response = await client.get(
-      Uri.parse('$url/posts?public_eq=true&_sort=id:DESC'),
+      Uri.parse('$url/online-stores'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': "true"
+      },
     );
     var body = jsonDecode(response.body);
     var itemCount = body;
     for (var i = 0; i < itemCount.length; i++) {
-      listItens.add(PostsNoAuth.fromJson(itemCount[i]));
+      listItens.add(StoresModel.fromJson(itemCount[i]));
     }
     return listItens;
   }

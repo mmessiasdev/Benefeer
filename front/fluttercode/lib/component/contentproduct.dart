@@ -54,6 +54,7 @@ class ContentProduct extends StatelessWidget {
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 1,
+                    height: 40,
                     child: SecundaryText(
                       text: title,
                       color: nightColor,

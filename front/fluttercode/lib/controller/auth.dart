@@ -85,7 +85,6 @@ class AuthController extends GetxController {
         email: email,
         password: password,
       );
-
       if (result.statusCode == 200) {
         String token = json.decode(result.body)['jwt'];
         var userResult = await RemoteAuthService().getProfile(token: token);
@@ -179,7 +178,7 @@ class AuthController extends GetxController {
 
   void signOut() async {
     user.value = null;
-    await LocalAuthService().clear(); 
+    await LocalAuthService().clear();
     Navigator.of(Get.overlayContext!).pushReplacementNamed('/');
   }
 }

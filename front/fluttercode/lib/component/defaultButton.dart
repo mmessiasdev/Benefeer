@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class Defaultbutton extends StatelessWidget {
   Defaultbutton(
       {super.key,
       required this.color,
       required this.iconColor,
+      this.icon,
       required this.onClick});
   Color color;
   Color iconColor;
+  IconData? icon;
   final Function onClick;
 
   @override
@@ -21,7 +24,7 @@ class Defaultbutton extends StatelessWidget {
         maxRadius: 40,
         backgroundColor: color,
         child: Icon(
-          Icons.arrow_right_alt,
+          icon ?? Icons.arrow_right_alt,
           color: iconColor,
         ),
       ),

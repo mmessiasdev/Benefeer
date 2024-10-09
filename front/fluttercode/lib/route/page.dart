@@ -7,12 +7,13 @@ import 'package:get/get.dart';
 class AppPage {
   static var list = [
     GetPage(
-        name: AppRoute.dashboard,
-        page: () => const DashboardScreen(),
-        binding: DashboardBinding()),
-    GetPage(
       name: AppRoute.loginIn,
       page: () => const SignInScreen(),
+    ),
+    GetPage(
+      name: AppRoute.dashboard,
+      page: () => const DashboardScreen(),
+      binding: DashboardBinding(),
     ),
   ];
 }

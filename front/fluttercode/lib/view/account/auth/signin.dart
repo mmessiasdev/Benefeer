@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:Benefeer/component/defaultButton.dart';
 import 'package:Benefeer/component/padding.dart';
+import 'package:Benefeer/controller/controllers.dart';
 import 'package:Benefeer/view/dashboard/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:Benefeer/component/colors.dart';
@@ -45,82 +46,113 @@ class _SignInScreenState extends State<SignInScreen> {
         child: Scaffold(
       backgroundColor: lightColor,
       body: Padding(
-        padding: defaultPadding,
-        child: passw == false
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  PrimaryText(
-                    color: nightColor,
-                    text: "CPF",
+        padding: defaultPaddingHorizon,
+        child: Column(
+          children: [
+            MainHeader(title: "Benefeer", onClick: () {}),
+            Expanded(
+              child: Center(
+                child: Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: defaultPadding,
+                    child: passw == false
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              PrimaryText(
+                                color: nightColor,
+                                text: "CPF",
+                              ),
+                              const SizedBox(
+                                height: 25,
+                              ),
+                              Padding(
+                                padding: defaultPaddingHorizon,
+                                child: InputTextField(
+                                  textEditingController: emailController,
+                                  title: "",
+                                  fill: true,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 30),
+                                child: Defaultbutton(
+                                  iconColor: lightColor,
+                                  color: PrimaryColor,
+                                  onClick: () {
+                                    setState(() {
+                                      passw = true;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              PrimaryText(
+                                color: nightColor,
+                                text: "Senha",
+                              ),
+                              const SizedBox(
+                                height: 25,
+                              ),
+                              Padding(
+                                padding: defaultPaddingHorizon,
+                                child: InputTextField(
+                                  textEditingController: passwordController,
+                                  title: "",
+                                  fill: true,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 30),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Defaultbutton(
+                                      iconColor: lightColor,
+                                      color: FifthColor,
+                                      icon: Icons.arrow_left_outlined,
+                                      onClick: () {
+                                        setState(() {
+                                          passw = false;
+                                        });
+                                      },
+                                    ),
+                                    Defaultbutton(
+                                      iconColor: lightColor,
+                                      color: PrimaryColor,
+                                      onClick: () {
+                                        setState(() {
+                                          passw = true;
+                                        });
+                                        print(emailController.text);
+                                        print(passwordController.text);
+                                        if (_formKey.currentState!.validate()) {
+                                          authController.signIn(
+                                              email: emailController.text,
+                                              password:
+                                                  passwordController.text);
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                   ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  Padding(
-                    padding: defaultPaddingHorizon,
-                    child: const InputTextField(
-                      title: "",
-                      fill: true,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: Defaultbutton(
-                      iconColor: lightColor,
-                      color: PrimaryColor,
-                      onClick: () {
-                        setState(() {
-                          passw = true;
-                        });
-                        // if (_formKey.currentState!.validate()) {
-                        //   // authController.signIn(
-                        //   //     email: emailController.text,
-                        //   //     password: passwordController.text);
-                        // }
-                      },
-                    ),
-                  ),
-                ],
-              )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  PrimaryText(
-                    color: nightColor,
-                    text: "Senha",
-                  ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  Padding(
-                    padding: defaultPaddingHorizon,
-                    child: const InputTextField(
-                      title: "",
-                      fill: true,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: Defaultbutton(
-                      iconColor: lightColor,
-                      color: PrimaryColor,
-                      onClick: () {
-                        setState(() {
-                          passw = true;
-                        });
-                        // if (_formKey.currentState!.validate()) {
-                        //   // authController.signIn(
-                        //   //     email: emailController.text,
-                        //   //     password: passwordController.text);
-                        // }
-                      },
-                    ),
-                  ),
-                ],
+                ),
               ),
+            ),
+          ],
+        ),
       ),
     ));
   }

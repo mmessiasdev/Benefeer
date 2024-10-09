@@ -4,6 +4,8 @@ import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/component/widgets/iconlist.dart';
 import 'package:Benefeer/component/widgets/listTitle.dart';
 import 'package:Benefeer/component/widgets/searchInput.dart';
+import 'package:Benefeer/model/stores.dart';
+import 'package:Benefeer/service/remote/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/padding.dart';
@@ -39,11 +41,14 @@ class _HomePageState extends State<HomePage> {
     var strFname = await LocalAuthService().getFname("fname");
     var strId = await LocalAuthService().getId("id");
 
-    setState(() {
-      token = strToken;
-      id = strId;
-      fname = strFname;
-    });
+    // Verifique se o widget ainda está montado antes de chamar setState
+    if (mounted) {
+      setState(() {
+        token = strToken;
+        id = strId;
+        fname = strFname;
+      });
+    }
   }
 
   TextEditingController content = TextEditingController();
@@ -131,7 +136,7 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  GestureDetector(            
+                  GestureDetector(
                     child: SubText(
                       text: "Online",
                       align: TextAlign.center,
@@ -178,138 +183,51 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 240,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: const [
-                              ContentProduct(
-                                drules: "7% de cashback",
-                                title: "Magalu",
-                              ),
-                              ContentProduct(
-                                drules: "7% de cashback",
-                                title: "Magalu",
-                              ),
-                              ContentProduct(
-                                drules: "7% de cashback",
-                                title: "Magalu",
-                              ),
-                              ContentProduct(
-                                drules: "7% de cashback",
-                                title: "Magalu",
-                              ),
-                              ContentProduct(
-                                drules: "7% de cashback",
-                                title: "Magalu",
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 40),
-                        Padding(
-                          padding: defaultPaddingHorizon,
-                          child: const SizedBox(
-                            width: double.infinity,
-                            child: ListTitle(
-                              title: "Destaques",
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 240,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: const [
-                              ContentProduct(
-                                drules: "7% de cashback",
-                                title: "Magalu",
-                              ),
-                              ContentProduct(
-                                drules: "7% de cashback",
-                                title: "Magalu",
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 40),
-                        Padding(
-                          padding: defaultPaddingHorizon,
-                          child: const SizedBox(
-                            width: double.infinity,
-                            child: ListTitle(
-                              title: "Destaques",
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 240,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: const [
-                              ContentProduct(
-                                drules: "7% de cashback",
-                                title: "Magalu",
-                              ),
-                              ContentProduct(
-                                drules: "7% de cashback",
-                                title: "Magalu",
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 40),
-                        Padding(
-                          padding: defaultPaddingHorizon,
-                          child: const SizedBox(
-                            width: double.infinity,
-                            child: ListTitle(
-                              title: "Destaques",
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 240,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: const [
-                              ContentProduct(
-                                drules: "7% de cashback",
-                                title: "Magalu",
-                              ),
-                              ContentProduct(
-                                drules: "7% de cashback",
-                                title: "Magalu",
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 40),
-                        Padding(
-                          padding: defaultPaddingHorizon,
-                          child: const SizedBox(
-                            width: double.infinity,
-                            child: ListTitle(
-                              title: "Destaques",
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 240,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: const [
-                              ContentProduct(
-                                drules: "7% de cashback",
-                                title: "Magalu",
-                              ),
-                              ContentProduct(
-                                drules: "7% de cashback",
-                                title: "Magalu",
-                              ),
-                            ],
-                          ),
-                        ),
+                        FutureBuilder<List<StoresModel>>(
+                            future: RemoteAuthService().getStores(token: token),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, index) {
+                                      var renders = snapshot.data![index];
+                                      if (renders != null) {
+                                        return Column(
+                                          children: [
+                                            Center(
+                                              child: ContentProduct(
+                                                drules:
+                                                    "${renders.percentcashback}% de cashback",
+                                                title: renders.name.toString(),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                      return const SizedBox(
+                                        height: 100,
+                                        child: Center(
+                                          child: Text('Não encontrado'),
+                                        ),
+                                      );
+                                    });
+                              }
+                              return SizedBox(
+                                height: 300,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: nightColor,
+                                  ),
+                                ),
+                              );
+                            }),
                       ],
                     )
                   : ErrorPost(text: "Em breve!"),
