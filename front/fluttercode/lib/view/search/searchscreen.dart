@@ -1,136 +1,115 @@
+import 'package:Benefeer/component/categorie.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/widgets/searchInput.dart';
+import 'package:Benefeer/model/categories.dart';
+import 'package:Benefeer/service/local/auth.dart';
+import 'package:Benefeer/service/remote/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
+
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  var client = http.Client();
+
+  String screen = "online";
+
+  String? token;
+  String? fname;
+  var id;
+  bool public = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getString();
+  }
+
+  void getString() async {
+    var strToken = await LocalAuthService().getSecureToken("token");
+    var strFname = await LocalAuthService().getFname("fname");
+    var strId = await LocalAuthService().getId("id");
+
+    // Verifique se o widget ainda está montado antes de chamar setState
+    if (mounted) {
+      setState(() {
+        token = strToken;
+        id = strId;
+        fname = strFname;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
-        // Alterei ListView para Column
         children: [
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 40, horizontal: 15),
             child: SearchInput(),
           ),
           Expanded(
-            // Envolvi o widget que você quer expandir com Expanded
             child: Container(
               decoration: BoxDecoration(color: PrimaryColor),
               child: Padding(
                 padding: defaultPadding,
                 child: ListView(
                   children: [
+                    FutureBuilder<List<CategoriesModel>>(
+                        future: RemoteAuthService().getCategories(token: token),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) {
+                                  var renders = snapshot.data![index];
+                                  print(renders);
+                                  if (renders != null) {
+                                    return Column(
+                                      children: [
+                                        Center(
+                                            child: Categorie(
+                                          title: renders.name.toString(),
+                                          illurl: renders.illustrationurl
+                                              .toString(),
+                                        )),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                  return const SizedBox(
+                                    height: 100,
+                                    child: Center(
+                                      child: Text('Não encontrado'),
+                                    ),
+                                  );
+                                });
+                          }
+                          return SizedBox(
+                            height: 300,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: nightColor,
+                              ),
+                            ),
+                          );
+                        }),
                     SizedBox(
                       height: 20,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: SecudaryColor,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: SizedBox(
-                                  child: Center(
-                                    child: SubText(
-                                        text: "Farmácias",
-                                        align: TextAlign.start),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: SizedBox(
-                                  height: 50,
-                                  child: Opacity(
-                                    opacity: .50,
-                                    child: Image.network(
-                                      "https://unex.edu.br/wp-content/uploads/2022/07/farmacia-scaled-1920x990.jpg",
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: SecudaryColor,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                child: Center(
-                                  child: SubText(
-                                      text: "Farmácias",
-                                      align: TextAlign.start),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: OffColor,
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: SecudaryColor,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                child: Center(
-                                  child: SubText(
-                                      text: "Farmácias",
-                                      align: TextAlign.start),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: OffColor,
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    // Continue com seus outros widgets...
                   ],
                 ),
               ),

@@ -58,6 +58,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
+
               // Column(
               //   children: [
               //     InputRegister(

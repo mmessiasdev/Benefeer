@@ -3,10 +3,11 @@ import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/texts.dart';
 
 class MainHeader extends StatelessWidget {
-  MainHeader({Key? key, required this.title, required this.onClick})
+  MainHeader({Key? key, required this.title, required this.onClick, this.icon})
       : super(key: key);
   String title;
   final Function onClick;
+  IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class MainHeader extends StatelessWidget {
             GestureDetector(
               onTap: () => onClick(),
               child: Icon(
-                Icons.menu,
+                icon,
                 size: 34,
               ),
             ),

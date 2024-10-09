@@ -78,21 +78,28 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: ListView(
-        children: [
-          Padding(
-            padding: defaultPaddingHorizon,
-            child: Column(
-              children: [
-                MainHeader(
+      child: Expanded(
+        child: SizedBox(
+          child: ListView(
+            children: [
+              Padding(
+                padding: defaultPaddingHorizon,
+                child: MainHeader(
                   title: "Benefeer",
+                  icon: Icons.menu,
                   onClick: () => {},
                 ),
-                const SearchInput(),
-                const SizedBox(
-                  height: 25,
-                ),
-                Row(
+              ),
+              Padding(
+                padding: defaultPaddingHorizon,
+                child: const SearchInput(),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              Padding(
+                padding: defaultPaddingHorizon,
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconList(
@@ -117,123 +124,246 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 40,
-          ),
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(75),
-            ),
-            child: Container(
-              height: 100,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: SecudaryColor,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                    child: SubText(
-                      text: "Online",
-                      align: TextAlign.center,
-                      color: screen == "online" ? nightColor : OffColor,
-                    ),
-                    onTap: () {
-                      setState(() {
-                        screen = "online";
-                      });
-                    },
+              const SizedBox(
+                height: 40,
+              ),
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(75),
+                ),
+                child: Container(
+                  height: 100,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: SecudaryColor,
                   ),
-                  GestureDetector(
-                    child: SubText(
-                      text: "Perto de você",
-                      align: TextAlign.center,
-                      color: screen == "close" ? nightColor : OffColor,
-                    ),
-                    onTap: () {
-                      setState(() {
-                        screen = "close";
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: SecudaryColor,
-              ),
-              child: screen == "online"
-                  ? Column(
-                      children: [
-                        const SizedBox(height: 40),
-                        Padding(
-                          padding: defaultPaddingHorizon,
-                          child: const SizedBox(
-                            width: double.infinity,
-                            child: ListTitle(
-                              title: "Destaques",
-                            ),
-                          ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        child: SubText(
+                          text: "Online",
+                          align: TextAlign.center,
+                          color: screen == "online" ? nightColor : OffColor,
                         ),
-                        FutureBuilder<List<StoresModel>>(
-                            future: RemoteAuthService().getStores(token: token),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return ListView.builder(
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: snapshot.data!.length,
-                                    itemBuilder: (context, index) {
-                                      var renders = snapshot.data![index];
-                                      if (renders != null) {
-                                        return Column(
-                                          children: [
-                                            Center(
-                                              child: ContentProduct(
-                                                drules:
-                                                    "${renders.percentcashback}% de cashback",
-                                                title: renders.name.toString(),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                      return const SizedBox(
-                                        height: 100,
-                                        child: Center(
-                                          child: Text('Não encontrado'),
-                                        ),
-                                      );
-                                    });
-                              }
-                              return SizedBox(
-                                height: 300,
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    color: nightColor,
+                        onTap: () {
+                          setState(() {
+                            screen = "online";
+                          });
+                        },
+                      ),
+                      GestureDetector(
+                        child: SubText(
+                          text: "Perto de você",
+                          align: TextAlign.center,
+                          color: screen == "close" ? nightColor : OffColor,
+                        ),
+                        onTap: () {
+                          setState(() {
+                            screen = "close";
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: SecudaryColor,
+                ),
+                child: screen == "online"
+                    ? Expanded(
+                        child: SizedBox(
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 40),
+                              Padding(
+                                padding: defaultPaddingHorizon,
+                                child: const SizedBox(
+                                  width: double.infinity,
+                                  child: ListTitle(
+                                    title: "Destaques",
                                   ),
                                 ),
-                              );
-                            }),
-                      ],
-                    )
-                  : ErrorPost(text: "Em breve!"),
-            ),
+                              ),
+                              FutureBuilder<List<StoresModel>>(
+                                  future: RemoteAuthService()
+                                      .getStores(token: token),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          scrollDirection: Axis.vertical,
+                                          itemCount: snapshot.data!.length,
+                                          itemBuilder: (context, index) {
+                                            var renders = snapshot.data![index];
+                                            if (renders != null) {
+                                              return Column(
+                                                children: [
+                                                  Center(
+                                                    child: ContentProduct(
+                                                      urlLogo: renders.logourl,
+                                                      drules:
+                                                          "${renders.percentcashback}% de cashback",
+                                                      title: renders.name
+                                                          .toString(),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                ],
+                                              );
+                                            }
+                                            return const SizedBox(
+                                              height: 100,
+                                              child: Center(
+                                                child: Text('Não encontrado'),
+                                              ),
+                                            );
+                                          });
+                                    }
+                                    return SizedBox(
+                                      height: 300,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: nightColor,
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                              const SizedBox(height: 40),
+                              Padding(
+                                padding: defaultPaddingHorizon,
+                                child: const SizedBox(
+                                  width: double.infinity,
+                                  child: ListTitle(
+                                    title: "Destaques",
+                                  ),
+                                ),
+                              ),
+                              FutureBuilder<List<StoresModel>>(
+                                  future: RemoteAuthService()
+                                      .getStores(token: token),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          scrollDirection: Axis.vertical,
+                                          itemCount: snapshot.data!.length,
+                                          itemBuilder: (context, index) {
+                                            var renders = snapshot.data![index];
+                                            if (renders != null) {
+                                              return Column(
+                                                children: [
+                                                  Center(
+                                                    child: ContentProduct(
+                                                      urlLogo: renders.logourl,
+                                                      drules:
+                                                          "${renders.percentcashback}% de cashback",
+                                                      title: renders.name
+                                                          .toString(),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                ],
+                                              );
+                                            }
+                                            return const SizedBox(
+                                              height: 100,
+                                              child: Center(
+                                                child: Text('Não encontrado'),
+                                              ),
+                                            );
+                                          });
+                                    }
+                                    return SizedBox(
+                                      height: 300,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: nightColor,
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                              const SizedBox(height: 40),
+                              Padding(
+                                padding: defaultPaddingHorizon,
+                                child: const SizedBox(
+                                  width: double.infinity,
+                                  child: ListTitle(
+                                    title: "Destaques",
+                                  ),
+                                ),
+                              ),
+                              FutureBuilder<List<StoresModel>>(
+                                  future: RemoteAuthService()
+                                      .getStores(token: token),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          scrollDirection: Axis.vertical,
+                                          itemCount: snapshot.data!.length,
+                                          itemBuilder: (context, index) {
+                                            var renders = snapshot.data![index];
+                                            if (renders != null) {
+                                              return Column(
+                                                children: [
+                                                  Center(
+                                                    child: ContentProduct(
+                                                      urlLogo: renders.logourl,
+                                                      drules:
+                                                          "${renders.percentcashback}% de cashback",
+                                                      title: renders.name
+                                                          .toString(),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                ],
+                                              );
+                                            }
+                                            return const SizedBox(
+                                              height: 100,
+                                              child: Center(
+                                                child: Text('Não encontrado'),
+                                              ),
+                                            );
+                                          });
+                                    }
+                                    return SizedBox(
+                                      height: 300,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: nightColor,
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                            ],
+                          ),
+                        ),
+                      )
+                    : SizedBox(
+                        height: MediaQuery.of(context).size.height * .5,
+                        child: ErrorPost(text: "Em breve!")),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

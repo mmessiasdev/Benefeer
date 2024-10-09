@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:Benefeer/model/categories.dart';
 import 'package:Benefeer/model/postsnauth.dart';
 import 'package:Benefeer/model/profiles.dart';
 import 'package:Benefeer/model/stores.dart';
@@ -124,6 +125,25 @@ class RemoteAuthService {
     var itemCount = body;
     for (var i = 0; i < itemCount.length; i++) {
       listItens.add(StoresModel.fromJson(itemCount[i]));
+    }
+    return listItens;
+  }
+
+  Future<List<CategoriesModel>> getCategories({
+    required String? token,
+  }) async {
+    List<CategoriesModel> listItens = [];
+    var response = await client.get(
+      Uri.parse('$url/categories'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+    var body = jsonDecode(response.body);
+    var itemCount = body;
+    for (var i = 0; i < itemCount.length; i++) {
+      listItens.add(CategoriesModel.fromJson(itemCount[i]));
     }
     return listItens;
   }

@@ -74,7 +74,11 @@ flutter:
   assets:
     - assets/images/branco.png
     - assets/images/preto.png
-    - assets/images/illustrator/Illustrator4.png
+
+    - assets/images/illustrator/illustrator1.png
+    - assets/images/illustrator/illustrator2.png
+
+
     - .env
 
 
