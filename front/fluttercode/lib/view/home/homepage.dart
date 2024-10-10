@@ -4,6 +4,7 @@ import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/component/widgets/iconlist.dart';
 import 'package:Benefeer/component/widgets/listTitle.dart';
 import 'package:Benefeer/component/widgets/searchInput.dart';
+import 'package:Benefeer/model/categories.dart';
 import 'package:Benefeer/model/stores.dart';
 import 'package:Benefeer/service/remote/auth.dart';
 import 'package:flutter/material.dart';
@@ -174,70 +175,130 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                   color: SecudaryColor,
                 ),
-                child: screen == "online"
-                    ? Column(
-                        children: [
-                          const SizedBox(height: 40),
-                          Padding(
-                            padding: defaultPaddingHorizon,
-                            child: const SizedBox(
-                              width: double.infinity,
-                              child: ListTitle(
-                                title: "Destaques",
+                child: Padding(
+                  padding: defaultPaddingVertical,
+                  child: screen == "online"
+                      ? Column(
+                          children: [
+                            const SizedBox(height: 40),
+                            Padding(
+                              padding: defaultPaddingHorizon,
+                              child: const SizedBox(
+                                width: double.infinity,
+                                child: ListTitle(
+                                  title: "Destaques",
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height:
-                                250, // Defina a altura para garantir que o ListView tenha espaço
-                            child: FutureBuilder<List<StoresModel>>(
-                              future:
-                                  RemoteAuthService().getStores(token: token),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return ListView.builder(
-                                    scrollDirection: Axis
-                                        .horizontal, // Scroll horizontal aqui
-                                    itemCount: snapshot.data!.length,
-                                    itemBuilder: (context, index) {
-                                      var renders = snapshot.data![index];
-                                      if (renders != null) {
-                                        return Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: ContentProduct(
-                                            urlLogo: renders.logourl,
-                                            drules:
-                                                "${renders.percentcashback}% de cashback",
-                                            title: renders.name.toString(),
-                                            id: renders.id.toString(),
+                            SizedBox(
+                              height:
+                                  250, // Defina a altura para garantir que o ListView tenha espaço
+                              child: FutureBuilder<List<StoresModel>>(
+                                future:
+                                    RemoteAuthService().getStores(token: token),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return ListView.builder(
+                                      scrollDirection: Axis
+                                          .horizontal, // Scroll horizontal aqui
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (context, index) {
+                                        var renders = snapshot.data![index];
+                                        if (renders != null) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: ContentProduct(
+                                              urlLogo: renders.logourl,
+                                              drules:
+                                                  "${renders.percentcashback}% de cashback",
+                                              title: renders.name.toString(),
+                                              id: renders.id.toString(),
+                                            ),
+                                          );
+                                        }
+                                        return const SizedBox(
+                                          height: 100,
+                                          child: Center(
+                                            child: Text('Não encontrado'),
                                           ),
                                         );
-                                      }
-                                      return const SizedBox(
-                                        height: 100,
-                                        child: Center(
-                                          child: Text('Não encontrado'),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                }
-                                return SizedBox(
-                                  height: 300,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      color: nightColor,
+                                      },
+                                    );
+                                  }
+                                  return SizedBox(
+                                    height: 300,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: nightColor,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        ],
-                      )
-                    : SizedBox(
-                        height: MediaQuery.of(context).size.height * .5,
-                        child: ErrorPost(text: "Em breve!")),
+                            const SizedBox(height: 40),
+                            Padding(
+                              padding: defaultPaddingHorizon,
+                              child: const SizedBox(
+                                width: double.infinity,
+                                child: ListTitle(
+                                  title: "Celulares",
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height:
+                                  250, // Defina a altura para garantir que o ListView tenha espaço
+                              child: FutureBuilder<List<OnlineStore>>(
+                                future: RemoteAuthService()
+                                    .getOneCategoryStories(
+                                        id: '2', token: token),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return ListView.builder(
+                                      scrollDirection: Axis
+                                          .horizontal, // Scroll horizontal aqui
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (context, index) {
+                                        var renders = snapshot.data![index];
+                                        if (renders != null) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: ContentProduct(
+                                              urlLogo: renders.logourl,
+                                              drules:
+                                                  "${renders.percentcashback}% de cashback",
+                                              title: renders.name.toString(),
+                                              id: renders.id.toString(),
+                                            ),
+                                          );
+                                        }
+                                        return const SizedBox(
+                                          height: 100,
+                                          child: Center(
+                                            child: Text('Não encontrado'),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }
+                                  return SizedBox(
+                                    height: 300,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: nightColor,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      : SizedBox(
+                          height: MediaQuery.of(context).size.height * .5,
+                          child: ErrorPost(text: "Em breve!")),
+                ),
               ),
             ],
           ),

@@ -4,6 +4,7 @@ import 'package:Benefeer/component/contentproduct.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/widgets/header.dart';
+import 'package:Benefeer/component/widgets/searchInput.dart';
 import 'package:Benefeer/model/categories.dart';
 import 'package:Benefeer/model/stores.dart';
 import 'package:Benefeer/service/local/auth.dart';
@@ -53,15 +54,29 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           var render = snapshot.data!;
                           return SizedBox(
                             child: Padding(
-                              padding: defaultPaddingHorizon,
+                              padding: defaultPadding,
                               child: Column(
                                 children: [
+                                  SearchInput(),
                                   MainHeader(
                                       title: render["name"],
                                       icon: Icons.arrow_back_ios,
                                       onClick: () {
                                         (Navigator.pop(context));
                                       }),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: SizedBox(
+                                      height: 100,
+                                      width:
+                                          MediaQuery.of(context).size.width * 1,
+                                      child: Image.network(
+                                        render['illustrationurl'],
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
@@ -91,7 +106,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return SizedBox(
-                          height: 400,
+                          height: 250,
                           child: ListView.builder(
                             scrollDirection:
                                 Axis.horizontal, // Scroll horizontal aqui
@@ -99,7 +114,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             itemBuilder: (context, index) {
                               var renders = snapshot.data![index];
                               if (renders != null) {
-                                print("Nome da loja ${renders.name}");
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ContentProduct(

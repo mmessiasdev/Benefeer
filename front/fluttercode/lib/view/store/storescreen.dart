@@ -4,6 +4,7 @@ import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/tips.dart';
 import 'package:Benefeer/component/widgets/header.dart';
+import 'package:Benefeer/component/widgets/searchInput.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
 import 'package:http/http.dart' as http;
@@ -56,7 +57,7 @@ class _StoreScreenState extends State<StoreScreen> {
       child: Scaffold(
         backgroundColor: lightColor,
         body: token == "null"
-            ? SizedBox()
+            ? const SizedBox()
             : ListView(
                 children: [
                   FutureBuilder<Map>(
@@ -76,6 +77,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                       onClick: () {
                                         (Navigator.pop(context));
                                       }),
+                                  const SearchInput(),
                                   Padding(
                                     padding: defaultPaddingVertical,
                                     child: SizedBox(
