@@ -186,7 +186,7 @@ class RemoteAuthService {
   }) async {
     List<OnlineStore> listItens = [];
     var response = await client.get(
-      Uri.parse('$url/online-stores/$id'),
+      Uri.parse('$url/categories/$id'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -194,7 +194,7 @@ class RemoteAuthService {
       },
     );
     var body = jsonDecode(response.body);
-    var itemCount = body;
+    var itemCount = body['online_stores'];
     for (var i = 0; i < itemCount.length; i++) {
       listItens.add(OnlineStore.fromJson(itemCount[i]));
     }

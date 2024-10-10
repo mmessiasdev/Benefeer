@@ -1,10 +1,14 @@
 import 'package:Benefeer/component/buttons.dart';
 import 'package:Benefeer/component/colors.dart';
+import 'package:Benefeer/component/contentproduct.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/widgets/header.dart';
+import 'package:Benefeer/model/categories.dart';
+import 'package:Benefeer/model/stores.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
+import 'package:Benefeer/view/store/storescreen.dart';
 import 'package:flutter/material.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -81,6 +85,52 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           ),
                         );
                       }),
+                  FutureBuilder<List<OnlineStore>>(
+                    future: RemoteAuthService()
+                        .getOneCategoryStories(token: token, id: widget.id),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return SizedBox(
+                          height: 400,
+                          child: ListView.builder(
+                            scrollDirection:
+                                Axis.horizontal, // Scroll horizontal aqui
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              var renders = snapshot.data![index];
+                              if (renders != null) {
+                                print("Nome da loja ${renders.name}");
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ContentProduct(
+                                    urlLogo: renders.logourl,
+                                    drules:
+                                        "${renders.percentcashback}% de cashback",
+                                    title: renders.name.toString(),
+                                    id: renders.id.toString(),
+                                  ),
+                                );
+                              }
+                              return const SizedBox(
+                                height: 100,
+                                child: Center(
+                                  child: Text('Não encontrado'),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      }
+                      return SizedBox(
+                        height: 300,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: nightColor,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
       ),
