@@ -175,72 +175,65 @@ class _HomePageState extends State<HomePage> {
                   color: SecudaryColor,
                 ),
                 child: screen == "online"
-                    ? Expanded(
-                        child: SizedBox(
-                          child: Column(
-                            children: [
-                              const SizedBox(height: 40),
-                              Padding(
-                                padding: defaultPaddingHorizon,
-                                child: const SizedBox(
-                                  width: double.infinity,
-                                  child: ListTitle(
-                                    title: "Destaques",
-                                  ),
-                                ),
+                    ? Column(
+                        children: [
+                          const SizedBox(height: 40),
+                          Padding(
+                            padding: defaultPaddingHorizon,
+                            child: const SizedBox(
+                              width: double.infinity,
+                              child: ListTitle(
+                                title: "Destaques",
                               ),
-                              FutureBuilder<List<StoresModel>>(
-                                  future: RemoteAuthService()
-                                      .getStores(token: token),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return ListView.builder(
-                                          shrinkWrap: true,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          scrollDirection: Axis.vertical,
-                                          itemCount: snapshot.data!.length,
-                                          itemBuilder: (context, index) {
-                                            var renders = snapshot.data![index];
-                                            if (renders != null) {
-                                              return Column(
-                                                children: [
-                                                  Center(
-                                                    child: ContentProduct(
-                                                      urlLogo: renders.logourl,
-                                                      drules:
-                                                          "${renders.percentcashback}% de cashback",
-                                                      title: renders.name
-                                                          .toString(),
-                                                      id: renders.id.toString(),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                ],
-                                              );
-                                            }
-                                            return const SizedBox(
-                                              height: 100,
-                                              child: Center(
-                                                child: Text('Não encontrado'),
-                                              ),
-                                            );
-                                          });
-                                    }
-                                    return SizedBox(
-                                      height: 300,
-                                      child: Center(
-                                        child: CircularProgressIndicator(
-                                          color: nightColor,
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                            ],
+                            ),
                           ),
-                        ),
+                          SizedBox(
+                            height:
+                                250, // Defina a altura para garantir que o ListView tenha espaço
+                            child: FutureBuilder<List<StoresModel>>(
+                              future:
+                                  RemoteAuthService().getStores(token: token),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListView.builder(
+                                    scrollDirection: Axis
+                                        .horizontal, // Scroll horizontal aqui
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, index) {
+                                      var renders = snapshot.data![index];
+                                      if (renders != null) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: ContentProduct(
+                                            urlLogo: renders.logourl,
+                                            drules:
+                                                "${renders.percentcashback}% de cashback",
+                                            title: renders.name.toString(),
+                                            id: renders.id.toString(),
+                                          ),
+                                        );
+                                      }
+                                      return const SizedBox(
+                                        height: 100,
+                                        child: Center(
+                                          child: Text('Não encontrado'),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }
+                                return SizedBox(
+                                  height: 300,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: nightColor,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       )
                     : SizedBox(
                         height: MediaQuery.of(context).size.height * .5,

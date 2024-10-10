@@ -83,6 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                           title: renders.name.toString(),
                                           illurl: renders.illustrationurl
                                               .toString(),
+                                          id: renders.id.toString(),
                                         )),
                                         const SizedBox(
                                           height: 20,

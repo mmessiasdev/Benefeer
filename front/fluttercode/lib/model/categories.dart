@@ -60,26 +60,26 @@ class OnlineStore {
       this.updatedAt});
 
   OnlineStore.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    desc = json['desc'];
-    afflink = json['afflink'];
-    percentcashback = json['percentcashback'];
-    logourl = json['logourl'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = json['online_stores']['id'];
+    name = json['online_stores']['name'];
+    desc = json['online_stores']['desc'];
+    afflink = json['online_stores']['afflink'];
+    percentcashback = json['online_stores']['percentcashback'];
+    logourl = json['online_stores']['logourl'];
+    createdAt = json['online_stores']['created_at'];
+    updatedAt = json['online_stores']['updated_at'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['desc'] = this.desc;
-    data['afflink'] = this.afflink;
-    data['percentcashback'] = this.percentcashback;
-    data['logourl'] = this.logourl;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
+    data['online_stores']['id'] = this.id;
+    data['online_stores']['name'] = this.name;
+    data['online_stores']['desc'] = this.desc;
+    data['online_stores']['afflink'] = this.afflink;
+    data['online_stores']['percentcashback'] = this.percentcashback;
+    data['online_stores']['logourl'] = this.logourl;
+    data['online_stores']['created_at'] = this.createdAt;
+    data['online_stores']['updated_at'] = this.updatedAt;
     return data;
   }
 }

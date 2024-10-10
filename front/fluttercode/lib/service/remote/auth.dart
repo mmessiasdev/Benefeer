@@ -164,6 +164,43 @@ class RemoteAuthService {
     return itens;
   }
 
+  Future<Map> getOneCategory({
+    required String id,
+    required String? token,
+  }) async {
+    var response = await client.get(
+      Uri.parse('$url/categories/$id'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': "true"
+      },
+    );
+    var itens = json.decode(response.body);
+    return itens;
+  }
+
+  Future<List<OnlineStore>> getOneCategoryStories({
+    required String? token,
+    required String? id,
+  }) async {
+    List<OnlineStore> listItens = [];
+    var response = await client.get(
+      Uri.parse('$url/online-stores/$id'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': "true"
+      },
+    );
+    var body = jsonDecode(response.body);
+    var itemCount = body;
+    for (var i = 0; i < itemCount.length; i++) {
+      listItens.add(OnlineStore.fromJson(itemCount[i]));
+    }
+    return listItens;
+  }
+
   Future<List<PostFiles>> getPostsFiles(
       {required String? token, required String? id}) async {
     List<PostFiles> listItens = [];

@@ -7,6 +7,7 @@ import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter/material.dart';
 
@@ -40,6 +41,13 @@ class _StoreScreenState extends State<StoreScreen> {
     setState(() {
       token = strToken.toString();
     });
+  }
+
+  // Função para abrir o link
+  Future<void> _launchURL(urlAff) async {
+    if (!await launchUrl(urlAff, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $urlAff';
+    }
   }
 
   @override
@@ -105,11 +113,20 @@ class _StoreScreenState extends State<StoreScreen> {
                                   ),
                                   Padding(
                                     padding: defaultPaddingVertical,
-                                    child: DefaultButton(
-                                      text: "Ativar cashback",
-                                      color: nightColor,
-                                      padding: defaultPadding,
-                                      colorText: lightColor,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          Uri urlAff =
+                                              Uri.parse(render["afflink"]);
+                                          _launchURL(urlAff);
+                                        });
+                                      },
+                                      child: DefaultButton(
+                                        text: "Ativar cashback",
+                                        color: nightColor,
+                                        padding: defaultPadding,
+                                        colorText: lightColor,
+                                      ),
                                     ),
                                   ),
                                   Tips(
