@@ -57,7 +57,7 @@ class WalletScreen extends StatelessWidget {
                     const SizedBox(
                       height: 40,
                     ),
-                    const DefaultButton(),
+                    DefaultButton(text: "Resgatar saldo",),
                   ],
                 ),
               ),

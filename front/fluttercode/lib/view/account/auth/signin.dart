@@ -1,7 +1,7 @@
-import 'dart:ffi';
-
+import 'package:Benefeer/component/buttons.dart';
 import 'package:Benefeer/component/defaultButton.dart';
 import 'package:Benefeer/component/padding.dart';
+import 'package:Benefeer/controller/auth.dart';
 import 'package:Benefeer/controller/controllers.dart';
 import 'package:Benefeer/view/dashboard/screen.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +10,9 @@ import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/extention/string_extention.dart';
 import 'package:Benefeer/component/inputdefault.dart';
+import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/request/request.dart';
+import 'package:get/get_navigation/src/routes/default_transitions.dart';
 
 import 'signup.dart';
 
@@ -25,6 +28,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final AuthController authController = Get.put(AuthController());
 
   @override
   void dispose() {
@@ -38,7 +42,13 @@ class _SignInScreenState extends State<SignInScreen> {
     super.initState();
   }
 
-  bool passw = false;
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  List<Widget> get _pages => [
+        InputLogin(title: "CPF", controller: emailController),
+        InputLogin(title: "Senha", controller: passwordController),
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -47,229 +57,130 @@ class _SignInScreenState extends State<SignInScreen> {
       backgroundColor: lightColor,
       body: Padding(
         padding: defaultPaddingHorizon,
-        child: Column(
-          children: [
-            MainHeader(title: "Benefeer", onClick: () {}),
-            Expanded(
-              child: Center(
-                child: Form(
-                  key: _formKey,
-                  child: Padding(
-                    padding: defaultPadding,
-                    child: passw == false
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              PrimaryText(
-                                color: nightColor,
-                                text: "CPF",
-                              ),
-                              const SizedBox(
-                                height: 25,
-                              ),
-                              Padding(
-                                padding: defaultPaddingHorizon,
-                                child: InputTextField(
-                                  textEditingController: emailController,
-                                  title: "",
-                                  fill: true,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 30),
-                                child: Defaultbutton(
-                                  iconColor: lightColor,
-                                  color: PrimaryColor,
-                                  onClick: () {
-                                    setState(() {
-                                      passw = true;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ],
-                          )
-                        : Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              PrimaryText(
-                                color: nightColor,
-                                text: "Senha",
-                              ),
-                              const SizedBox(
-                                height: 25,
-                              ),
-                              Padding(
-                                padding: defaultPaddingHorizon,
-                                child: InputTextField(
-                                  textEditingController: passwordController,
-                                  title: "",
-                                  fill: true,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 30),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Defaultbutton(
-                                      iconColor: lightColor,
-                                      color: FifthColor,
-                                      icon: Icons.arrow_left_outlined,
-                                      onClick: () {
-                                        setState(() {
-                                          passw = false;
-                                        });
-                                      },
-                                    ),
-                                    Defaultbutton(
-                                      iconColor: lightColor,
-                                      color: PrimaryColor,
-                                      onClick: () {
-                                        setState(() {
-                                          passw = true;
-                                        });
-                                        print(emailController.text);
-                                        print(passwordController.text);
-                                        if (_formKey.currentState!.validate()) {
-                                          authController.signIn(
-                                              email: emailController.text,
-                                              password:
-                                                  passwordController.text);
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                  ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              MainHeader(title: "Benefeer", onClick: () {}),
+              Expanded(
+                child: PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentPage = index;
+                    });
+                  },
+                  itemCount: _pages.length,
+                  itemBuilder: (context, index) {
+                    return _pages[index];
+                  },
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                height: 200,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Botão "Voltar"
+                    // if (_currentPage > 0)
+                    //   GestureDetector(
+                    //     onTap: () {
+                    //       _pageController.previousPage(
+                    //         duration: Duration(milliseconds: 300),
+                    //         curve: Curves.easeIn,
+                    //       );
+                    //     },
+                    //     child: DefaultButton(
+                    //       text: "Voltar",
+                    //       color: PrimaryColor,
+                    //       padding:
+                    //           EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    //     ),
+                    //   ),
+                    // Spacer(),
+                    // Botão "Próximo" ou "Concluir"
+                    GestureDetector(
+                        onTap: () {
+                          if (_currentPage == _pages.length - 1) {
+                            // Se for a última página, finalize o tutorial
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SignInScreen(),
+                              ),
+                            );
+                          } else {
+                            // Caso contrário, vá para a próxima página
+                            _pageController.nextPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeIn,
+                            );
+                          }
+                        },
+                        child: DefaultCircleButton(
+                          color: PrimaryColor,
+                          iconColor: lightColor,
+                          onClick: () {
+                            if (_currentPage == _pages.length - 1) {
+                              // Se for a última página, finalize o tutorial
+                              print(emailController.text);
+                              print(passwordController.text);
+                              if (_formKey.currentState!.validate()) {
+                                authController.signIn(
+                                    email: emailController.text,
+                                    password: passwordController.text);
+                              }
+                            } else {
+                              // Caso contrário, vá para a próxima página
+                              _pageController.nextPage(
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.easeIn,
+                              );
+                            }
+                          },
+                        )),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     ));
   }
+}
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     backgroundColor: lightColor,
-  //     body: ListView(
-  //       children: [
-  //         MainHeader(
-  //             title: "Voltar",
-  //             onClick: () => Navigator.pushReplacement(
-  //                   context,
-  //                   MaterialPageRoute(
-  //                     builder: (context) => const DashboardScreen(),
-  //                   ),
-  //                 )),
-  //         Padding(
-  //           padding: const EdgeInsets.only(left: 40, right: 40, top: 75),
-  //           child: SizedBox(
-  //             height: MediaQuery.of(context).size.height,
-  //             child: Form(
-  //               key: _formKey,
-  //               child: SizedBox(
-  //                 height: MediaQuery.of(context).size.height,
-  //                 child: ListView(
-  //                   children: [
-  //                     Padding(
-  //                       padding: const EdgeInsets.only(top: 20),
-  //                       child: PrimaryText(
-  //                           text: 'Login',
-  //                           color: nightColor,
-  //                           align: TextAlign.start),
-  //                     ),
-  //                     Padding(
-  //                       padding: const EdgeInsets.only(top: 50),
-  //                       child: InputTextField(
-  //                         title: 'Email',
-  //                         textEditingController: emailController,
-  //                         validation: (String? value) {
-  //                           if (value == null || value.isEmpty) {
-  //                             return "Esse campo não pode ficar vazio.";
-  //                           } else if (!value.isValidEmail) {
-  //                             return "Insira um email válido.";
-  //                           }
-  //                           return null;
-  //                         },
-  //                       ),
-  //                     ),
-  //                     const SizedBox(height: 20),
-  //                     Padding(
-  //                       padding: const EdgeInsets.only(top: 20),
-  //                       child: InputTextField(
-  //                         title: 'Password',
-  //                         obsecureText: true,
-  //                         maxLines: 1,
-  //                         // icon: Icon(Icons.lock),
-  //                         textEditingController: passwordController,
-  //                         validation: (String? value) {
-  //                           if (value == null || value.isEmpty) {
-  //                             return "Esse campo não pode ficar vazio.";
-  //                           }
-  //                           return null;
-  //                         },
-  //                       ),
-  //                     ),
-  //                     const SizedBox(height: 40),
-  //                     Padding(
-  //                       padding: const EdgeInsets.only(top: 30),
-  //                       child: Defaultbutton(
-  //                         iconColor: lightColor,
-  //                         color: FourtyColor,
-  //                         onClick: () {
-  //                           if (_formKey.currentState!.validate()) {
-  //                             // authController.signIn(
-  //                             //     email: emailController.text,
-  //                             //     password: passwordController.text);
-  //                           }
-  //                         },
-  //                       ),
-  //                     ),
-  //                     const SizedBox(height: 10),
-  //                     Padding(
-  //                       padding: const EdgeInsets.only(top: 30),
-  //                       child: Row(
-  //                         mainAxisAlignment: MainAxisAlignment.center,
-  //                         children: [
-  //                           const Text("É um novo usário? "),
-  //                           InkWell(
-  //                               onTap: () {
-  //                                 Navigator.pushReplacement(
-  //                                   context,
-  //                                   MaterialPageRoute(
-  //                                     builder: (context) =>
-  //                                         const SignUpScreen(),
-  //                                   ),
-  //                                 );
-  //                               },
-  //                               child: const Text(
-  //                                 "Crie uma conta.",
-  //                                 style: TextStyle(
-  //                                   color: Color.fromRGBO(19, 68, 90, 1),
-  //                                 ),
-  //                               ))
-  //                         ],
-  //                       ),
-  //                     ),
-  //                     const SizedBox(height: 10)
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+class InputLogin extends StatelessWidget {
+  InputLogin({super.key, required this.title, required this.controller});
+
+  String title;
+  TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        PrimaryText(
+          color: nightColor,
+          text: title,
+        ),
+        const SizedBox(
+          height: 25,
+        ),
+        Padding(
+          padding: defaultPaddingHorizon,
+          child: InputTextField(
+            textEditingController: controller,
+            title: "",
+            fill: true,
+          ),
+        ),
+      ],
+    );
+  }
 }

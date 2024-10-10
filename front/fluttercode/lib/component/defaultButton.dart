@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class Defaultbutton extends StatelessWidget {
-  Defaultbutton(
+class DefaultCircleButton extends StatelessWidget {
+  DefaultCircleButton(
       {super.key,
       required this.color,
       required this.iconColor,

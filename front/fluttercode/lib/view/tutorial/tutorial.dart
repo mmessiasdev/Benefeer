@@ -1,3 +1,8 @@
+import 'package:Benefeer/component/buttons.dart';
+import 'package:Benefeer/component/colors.dart';
+import 'package:Benefeer/component/padding.dart';
+import 'package:Benefeer/component/texts.dart';
+import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/view/account/auth/signin.dart';
 import 'package:flutter/material.dart';
 
@@ -12,34 +17,30 @@ class _TutorialScreenState extends State<TutorialScreen> {
 
   // Lista de textos ou conteúdo para as páginas do tutorial
   final List<Widget> _pages = [
-    TutorialPage(
-      title: 'Bem-vindo ao Benefeer!',
-      description: 'Aqui você pode acompanhar seus benefícios de forma fácil.',
-      image: Icons.account_balance,
-    ),
-    TutorialPage(
-      title: 'Gerencie suas contas',
-      description: 'Tenha controle completo sobre seus gastos e economias.',
-      image: Icons.monetization_on_outlined,
-    ),
-    TutorialPage(
-      title: 'Relatórios em tempo real',
+    const TutorialPage(
+      title: 'Benefeer!',
+      subtitle: 'O seu app de beneficios.',
       description:
-          'Receba atualizações e relatórios automáticos em tempo real.',
-      image: Icons.analytics_outlined,
+          "Desconto em lojas online e fisicas, serviços online e muito mais!",
+      image: "assets/images/illustrator/illustrator1.png",
+    ),
+    const TutorialPage(
+      title: 'Mais que um app.',
+      subtitle: "Uma forma de ganhar dinheiro!",
+      description:
+          'Ganhe dinheiro fazendo compras e do conforto de casa. Os maiores cashbacks do mercado.',
+      image: "assets/images/illustrator/illustrator2.png",
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Tutorial"),
-      ),
+      backgroundColor: lightColor,
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
-            // PageView para exibir as páginas do tutorial
             child: PageView.builder(
               controller: _pageController,
               onPageChanged: (index) {
@@ -54,26 +55,13 @@ class _TutorialScreenState extends State<TutorialScreen> {
             ),
           ),
           // Botão para avançar para a próxima página ou finalizar
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          SizedBox(
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Botão "Voltar"
-                if (_currentPage > 0)
-                  ElevatedButton(
-                    onPressed: () {
-                      _pageController.previousPage(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
-                    },
-                    child: Text("Voltar"),
-                  ),
-                Spacer(),
-                // Botão "Próximo" ou "Concluir"
-                ElevatedButton(
-                  onPressed: () {
+                GestureDetector(
+                  onTap: () {
                     if (_currentPage == _pages.length - 1) {
                       // Se for a última página, finalize o tutorial
                       Navigator.pushReplacement(
@@ -90,10 +78,21 @@ class _TutorialScreenState extends State<TutorialScreen> {
                       );
                     }
                   },
-                  child: Text(_currentPage == _pages.length - 1
-                      ? "Concluir"
-                      : "Próximo"),
+                  child: DefaultButton(
+                    text: _currentPage == _pages.length - 1
+                        ? "Concluir"
+                        : "Próximo",
+                    color: PrimaryColor,
+                    padding: EdgeInsets.symmetric(horizontal: 35, vertical: 25),
+                  ),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                SubText(
+                    text:
+                        _currentPage == _pages.length - 1 ? "2 de 2" : "1 de 2",
+                    align: TextAlign.center)
               ],
             ),
           ),
@@ -107,37 +106,59 @@ class _TutorialScreenState extends State<TutorialScreen> {
 class TutorialPage extends StatelessWidget {
   final String title;
   final String description;
-  final IconData? image;
+  final String? image;
+  final String subtitle;
 
   const TutorialPage({
     Key? key,
     required this.title,
     required this.description,
+    required this.subtitle,
     this.image,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(32.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset("assets/images/illustrator/illustrator1.png"),
-          SizedBox(height: 20),
-          Text(
-            title,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: defaultPaddingHorizon,
+          child: Image.asset(
+            image ?? "",
+            fit: BoxFit.contain,
           ),
-          SizedBox(height: 20),
-          Text(
-            description,
-            style: TextStyle(fontSize: 18),
-            textAlign: TextAlign.center,
+        ),
+        Padding(
+          padding: defaultPadding,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              RichDefaultText(
+                align: TextAlign.start,
+                text: title,
+                fontweight: FontWeight.w600,
+                size: 40,
+                wid: SubTextSized(
+                  size: 40,
+                  fontweight: FontWeight.normal,
+                  align: TextAlign.start,
+                  text: subtitle,
+                ),
+              ),
+              SizedBox(height: 20),
+              SecundaryText(
+                text: description,
+                color: nightColor,
+                align: TextAlign.start,
+              ),
+            ],
           ),
-        ],
-      ),
+        )
+      ],
     );
   }
 }

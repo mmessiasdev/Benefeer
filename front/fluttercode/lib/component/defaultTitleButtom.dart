@@ -24,7 +24,7 @@ class DefaultTitleButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SubTextSized(text: title, size: 24, fontweight: FontWeight.bold),
-          Defaultbutton(
+          DefaultCircleButton(
             color: color,
             iconColor: iconColor,
             onClick: () {
