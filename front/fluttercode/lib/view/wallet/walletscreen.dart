@@ -7,8 +7,15 @@ import 'package:Benefeer/component/tips.dart';
 import 'package:Benefeer/component/widgets/header.dart';
 import 'package:flutter/material.dart';
 
-class WalletScreen extends StatelessWidget {
+class WalletScreen extends StatefulWidget {
   const WalletScreen({super.key});
+
+  @override
+  State<WalletScreen> createState() => _WalletScreenState();
+}
+
+class _WalletScreenState extends State<WalletScreen> {
+  String screen = "saldo";
 
   @override
   Widget build(BuildContext context) {
@@ -33,31 +40,62 @@ class WalletScreen extends StatelessWidget {
                 child: ListView(
                   children: [
                     Padding(
-                      padding: defaultPadding,
+                      padding: defaultPaddingHorizonTop,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          SubText(text: "Online", align: TextAlign.center),
-                          SubText(
-                              text: "Perto de você", align: TextAlign.center),
+                          GestureDetector(
+                            child: SubText(
+                              text: "Saldo",
+                              align: TextAlign.center,
+                              color: screen == "saldo" ? nightColor : OffColor,
+                            ),
+                            onTap: () {
+                              setState(() {
+                                screen = "saldo";
+                              });
+                            },
+                          ),
+                          GestureDetector(
+                            child: SubText(
+                              text: "Extrato",
+                              align: TextAlign.center,
+                              color:
+                                  screen == "extract" ? nightColor : OffColor,
+                            ),
+                            onTap: () {
+                              setState(() {
+                                screen = "extract";
+                              });
+                            },
+                          ),
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    const BankCard(),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    Tips(
-                      desc:
-                          "Após a compra de algum produto dentro do link do nosso app, o valor do cashback leva no máximo até 7 dias uteis para ser acrescentado na sua conta.",
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    DefaultButton(text: "Resgatar saldo",),
+                    screen == "saldo"
+                        ? Column(
+                            children: [
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              const BankCard(),
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              Tips(
+                                desc:
+                                    "Após a compra de algum produto dentro do link do nosso app, o valor do cashback leva no máximo até 7 dias uteis para ser acrescentado na sua conta.",
+                              ),
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              DefaultButton(
+                                text: "Resgatar saldo",
+                                padding: EdgeInsets.all(20),
+                              ),
+                            ],
+                          )
+                        : SizedBox(),
                   ],
                 ),
               ),

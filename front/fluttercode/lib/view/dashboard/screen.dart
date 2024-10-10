@@ -46,7 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 body: SafeArea(
                   child: IndexedStack(
                     index: controller.tabIndex,
-                    children: const [
+                    children: [
                       HomePage(),
                       SearchScreen(),
                       WalletScreen(),

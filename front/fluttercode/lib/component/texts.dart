@@ -60,10 +60,9 @@ class SecundaryText extends StatelessWidget {
 }
 
 class ButtonText extends StatelessWidget {
-  ButtonText({
-    required this.text,
-  });
+  ButtonText({required this.text, this.colorText});
   String text;
+  Color? colorText;
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +74,7 @@ class ButtonText extends StatelessWidget {
           fontSize: 24,
           textStyle: TextStyle(
             fontWeight: FontWeight.w600,
-            color: Color.fromARGB(255, 0, 0, 0),
+            color: colorText ?? nightColor, 
             decoration: TextDecoration.none,
           ),
         ),

@@ -5,9 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 
 class DefaultButton extends StatelessWidget {
-  DefaultButton({super.key, required this.text, this.color, this.padding});
+  DefaultButton(
+      {super.key,
+      required this.text,
+      this.color,
+      this.padding,
+      this.colorText});
   String text;
   Color? color;
+  Color? colorText;
   EdgeInsetsGeometry? padding;
 
   @override
@@ -19,7 +25,10 @@ class DefaultButton extends StatelessWidget {
       ),
       child: Padding(
         padding: padding ?? defaultPaddingHorizon,
-        child: ButtonText(text: text),
+        child: ButtonText(
+          text: text,
+          colorText: colorText ?? nightColor,
+        ),
       ),
     );
   }
