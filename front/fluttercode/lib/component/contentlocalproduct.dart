@@ -1,5 +1,6 @@
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/texts.dart';
+import 'package:Benefeer/view/store/localstorescreen.dart';
 import 'package:Benefeer/view/store/storescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -23,7 +24,7 @@ class ContentLocalProduct extends StatelessWidget {
       onTap: () {
         (Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => SizedBox()),
+          MaterialPageRoute(builder: (context) => LocalStoreScreen(id: id)),
         ));
       },
       child: Container(

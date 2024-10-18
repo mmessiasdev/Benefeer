@@ -3,8 +3,10 @@ import 'package:Benefeer/component/texts.dart';
 import 'package:flutter/material.dart';
 
 class BankCard extends StatelessWidget {
-  const BankCard({super.key});
-  
+  BankCard({super.key, this.urllogo});
+
+  String? urllogo;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,26 +21,31 @@ class BankCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(17)),
       child: Padding(
         padding: const EdgeInsets.all(25),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-            PrimaryText(
-              color: nightColor,
-              text: "Benefeer",
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PrimaryText(
+                  color: nightColor,
+                  text: "Benefeer",
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                RichDefaultText(
+                  text: "Saldo diponível: \n",
+                  size: 16,
+                  fontweight: FontWeight.w300,
+                  wid: SecundaryText(
+                    text: "R\$ 0,00",
+                    color: nightColor,
+                    align: TextAlign.start,
+                  ),
+                )
+              ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            RichDefaultText(
-              text: "Saldo diponível: \n",
-              size: 16,
-              fontweight: FontWeight.w300,
-              wid: SecundaryText(
-                text: "R\$ 0,00",
-                color: nightColor,
-                align: TextAlign.start,
-              ),
-            )
+            Image.network(urllogo ?? ""),
           ],
         ),
       ),

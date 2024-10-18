@@ -245,6 +245,23 @@ class RemoteAuthService {
     }
     return listItens;
   }
+  
+  Future<Map> getLocalStore({
+    required String id,
+    required String? token,
+  }) async {
+    var response = await client.get(
+      Uri.parse('$url/local-stores/$id'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': "true"
+      },
+    );
+    var itens = json.decode(response.body);
+    return itens;
+  }
+
 
   Future<List<PostFiles>> getPostsFiles(
       {required String? token, required String? id}) async {
