@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:Benefeer/model/categories.dart';
+import 'package:Benefeer/model/plans.dart';
 import 'package:Benefeer/model/postsnauth.dart';
 import 'package:Benefeer/model/profiles.dart';
 import 'package:Benefeer/model/stores.dart';
@@ -201,6 +202,25 @@ class RemoteAuthService {
     return listItens;
   }
 
+  Future<List<Plans>> getPlans({
+    required String? token,
+  }) async {
+    List<Plans> listItens = [];
+    var response = await client.get(
+      Uri.parse('$url/plans'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+    var body = jsonDecode(response.body);
+    var itemCount = body;
+    for (var i = 0; i < itemCount.length; i++) {
+      listItens.add(Plans.fromJson(itemCount[i]));
+    }
+    return listItens;
+  }
+
   Future<List<PostFiles>> getPostsFiles(
       {required String? token, required String? id}) async {
     List<PostFiles> listItens = [];
@@ -259,23 +279,23 @@ class RemoteAuthService {
     return listItens;
   }
 
-  Future<List<Posts>> getMyPosts(
-      {required String? token, required String? profileId}) async {
-    List<Posts> listItens = [];
-    var response = await client.get(
-      Uri.parse('$url/profile/$profileId'),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
-      },
-    );
-    var body = jsonDecode(response.body);
-    var itemCount = body["posts"];
-    print(body);
-    for (var i = 0; i < itemCount.length; i++) {
-      listItens.add(Posts.fromJson(itemCount[i]));
-    }
-    return listItens;
-  }
+  // Future<List<Posts>> getMyPosts(
+  //     {required String? token, required String? profileId}) async {
+  //   List<Posts> listItens = [];
+  //   var response = await client.get(
+  //     Uri.parse('$url/profile/$profileId'),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization": "Bearer $token",
+  //       'ngrok-skip-browser-warning': "true"
+  //     },
+  //   );
+  //   var body = jsonDecode(response.body);
+  //   var itemCount = body["posts"];
+  //   print(body);
+  //   for (var i = 0; i < itemCount.length; i++) {
+  //     listItens.add(Posts.fromJson(itemCount[i]));
+  //   }
+  //   return listItens;
+  // }
 }

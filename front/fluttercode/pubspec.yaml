@@ -42,22 +42,6 @@ dependencies:
 
 
 
-flutter_icons:
-  image_path: "assets/icon/icon.png"
-  ios: true
-  remove_alpha_ios: true
-  android: "ic_launcher"
-  adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/icon/icon.png"
-
-
-
-flutter_native_splash:
-  color: "#ffffff"
-  image: "assets/icon/splash.png"
-  android: true
-  ios: true
-
 # dart run flutter_native_splash:create
 
 
@@ -73,9 +57,6 @@ flutter:
 
   uses-material-design: true
   assets:
-    - assets/images/branco.png
-    - assets/images/preto.png
-
     - assets/images/illustrator/illustrator1.png
     - assets/images/illustrator/illustrator2.png
 

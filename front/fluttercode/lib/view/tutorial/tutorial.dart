@@ -36,6 +36,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: lightColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,

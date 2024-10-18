@@ -1,5 +1,6 @@
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/view/account/auth/signin.dart';
+import 'package:Benefeer/view/plan/planscreen.dart';
 import 'package:Benefeer/view/search/searchscreen.dart';
 import 'package:Benefeer/view/tutorial/tutorial.dart';
 import 'package:Benefeer/view/wallet/walletscreen.dart';
@@ -48,6 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     index: controller.tabIndex,
                     children: [
                       HomePage(),
+                      PlanScreen(),
                       SearchScreen(),
                       WalletScreen(),
                     ],
@@ -75,6 +77,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         Icons.home_filled,
                         size: 30,
                       )),
+                      BottomNavigationBarItem(
+                        icon: Icon(
+                          Icons.diamond,
+                          size: 30,
+                        ),
+                      ),
                       BottomNavigationBarItem(
                         icon: Icon(
                           Icons.search,
