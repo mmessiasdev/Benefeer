@@ -1,4 +1,5 @@
 import 'package:Benefeer/component/colors.dart';
+import 'package:Benefeer/component/contentproduct.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/widgets/header.dart';
@@ -19,8 +20,8 @@ class PlanScreen extends StatefulWidget {
 
 class _PlanScreenState extends State<PlanScreen> {
   var client = http.Client();
-
   var token;
+  var idPlan;
 
   @override
   void initState() {
@@ -40,127 +41,211 @@ class _PlanScreenState extends State<PlanScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: lightColor,
-      body: ListView(
-        children: [
-          Padding(
-            padding: defaultPaddingHorizon,
-            child:
-                MainHeader(title: "Benefeer", icon: Icons.menu, onClick: () {}),
-          ),
-          FutureBuilder(
-              future: RemoteAuthService().getProfile(token: token),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Erro: ${snapshot.error}'));
-                } else if (snapshot.hasData) {
-                  var render = snapshot.data;
-                  return PrimaryText(
-                    color: nightColor,
-                    text: render['fname'],
-                  );
-                } else {
-                  return Center(
-                    child: SecundaryText(
-                      align: TextAlign.center,
-                      color: nightColor,
-                      text: "Nenhum Texto encontrado.",
-                    ),
-                  );
-                }
-              }),
-          Padding(
-            padding: defaultPaddingHorizon,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: token == null
+          ? const Center(child: CircularProgressIndicator())
+          : ListView(
               children: [
+                Padding(
+                  padding: defaultPaddingHorizon,
+                  child: MainHeader(
+                      title: "Benefeer", icon: Icons.menu, onClick: () {}),
+                ),
+                FutureBuilder(
+                  future: RemoteAuthService().getProfile(token: token),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Erro: ${snapshot.error}'));
+                    } else if (snapshot.hasData) {
+                      var render = snapshot.data;
+
+                      // Verifica se o campo "plan" é nulo
+                      if (render['plan'] == null) {
+                        // Se for nulo, renderiza o widget codado
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Padding(
+                              padding: defaultPaddingHorizon,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  const SizedBox(
+                                    height: 40,
+                                  ),
+                                  SecundaryText(
+                                      color: nightColor,
+                                      text:
+                                          "Você ainda não possui nenhum plano.",
+                                      align: TextAlign.start),
+                                  SizedBox(
+                                    height: 40,
+                                  ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: SizedBox(
+                                        height: 235,
+                                        child: Image.asset(
+                                          "assets/images/illustrator/illustrator2.png",
+                                          fit: BoxFit.cover,
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    height: 40,
+                                  ),
+                                  SubText(
+                                    text:
+                                        "Adquira para aproveitar o máximo de benefícios que temos a oferecer para você, sua família e sua empresa! ",
+                                    color: nightColor,
+                                    align: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 40,
+                                  ),
+                                  Icon(Icons.arrow_downward),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 600,
+                              child: Center(
+                                child: FutureBuilder<List<Plans>>(
+                                    future: RemoteAuthService()
+                                        .getPlans(token: token),
+                                    builder: (context, planSnapshot) {
+                                      if (planSnapshot.hasData) {
+                                        return ListView.builder(
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount:
+                                                planSnapshot.data!.length,
+                                            itemBuilder: (context, index) {
+                                              var renders =
+                                                  planSnapshot.data![index];
+                                              if (renders != null) {
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: PlanContainer(
+                                                      name: renders.name
+                                                          .toString(),
+                                                      value: renders.value
+                                                          .toString(),
+                                                      rules: renders.rules
+                                                          .toString(),
+                                                      benefit: renders.benefits
+                                                          .toString()),
+                                                );
+                                              }
+                                              return const SizedBox(
+                                                height: 100,
+                                                child: Center(
+                                                  child: Text(
+                                                      'Plano não encontrado'),
+                                                ),
+                                              );
+                                            });
+                                      }
+                                      return SizedBox(
+                                        height: 300,
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            color: nightColor,
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ),
+                          ],
+                        );
+                      } else {
+                        // Aqui, você não precisa do setState. Basta definir a variável idPlan diretamente.
+                        idPlan = render['plan']['id'].toString();
+                        print(idPlan);
+
+                        // Renderiza o CircularProgressIndicator verde e o FutureBuilder<List<Plans>>
+                        return Column(
+                          children: [
+                            idPlan != null
+                                ? SizedBox(
+                                    height:
+                                        400, // Altura definida para o ListView
+                                    child: FutureBuilder<List<LocalStores>>(
+                                      future: RemoteAuthService()
+                                          .getOnePlansLocalStores(
+                                              token: token, id: idPlan),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          print(
+                                            RemoteAuthService()
+                                                .getOnePlansLocalStores(
+                                                    token: token, id: idPlan),
+                                          );
+                                          return ListView.builder(
+                                            scrollDirection: Axis
+                                                .horizontal, // Scroll horizontal
+                                            itemCount: snapshot.data!.length,
+                                            itemBuilder: (context, index) {
+                                              var renders =
+                                                  snapshot.data![index];
+                                              if (idPlan != null) {
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: ContentProduct(
+                                                    title:
+                                                        renders.name.toString(),
+                                                    drules: renders.rules
+                                                        .toString()
+                                                        .replaceAll(
+                                                            "\\n", "\n\n"),
+                                                    urlLogo: renders.urllogo,
+                                                    id: renders.id.toString(),
+                                                  ),
+                                                );
+                                              }
+                                              return const SizedBox(
+                                                height: 100,
+                                                child: Center(
+                                                  child: Text('Não encontrado'),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        }
+                                        return SizedBox(
+                                          height: 300,
+                                          child: Center(
+                                            child: CircularProgressIndicator(
+                                              color: nightColor,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  )
+                                : Text("data")
+                          ],
+                        );
+                      }
+                    } else {
+                      return Center(
+                        child: SecundaryText(
+                          align: TextAlign.center,
+                          color: nightColor,
+                          text: "Nenhum Texto encontrado.",
+                        ),
+                      );
+                    }
+                  },
+                ),
                 SizedBox(
-                  height: 40,
+                  height: 50,
                 ),
-                SecundaryText(
-                    color: nightColor,
-                    text: "Você ainda não possui nenhum plano.",
-                    align: TextAlign.start),
-                SizedBox(
-                  height: 40,
-                ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: SizedBox(
-                      height: 235,
-                      child: Image.asset(
-                        "assets/images/illustrator/illustrator2.png",
-                        fit: BoxFit.cover,
-                      )),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                SubText(
-                  text:
-                      "Adquira para aproveitar o máximo de benefícios que temos a oferecer para você, sua família e sua empresa! ",
-                  color: nightColor,
-                  align: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Icon(Icons.arrow_downward)
               ],
             ),
-          ),
-          SizedBox(
-            height: 50,
-          ),
-          SizedBox(
-            height: 600,
-            child: Center(
-              child: FutureBuilder<List<Plans>>(
-                  future: RemoteAuthService().getPlans(token: token),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            var renders = snapshot.data![index];
-                            print(renders);
-                            if (renders != null) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: PlanContainer(
-                                    name: renders.name.toString(),
-                                    value: renders.value.toString(),
-                                    rules: renders.rules.toString(),
-                                    benefit: renders.benefits.toString()),
-                              );
-                            }
-                            return const SizedBox(
-                              height: 100,
-                              child: Center(
-                                child: Text('Não encontrado'),
-                              ),
-                            );
-                          });
-                    }
-                    return SizedBox(
-                      height: 300,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: nightColor,
-                        ),
-                      ),
-                    );
-                  }),
-            ),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-        ],
-      ),
     );
   }
 }

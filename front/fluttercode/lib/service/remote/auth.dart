@@ -81,7 +81,12 @@ class RemoteAuthService {
         'ngrok-skip-browser-warning': "true"
       },
     );
-    return response;
+    if (response.statusCode == 200) {
+      // Converte a resposta JSON para um Map<String, dynamic>
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Falha ao carregar o perfil');
+    }
   }
 
   Future addPost(
@@ -217,6 +222,26 @@ class RemoteAuthService {
     var itemCount = body;
     for (var i = 0; i < itemCount.length; i++) {
       listItens.add(Plans.fromJson(itemCount[i]));
+    }
+    return listItens;
+  }
+
+  Future<List<LocalStores>> getOnePlansLocalStores({
+    required String? token,
+    required String? id,
+  }) async {
+    List<LocalStores> listItens = [];
+    var response = await client.get(
+      Uri.parse('$url/plans/$id'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+    var body = jsonDecode(response.body);
+    var itemCount = body["local_stores"];
+    for (var i = 0; i < itemCount.length; i++) {
+      listItens.add(LocalStores.fromJson(itemCount[i]));
     }
     return listItens;
   }
