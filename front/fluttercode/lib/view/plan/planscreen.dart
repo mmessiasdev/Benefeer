@@ -1,4 +1,5 @@
 import 'package:Benefeer/component/colors.dart';
+import 'package:Benefeer/component/contentlocalproduct.dart';
 import 'package:Benefeer/component/contentproduct.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
@@ -107,113 +108,49 @@ class _PlanScreenState extends State<PlanScreen> {
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              height: 600,
-                              child: Center(
-                                child: FutureBuilder<List<Plans>>(
-                                    future: RemoteAuthService()
-                                        .getPlans(token: token),
-                                    builder: (context, planSnapshot) {
-                                      if (planSnapshot.hasData) {
-                                        return ListView.builder(
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount:
-                                                planSnapshot.data!.length,
-                                            itemBuilder: (context, index) {
-                                              var renders =
-                                                  planSnapshot.data![index];
-                                              if (renders != null) {
-                                                return Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: PlanContainer(
-                                                      name: renders.name
-                                                          .toString(),
-                                                      value: renders.value
-                                                          .toString(),
-                                                      rules: renders.rules
-                                                          .toString(),
-                                                      benefit: renders.benefits
-                                                          .toString()),
-                                                );
-                                              }
-                                              return const SizedBox(
-                                                height: 100,
-                                                child: Center(
-                                                  child: Text(
-                                                      'Plano não encontrado'),
-                                                ),
-                                              );
-                                            });
-                                      }
-                                      return SizedBox(
-                                        height: 300,
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                            color: nightColor,
-                                          ),
-                                        ),
-                                      );
-                                    }),
-                              ),
-                            ),
-                          ],
-                        );
-                      } else {
-                        // Aqui, você não precisa do setState. Basta definir a variável idPlan diretamente.
-                        idPlan = render['plan']['id'].toString();
-                        print(idPlan);
-
-                        // Renderiza o CircularProgressIndicator verde e o FutureBuilder<List<Plans>>
-                        return Column(
-                          children: [
-                            idPlan != null
-                                ? SizedBox(
-                                    height:
-                                        400, // Altura definida para o ListView
-                                    child: FutureBuilder<List<LocalStores>>(
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                height: 600,
+                                child: Center(
+                                  child: FutureBuilder<List<Plans>>(
                                       future: RemoteAuthService()
-                                          .getOnePlansLocalStores(
-                                              token: token, id: idPlan),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          print(
-                                            RemoteAuthService()
-                                                .getOnePlansLocalStores(
-                                                    token: token, id: idPlan),
-                                          );
+                                          .getPlans(token: token),
+                                      builder: (context, planSnapshot) {
+                                        if (planSnapshot.hasData) {
                                           return ListView.builder(
-                                            scrollDirection: Axis
-                                                .horizontal, // Scroll horizontal
-                                            itemCount: snapshot.data!.length,
-                                            itemBuilder: (context, index) {
-                                              var renders =
-                                                  snapshot.data![index];
-                                              if (idPlan != null) {
-                                                return Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: ContentProduct(
-                                                    title:
-                                                        renders.name.toString(),
-                                                    drules: renders.rules
-                                                        .toString()
-                                                        .replaceAll(
-                                                            "\\n", "\n\n"),
-                                                    urlLogo: renders.urllogo,
-                                                    id: renders.id.toString(),
+                                              shrinkWrap: true,
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount:
+                                                  planSnapshot.data!.length,
+                                              itemBuilder: (context, index) {
+                                                var renders =
+                                                    planSnapshot.data![index];
+                                                if (renders != null) {
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: PlanContainer(
+                                                        name: renders.name
+                                                            .toString(),
+                                                        value: renders.value
+                                                            .toString(),
+                                                        rules: renders.rules
+                                                            .toString(),
+                                                        benefit: renders
+                                                            .benefits
+                                                            .toString()),
+                                                  );
+                                                }
+                                                return const SizedBox(
+                                                  height: 100,
+                                                  child: Center(
+                                                    child: Text(
+                                                        'Plano não encontrado'),
                                                   ),
                                                 );
-                                              }
-                                              return const SizedBox(
-                                                height: 100,
-                                                child: Center(
-                                                  child: Text('Não encontrado'),
-                                                ),
-                                              );
-                                            },
-                                          );
+                                              });
                                         }
                                         return SizedBox(
                                           height: 300,
@@ -223,11 +160,100 @@ class _PlanScreenState extends State<PlanScreen> {
                                             ),
                                           ),
                                         );
-                                      },
-                                    ),
-                                  )
-                                : Text("data")
+                                      }),
+                                ),
+                              ),
+                            ),
                           ],
+                        );
+                      } else {
+                        // Aqui, você não precisa do setState. Basta definir a variável idPlan diretamente.
+                        idPlan = render['plan']['id'].toString();
+                        print(idPlan);
+                        return Padding(
+                          padding: defaultPaddingHorizon,
+                          child: idPlan != null
+                              ? Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    SecundaryText(
+                                        text: "Seus beneficios",
+                                        color: nightColor,
+                                        align: TextAlign.start),
+                                    SizedBox(
+                                      height: 25,
+                                    ),
+                                    SizedBox(
+                                      height:
+                                          400, // Altura definida para o ListView
+                                      child: FutureBuilder<List<LocalStores>>(
+                                        future: RemoteAuthService()
+                                            .getOnePlansLocalStores(
+                                                token: token, id: idPlan),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            print(
+                                              RemoteAuthService()
+                                                  .getOnePlansLocalStores(
+                                                      token: token, id: idPlan),
+                                            );
+                                            return GridView.builder(
+                                              gridDelegate:
+                                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                                crossAxisSpacing: 10,
+                                                mainAxisSpacing: 5,
+                                                childAspectRatio:
+                                                    0.75, // Proporção padrão
+                                              ),
+                                              itemCount: snapshot.data!.length,
+                                              itemBuilder: (context, index) {
+                                                var renders =
+                                                    snapshot.data![index];
+                                                // Verificação se o idPlan não é nulo
+                                                if (idPlan != null) {
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: ContentLocalProduct(
+                                                      urlLogo: renders.urllogo,
+                                                      benefit: renders.benefit
+                                                          .toString(),
+                                                      title: renders.name
+                                                          .toString(),
+                                                      id: renders.id.toString(),
+                                                    ),
+                                                  );
+                                                }
+                                                return const SizedBox(
+                                                  height: 100,
+                                                  child: Center(
+                                                    child:
+                                                        Text('Não encontrado'),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          }
+                                          return SizedBox(
+                                            height: 300,
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                color: nightColor,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Text("data"),
                         );
                       }
                     } else {
