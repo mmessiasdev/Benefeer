@@ -80,9 +80,8 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                       }),
                                   const SearchInput(),
                                   Padding(
-                                    padding: defaultPaddingVertical,
-                                    child: BankCard(urllogo: render["urllogo"],)
-                                  ),
+                                      padding: defaultPaddingVertical,
+                                      child: BankCard()),
                                   Padding(
                                     padding: defaultPaddingVertical,
                                     child: Container(
@@ -105,7 +104,8 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                   Padding(
                                     padding: defaultPaddingVertical,
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
                                       children: [
                                         SecundaryText(
                                           text: render["name"],

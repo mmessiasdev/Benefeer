@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/contentlocalproduct.dart';
 import 'package:Benefeer/component/contentproduct.dart';
@@ -10,7 +12,9 @@ import 'package:Benefeer/model/plans.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:http/http.dart' as http;
+import 'package:get/get.dart'; // Pacote get para navegação
 
 class PlanScreen extends StatefulWidget {
   const PlanScreen({super.key});
@@ -59,10 +63,13 @@ class _PlanScreenState extends State<PlanScreen> {
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Erro: ${snapshot.error}'));
                     } else if (snapshot.hasData) {
-                      var render = snapshot.data;
+                      var response = snapshot.data
+                          as http.Response; // Usa o alias 'http.Response'
+                      var render =
+                          jsonDecode(response.body) as Map<String, dynamic>;
 
                       // Verifica se o campo "plan" é nulo
-                      if (render['plan'] == null) {
+                      if (render != null && render['plan'] == null) {
                         // Se for nulo, renderiza o widget codado
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -221,7 +228,8 @@ class _PlanScreenState extends State<PlanScreen> {
                                                         const EdgeInsets.all(
                                                             8.0),
                                                     child: ContentLocalProduct(
-                                                      urlLogo: renders.urllogo,
+                                                      urlLogo: renders.urllogo
+                                                          .toString(),
                                                       benefit: renders.benefit
                                                           .toString(),
                                                       title: renders.name

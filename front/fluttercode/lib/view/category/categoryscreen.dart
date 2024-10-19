@@ -117,7 +117,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ContentProduct(
-                                    urlLogo: renders.logourl,
+                                    urlLogo: renders.logourl.toString(),
                                     drules:
                                         "${renders.percentcashback}% de cashback",
                                     title: renders.name.toString(),

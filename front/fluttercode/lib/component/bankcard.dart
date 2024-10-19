@@ -3,9 +3,7 @@ import 'package:Benefeer/component/texts.dart';
 import 'package:flutter/material.dart';
 
 class BankCard extends StatelessWidget {
-  BankCard({super.key, this.urllogo});
-
-  String? urllogo;
+  BankCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,6 @@ class BankCard extends StatelessWidget {
                 )
               ],
             ),
-            Image.network(urllogo ?? ""),
           ],
         ),
       ),

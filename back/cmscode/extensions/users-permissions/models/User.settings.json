@@ -62,10 +62,6 @@
     "profile": {
       "via": "user",
       "model": "profile"
-    },
-    "cpf": {
-      "type": "string",
-      "unique": true
     }
   }
 }

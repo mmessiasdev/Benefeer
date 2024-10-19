@@ -70,24 +70,19 @@ class RemoteAuthService {
     return response;
   }
 
-  Future<dynamic> getProfile({
-    required String token,
-  }) async {
-    var response = await client.get(
-      Uri.parse('$url/profiles/me'),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
-      },
-    );
-    if (response.statusCode == 200) {
-      // Converte a resposta JSON para um Map<String, dynamic>
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Falha ao carregar o perfil');
-    }
-  }
+Future<http.Response> getProfile({
+  required String token,
+}) async {
+  // Faz a chamada GET e retorna o objeto Response diretamente
+  return await client.get(
+    Uri.parse('$url/profiles/me'),
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+      'ngrok-skip-browser-warning': "true",
+    },
+  );
+}
 
   Future addPost(
       {required String? title,
@@ -245,7 +240,7 @@ class RemoteAuthService {
     }
     return listItens;
   }
-  
+
   Future<Map> getLocalStore({
     required String id,
     required String? token,
@@ -261,7 +256,6 @@ class RemoteAuthService {
     var itens = json.decode(response.body);
     return itens;
   }
-
 
   Future<List<PostFiles>> getPostsFiles(
       {required String? token, required String? id}) async {

@@ -81,22 +81,39 @@ class AuthController extends GetxController {
         status: 'Loading...',
         dismissOnTap: false,
       );
+
+      // Faz a chamada para signIn
       var result = await RemoteAuthService().signIn(
         email: email,
         password: password,
       );
+
       if (result.statusCode == 200) {
+        // Pega o token do corpo da resposta
         String token = json.decode(result.body)['jwt'];
+
+        // Faz a chamada para getProfile
         var userResult = await RemoteAuthService().getProfile(token: token);
+
         if (userResult.statusCode == 200) {
-          var email = jsonDecode(userResult.body)['email'];
-          var lname = jsonDecode(userResult.body)['lname'];
-          var fname = jsonDecode(userResult.body)['fname'];
-          var id = jsonDecode(userResult.body)['id'];
+          // Decodifica o corpo da resposta (apenas depois de checar o statusCode)
+          var userData = jsonDecode(userResult.body);
+
+          var email = userData['email'];
+          var lname = userData['lname'];
+          var fname = userData['fname'];
+          var id = userData['id'];
+
           user.value = userFromJson(userResult.body);
+
           await LocalAuthService().storeToken(token);
-          await LocalAuthService()
-              .storeAccount(email: email, lname: lname, id: id, fname: fname);
+          await LocalAuthService().storeAccount(
+            email: email,
+            lname: lname,
+            id: id,
+            fname: fname,
+          );
+
           EasyLoading.showSuccess("Bem vindo ao Benefeer");
           Navigator.of(Get.overlayContext!).pushReplacementNamed('/');
         } else {

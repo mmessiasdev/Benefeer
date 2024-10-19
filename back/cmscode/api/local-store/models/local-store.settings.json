@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "local_stores",
+  "info": {
+    "name": "LocalStore",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "rules": {
+      "type": "string"
+    },
+    "localization": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "urllogo": {
+      "type": "string"
+    },
+    "code": {
+      "type": "uid"
+    },
+    "CEP": {
+      "type": "string"
+    },
+    "benefit": {
+      "type": "string"
+    },
+    "plans": {
+      "via": "local_stores",
+      "collection": "plan"
+    }
+  }
+}

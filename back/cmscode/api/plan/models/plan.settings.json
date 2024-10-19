@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "plans",
+  "info": {
+    "name": "Plan",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "desc": {
+      "type": "string"
+    },
+    "benefits": {
+      "type": "string"
+    },
+    "rules": {
+      "type": "string"
+    },
+    "value": {
+      "default": 0,
+      "type": "decimal"
+    },
+    "local_stores": {
+      "collection": "local-store",
+      "via": "plans",
+      "dominant": true
+    }
+  }
+}
