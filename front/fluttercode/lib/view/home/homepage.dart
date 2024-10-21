@@ -7,6 +7,7 @@ import 'package:Benefeer/component/widgets/searchInput.dart';
 import 'package:Benefeer/model/categories.dart';
 import 'package:Benefeer/model/stores.dart';
 import 'package:Benefeer/service/remote/auth.dart';
+import 'package:Benefeer/view/qrcode/qrcodescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/padding.dart';
@@ -87,8 +88,15 @@ class _HomePageState extends State<HomePage> {
               padding: defaultPaddingHorizon,
               child: MainHeader(
                 title: "Benefeer",
-                icon: Icons.menu,
-                onClick: () => {},
+                icon: Icons.qr_code,
+                onClick: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QRCodeScannerPage(),
+                    ),
+                  );
+                },
               ),
             ),
             Padding(

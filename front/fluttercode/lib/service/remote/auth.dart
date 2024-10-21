@@ -70,19 +70,19 @@ class RemoteAuthService {
     return response;
   }
 
-Future<http.Response> getProfile({
-  required String token,
-}) async {
-  // Faz a chamada GET e retorna o objeto Response diretamente
-  return await client.get(
-    Uri.parse('$url/profiles/me'),
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $token",
-      'ngrok-skip-browser-warning': "true",
-    },
-  );
-}
+  Future<http.Response> getProfile({
+    required String token,
+  }) async {
+    // Faz a chamada GET e retorna o objeto Response diretamente
+    return await client.get(
+      Uri.parse('$url/profiles/me'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': "true",
+      },
+    );
+  }
 
   Future addPost(
       {required String? title,
@@ -274,6 +274,23 @@ Future<http.Response> getProfile({
       listItens.add(PostFiles.fromJson(itemCount[i]));
     }
     return listItens;
+  }
+
+  Future<Map> getQrCodeLocalStore({
+    required String id,
+    required String? token,
+  }) async {
+    var response = await client.get(
+      Uri.parse('$url/local-store/$id/qrcode'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': "true"
+      },
+    );
+    var itens = json.decode(response.body);
+    print(itens);
+    return itens;
   }
 
   // Future<List<PostsModel>> getPostSearch(

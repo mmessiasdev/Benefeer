@@ -79,9 +79,36 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                         (Navigator.pop(context));
                                       }),
                                   const SearchInput(),
-                                  Padding(
-                                      padding: defaultPaddingVertical,
-                                      child: BankCard()),
+                                  SizedBox(
+                                    height: 40,
+                                  ),
+                                  FutureBuilder<Map>(
+                                      future: RemoteAuthService()
+                                          .getQrCodeLocalStore(
+                                              id: widget.id, token: token),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          var renderQr = snapshot.data!;
+                                          print(renderQr["qrCode"]);
+                                          return BankCard(
+                                            qrCode:
+                                                renderQr["qrCode"].toString(),
+                                          );
+                                        } else if (snapshot.hasError) {
+                                          return Expanded(
+                                            child: Center(
+                                                child: SubText(
+                                              text: 'Erro ao pesquisar QR Code',
+                                              color: PrimaryColor,
+                                              align: TextAlign.center,
+                                            )),
+                                          );
+                                        }
+                                        return Padding(
+                                          padding: defaultPadding,
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }),
                                   Padding(
                                     padding: defaultPaddingVertical,
                                     child: Container(
@@ -112,11 +139,22 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                           color: nightColor,
                                           align: TextAlign.start,
                                         ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Divider(),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
                                         SubText(
-                                          text: render["name"],
+                                          text: render["localization"],
                                           color: nightColor,
                                           align: TextAlign.start,
                                         ),
+                                        SecundaryText(
+                                            text: render["phone"],
+                                            color: nightColor,
+                                            align: TextAlign.start)
                                       ],
                                     ),
                                   ),
@@ -138,15 +176,15 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                   //     ),
                                   //   ),
                                   // ),
-                                  Tips(
-                                      desc:
-                                          "Ao clicar em “Ativar cashback”, você será redirecionado ao site ou app."),
-                                  Tips(
-                                      desc:
-                                          "Qualquer item comprado dentro do nosso link, será acrescentado dentro do seu seu saldo no nosso app!"),
-                                  Tips(
-                                      desc:
-                                          "O saldo do cashback irá cair na sua conta em até no máximo 7 dias uteis.")
+                                  // Tips(
+                                  //     desc:
+                                  //         "Ao clicar em “Ativar cashback”, você será redirecionado ao site ou app."),
+                                  // Tips(
+                                  //     desc:
+                                  //         "Qualquer item comprado dentro do nosso link, será acrescentado dentro do seu seu saldo no nosso app!"),
+                                  // Tips(
+                                  //     desc:
+                                  //         "O saldo do cashback irá cair na sua conta em até no máximo 7 dias uteis.")
                                 ],
                               ),
                             ),

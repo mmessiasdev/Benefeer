@@ -1,15 +1,20 @@
+import 'dart:convert';
+
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class BankCard extends StatelessWidget {
-  BankCard({super.key});
+  BankCard({super.key, this.urllogo, this.qrCode});
+
+  String? urllogo;
+  String? qrCode;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 190,
-      width: 340,
+      width: 400,
       decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [PrimaryColor, SecudaryColor],
@@ -19,33 +24,53 @@ class BankCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(17)),
       child: Padding(
         padding: const EdgeInsets.all(25),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                PrimaryText(
-                  color: nightColor,
-                  text: "Benefeer",
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                RichDefaultText(
-                  text: "Saldo diponível: \n",
-                  size: 16,
-                  fontweight: FontWeight.w300,
-                  wid: SecundaryText(
-                    text: "R\$ 0,00",
-                    color: nightColor,
-                    align: TextAlign.start,
-                  ),
-                )
-              ],
+            PrimaryText(
+              color: nightColor,
+              text: "Benefeer",
             ),
+            const SizedBox(
+              height: 10,
+            ),
+            RichDefaultText(
+              text: "Manoel Messias Farias Alves",
+              size: 16,
+              fontweight: FontWeight.w300,
+              wid: SecundaryText(
+                text: "05516148545",
+                color: nightColor,
+                align: TextAlign.start,
+              ),
+            ),
+            const SizedBox(height: 10),
+            if (qrCode != null && qrCode!.startsWith('data:image'))
+              Align(
+                alignment: Alignment.centerRight,
+                child: SizedBox(
+                  height: 100,
+                  child: _buildQrCodeImage(qrCode!)),
+              )
+            else
+              SizedBox(height: 80,)
           ],
         ),
       ),
     );
   }
+}
+
+Widget _buildQrCodeImage(String base64String) {
+  // Remove a parte 'data:image/png;base64,' da string
+  final decodedBytes =
+      base64Decode(base64String.split(',').last); // Decodifica a string Base64
+
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(10),
+    child: Image.memory(
+      decodedBytes,
+      fit: BoxFit.contain,
+    ),
+  );
 }
