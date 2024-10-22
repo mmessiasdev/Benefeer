@@ -281,7 +281,7 @@ class RemoteAuthService {
     required String? token,
   }) async {
     var response = await client.get(
-      Uri.parse('$url/local-store/$id/qrcode'),
+      Uri.parse('$url/local-stores/$id/qrcode'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",

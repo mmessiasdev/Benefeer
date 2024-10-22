@@ -1,4 +1,9 @@
 import 'dart:convert'; // Para trabalhar com JSON
+import 'package:Benefeer/component/colors.dart';
+import 'package:Benefeer/component/padding.dart';
+import 'package:Benefeer/component/texts.dart';
+import 'package:Benefeer/component/widgets/header.dart';
+import 'package:Benefeer/service/local/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:http/http.dart' as http;
@@ -12,9 +17,23 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
   bool isLoading = false;
-  String? dataResult; // Para armazenar os dados da API
+  var dataResult; // Para armazenar os dados da API
+  var token;
 
-  // Método para lidar com a leitura do QR Code e fazer a requisição à API
+  @override
+  void initState() {
+    super.initState();
+    getString();
+  }
+
+  void getString() async {
+    var strToken = await LocalAuthService().getSecureToken("token");
+
+    setState(() {
+      token = strToken.toString();
+    });
+  }
+
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) async {
@@ -29,12 +48,22 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
             scanData.code.toString(); // Pode ser um link direto ou ID
 
         try {
-          var response = await http.get(Uri.parse(apiUrl));
+          var response = await http.get(
+            Uri.parse(apiUrl),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $token",
+              'ngrok-skip-browser-warning': "true"
+            },
+          );
+
           if (response.statusCode == 200) {
             // Decodifica o JSON da resposta
             var jsonData = jsonDecode(response.body);
+
+            // Atualiza o estado com os valores obtidos da API
             setState(() {
-              dataResult = jsonData.toString(); // Armazena o resultado
+              dataResult = jsonData;
               isLoading = false;
             });
           } else {
@@ -61,27 +90,79 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("QR Code Scanner")),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-            ),
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: defaultPaddingHorizon,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              MainHeader(title: "Verifique a loja", onClick: () {}),
+              SizedBox(
+                height: 350,
+                child: QRView(
+                  key: qrKey,
+                  onQRViewCreated: _onQRViewCreated,
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Center(
+                    child: isLoading
+                        ? CircularProgressIndicator() // Mostra o loading
+                        : dataResult != null &&
+                                dataResult is Map &&
+                                dataResult.containsKey("id")
+                            ? Padding(
+                                padding: defaultPaddingVertical,
+                                child: ListView(
+                                  children: [
+                                    Padding(
+                                      padding: defaultPaddingVertical,
+                                      child: Icon(
+                                        Icons.verified,
+                                        color: SeventhColor,
+                                        size: 40,
+                                      ),
+                                    ),
+                                    SecundaryText(
+                                      align: TextAlign.start,
+                                      color: nightColor,
+                                      text:
+                                          dataResult?["name"].toString() ?? "",
+                                    ),
+                                    SubText(
+                                        text: dataResult?["localization"]
+                                                .toString() ??
+                                            "",
+                                        align: TextAlign.start),
+                                    Padding(
+                                      padding: defaultPadding,
+                                      child: Divider(),
+                                    ),
+                                    SubTextSized(
+                                      text: dataResult?["rules"]
+                                              .replaceAll("\\n", "\n\n") ??
+                                          "",
+                                      size: 15,
+                                      fontweight: FontWeight.w600,
+                                      color: OffColor,
+                                    )
+                                  ],
+                                ),
+                              )
+                            : SecundaryText(
+                                text: 'Escaneie um QR Code',
+                                color: nightColor,
+                                align: TextAlign.center)
+                    // : Text(dataResult != null
+                    //     ? dataResult["name"].toString()
+                    //     : 'Escaneie um QR Code'),
+                    ),
+              )
+            ],
           ),
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: isLoading
-                  ? CircularProgressIndicator() // Mostra o loading
-                  : Text(
-                      dataResult != null ? dataResult! : 'Escaneie um QR Code'),
-            ),
-          )
-        ],
+        ),
       ),
     );
   }
