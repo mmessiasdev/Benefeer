@@ -45,7 +45,6 @@ class RemoteAuthService {
       },
       body: jsonEncode(body),
     );
-    print('Resposta HTML: ${response.body}');
     return response;
   }
 
@@ -195,7 +194,7 @@ class RemoteAuthService {
       },
     );
     var body = jsonDecode(response.body);
-    var itemCount = body['online_stores'];
+    var itemCount = body['online_store'];
     for (var i = 0; i < itemCount.length; i++) {
       listItens.add(OnlineStore.fromJson(itemCount[i]));
     }
@@ -289,7 +288,6 @@ class RemoteAuthService {
       },
     );
     var itens = json.decode(response.body);
-    print(itens);
     return itens;
   }
 

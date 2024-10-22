@@ -224,10 +224,11 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         );
                                       }
-                                      return const SizedBox(
+                                      return SizedBox(
                                         height: 100,
                                         child: Center(
-                                          child: Text('Não encontrado'),
+                                          child: ErrorPost(
+                                              text: "Procurando lojas"),
                                         ),
                                       );
                                     },
@@ -254,53 +255,53 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                          // SizedBox(
-                          //   height: 250,
-                          //   child: FutureBuilder<List<OnlineStore>>(
-                          //     future: RemoteAuthService()
-                          //         .getOneCategoryStories(id: '2', token: token),
-                          //     builder: (context, snapshot) {
-                          //       if (snapshot.hasData) {
-                          //         return ListView.builder(
-                          //           scrollDirection: Axis.horizontal,
-                          //           itemCount: snapshot.data!.length,
-                          //           itemBuilder: (context, index) {
-                          //             var renders = snapshot.data![index];
-                          //             if (renders != null) {
-                          //               return Padding(
-                          //                 padding: const EdgeInsets.all(8.0),
-                          //                 child: Align(
-                          //                   alignment: Alignment.centerLeft,
-                          //                   child: ContentProduct(
-                          //                     urlLogo: renders.logourl.toString(),
-                          //                     drules:
-                          //                         "${renders.percentcashback}% de cashback",
-                          //                     title: renders.name.toString(),
-                          //                     id: renders.id.toString(),
-                          //                   ),
-                          //                 ),
-                          //               );
-                          //             }
-                          //             return const SizedBox(
-                          //               height: 100,
-                          //               child: Center(
-                          //                 child: Text('Não encontrado'),
-                          //               ),
-                          //             );
-                          //           },
-                          //         );
-                          //       }
-                          //       return SizedBox(
-                          //         height: 300,
-                          //         child: Center(
-                          //           child: CircularProgressIndicator(
-                          //             color: nightColor,
-                          //           ),
-                          //         ),
-                          //       );
-                          //     },
-                          //   ),
-                          // ),
+                          SizedBox(
+                            height: 250,
+                            child: FutureBuilder<List<OnlineStore>>(
+                              future: RemoteAuthService()
+                                  .getOneCategoryStories(id: '1', token: token),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, index) {
+                                      var renders = snapshot.data![index];
+                                      if (renders != null) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: ContentProduct(
+                                              urlLogo:
+                                                  renders.logourl.toString(),
+                                              drules:
+                                                  "${renders.percentcashback}% de cashback",
+                                              title: renders.name.toString(),
+                                              id: renders.id.toString(),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      return SizedBox(
+                                        height: 200,
+                                        child: Center(
+                                          child: ErrorPost(
+                                              text: "Lojas não encontradas."),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }
+                                return SizedBox(
+                                  height: 200,
+                                  child: Center(
+                                    child: ErrorPost(text: "Procurando lojas"),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                         ],
                       )
                     : SizedBox(

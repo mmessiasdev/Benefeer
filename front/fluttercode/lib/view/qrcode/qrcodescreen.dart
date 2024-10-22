@@ -5,6 +5,7 @@ import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:http/http.dart' as http;
 
@@ -58,15 +59,18 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
           );
 
           if (response.statusCode == 200) {
+            EasyLoading.showSuccess('QR Code válido.');
+
             // Decodifica o JSON da resposta
             var jsonData = jsonDecode(response.body);
 
             // Atualiza o estado com os valores obtidos da API
             setState(() {
               dataResult = jsonData;
-              isLoading = false;
+              isLoading = true;
             });
           } else {
+            EasyLoading.showError('Erro ao carregar dados.');
             setState(() {
               dataResult = "Erro ao carregar dados da API";
               isLoading = false;
@@ -74,6 +78,7 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
           }
         } catch (e) {
           setState(() {
+            EasyLoading.showError('QR Code válido não encontrado.');
             dataResult = "Falha na conexão: $e";
             isLoading = false;
           });
@@ -108,57 +113,59 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
               Expanded(
                 flex: 1,
                 child: Center(
-                    child: isLoading
-                        ? CircularProgressIndicator() // Mostra o loading
-                        : dataResult != null &&
-                                dataResult is Map &&
-                                dataResult.containsKey("id")
-                            ? Padding(
-                                padding: defaultPaddingVertical,
-                                child: ListView(
-                                  children: [
-                                    Padding(
-                                      padding: defaultPaddingVertical,
-                                      child: Icon(
-                                        Icons.verified,
-                                        color: SeventhColor,
-                                        size: 40,
-                                      ),
+                  child: isLoading
+                      ? CircularProgressIndicator() // Mostra o loading
+                      : dataResult != null &&
+                              dataResult is Map &&
+                              dataResult.containsKey("id")
+                          ? Padding(
+                              padding: defaultPaddingVertical,
+                              child: ListView(
+                                children: [
+                                  Padding(
+                                    padding: defaultPaddingVertical,
+                                    child: Icon(
+                                      Icons.verified,
+                                      color: SeventhColor,
+                                      size: 40,
                                     ),
-                                    SecundaryText(
-                                      align: TextAlign.start,
-                                      color: nightColor,
-                                      text:
-                                          dataResult?["name"].toString() ?? "",
-                                    ),
-                                    SubText(
-                                        text: dataResult?["localization"]
-                                                .toString() ??
-                                            "",
-                                        align: TextAlign.start),
-                                    Padding(
-                                      padding: defaultPadding,
-                                      child: Divider(),
-                                    ),
-                                    SubTextSized(
-                                      text: dataResult?["rules"]
-                                              .replaceAll("\\n", "\n\n") ??
+                                  ),
+                                  SecundaryText(
+                                    align: TextAlign.start,
+                                    color: nightColor,
+                                    text: dataResult?["name"].toString() ?? "",
+                                  ),
+                                  SubText(
+                                      text: dataResult?["localization"]
+                                              .toString() ??
                                           "",
-                                      size: 15,
-                                      fontweight: FontWeight.w600,
-                                      color: OffColor,
-                                    )
-                                  ],
+                                      align: TextAlign.start),
+                                  Padding(
+                                    padding: defaultPadding,
+                                    child: Divider(),
+                                  ),
+                                  SubTextSized(
+                                    text: dataResult?["rules"]
+                                            .replaceAll("\\n", "\n\n") ??
+                                        "",
+                                    size: 15,
+                                    fontweight: FontWeight.w600,
+                                    color: OffColor,
+                                  )
+                                ],
+                              ),
+                            )
+                          : dataResult != null && dataResult != Map
+                              ? Icon(
+                                  Icons.verified,
+                                  color: Colors.red,
+                                )
+                              : SecundaryText(
+                                  text: 'Escaneie um QR Code',
+                                  color: nightColor,
+                                  align: TextAlign.center,
                                 ),
-                              )
-                            : SecundaryText(
-                                text: 'Escaneie um QR Code',
-                                color: nightColor,
-                                align: TextAlign.center)
-                    // : Text(dataResult != null
-                    //     ? dataResult["name"].toString()
-                    //     : 'Escaneie um QR Code'),
-                    ),
+                ),
               )
             ],
           ),
