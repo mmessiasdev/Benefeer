@@ -67,7 +67,7 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
             // Atualiza o estado com os valores obtidos da API
             setState(() {
               dataResult = jsonData;
-              isLoading = true;
+              isLoading = false;
             });
           } else {
             EasyLoading.showError('Erro ao carregar dados.');
@@ -156,9 +156,18 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
                               ),
                             )
                           : dataResult != null && dataResult != Map
-                              ? Icon(
-                                  Icons.verified,
-                                  color: Colors.red,
+                              ? Column(
+                                  children: [
+                                    Icon(
+                                      Icons.verified,
+                                      color: FifthColor,
+                                      size: 40,
+                                    ),
+                                    SecundaryText(
+                                        text: "QR Code inválido.",
+                                        color: nightColor,
+                                        align: TextAlign.center),
+                                  ],
                                 )
                               : SecundaryText(
                                   text: 'Escaneie um QR Code',
