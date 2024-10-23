@@ -209,6 +209,7 @@ class _PlanScreenState extends State<PlanScreen> {
                                                       token: token, id: idPlan),
                                             );
                                             return GridView.builder(
+                                              shrinkWrap: true,
                                               gridDelegate:
                                                   const SliverGridDelegateWithFixedCrossAxisCount(
                                                 crossAxisCount: 2,

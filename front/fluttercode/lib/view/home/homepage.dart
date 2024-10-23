@@ -80,8 +80,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: SizedBox(
-        // Remova o Expanded daqui
+      child: Container(
+        color: lightColor,
         child: ListView(
           children: [
             Padding(
@@ -103,9 +103,7 @@ class _HomePageState extends State<HomePage> {
               padding: defaultPaddingHorizon,
               child: const SearchInput(),
             ),
-            const SizedBox(
-              height: 25,
-            ),
+            const SizedBox(height: 25),
             Padding(
               padding: defaultPaddingHorizon,
               child: Row(
@@ -134,9 +132,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 40,
-            ),
+            const SizedBox(height: 40),
             ClipRRect(
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(75),
@@ -144,9 +140,7 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                 height: 100,
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  color: SecudaryColor,
-                ),
+                decoration: BoxDecoration(color: SecudaryColor),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -180,9 +174,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Container(
               width: double.infinity,
-              decoration: BoxDecoration(
-                color: SecudaryColor,
-              ),
+              decoration: BoxDecoration(color: SecudaryColor),
               child: Padding(
                 padding: defaultPaddingVertical,
                 child: screen == "online"
@@ -192,121 +184,87 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(height: 40),
                           Padding(
                             padding: defaultPaddingHorizon,
-                            child: const SizedBox(
-                              width: double.infinity,
-                              child: ListTitle(
-                                title: "Destaques",
-                              ),
-                            ),
+                            child: const ListTitle(title: "Destaques"),
                           ),
                           SizedBox(
-                            height: 250, // Altura definida para o ListView
-                            child: FutureBuilder<List<StoresModel>>(
-                              future:
-                                  RemoteAuthService().getStores(token: token),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return ListView.builder(
-                                    scrollDirection:
-                                        Axis.horizontal, // Scroll horizontal
-                                    itemCount: snapshot.data!.length,
-                                    itemBuilder: (context, index) {
-                                      var renders = snapshot.data![index];
-                                      if (renders != null) {
-                                        return Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: ContentProduct(
-                                            urlLogo: renders.logourl.toString(),
-                                            drules:
-                                                "${renders.percentcashback}% de cashback",
-                                            title: renders.name.toString(),
-                                            id: renders.id.toString(),
-                                          ),
+                            height:
+                                250, // Altura definida para o ListView
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                FutureBuilder<List<StoresModel>>(
+                                  future: RemoteAuthService()
+                                      .getStores(token: token),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                            ConnectionState.done &&
+                                        snapshot.hasData) {
+                                      if (snapshot.data!.isEmpty) {
+                                        return const Center(
+                                          child: Text(
+                                              "Nenhuma loja disponível no momento."),
+                                        );
+                                      } else {
+                                        return ListView.builder(
+                                          shrinkWrap: true,
+                                          scrollDirection:
+                                              Axis.horizontal,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount:
+                                              snapshot.data!.length,
+                                          itemBuilder: (context, index) {
+                                            var renders =
+                                                snapshot.data![index];
+                                            return Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets
+                                                          .all(8.0),
+                                                  child: ContentProduct(
+                                                    urlLogo: renders
+                                                        .logourl
+                                                        .toString(),
+                                                    drules:
+                                                        "${renders.percentcashback}% de cashback",
+                                                    title: renders.name
+                                                        .toString(),
+                                                    id: renders.id
+                                                        .toString(),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
                                         );
                                       }
-                                      return SizedBox(
-                                        height: 100,
-                                        child: Center(
-                                          child: ErrorPost(
-                                              text: "Procurando lojas"),
-                                        ),
+                                    } else if (snapshot.hasError) {
+                                      return Center(
+                                        child: Text(
+                                            "Erro ao carregar dados: ${snapshot.error}"),
                                       );
-                                    },
-                                  );
-                                }
-                                return SizedBox(
-                                  height: 300,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      color: nightColor,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 40),
-                          Padding(
-                            padding: defaultPaddingHorizon,
-                            child: const SizedBox(
-                              width: double.infinity,
-                              child: ListTitle(
-                                title: "Celulares",
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 250,
-                            child: FutureBuilder<List<OnlineStore>>(
-                              future: RemoteAuthService()
-                                  .getOneCategoryStories(id: '1', token: token),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: snapshot.data!.length,
-                                    itemBuilder: (context, index) {
-                                      var renders = snapshot.data![index];
-                                      if (renders != null) {
-                                        return Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: ContentProduct(
-                                              urlLogo:
-                                                  renders.logourl.toString(),
-                                              drules:
-                                                  "${renders.percentcashback}% de cashback",
-                                              title: renders.name.toString(),
-                                              id: renders.id.toString(),
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                      return SizedBox(
-                                        height: 200,
-                                        child: Center(
-                                          child: ErrorPost(
-                                              text: "Lojas não encontradas."),
+                                    }
+      
+                                    return SizedBox(
+                                      height: 300,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: nightColor,
                                         ),
-                                      );
-                                    },
-                                  );
-                                }
-                                return SizedBox(
-                                  height: 200,
-                                  child: Center(
-                                    child: ErrorPost(text: "Procurando lojas"),
-                                  ),
-                                );
-                              },
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       )
                     : SizedBox(
                         height: MediaQuery.of(context).size.height * .5,
-                        child: ErrorPost(text: "Em breve!")),
+                        child: ErrorPost(text: "Em breve!"),
+                      ),
               ),
             ),
           ],
