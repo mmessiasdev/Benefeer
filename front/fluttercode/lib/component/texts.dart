@@ -34,16 +34,25 @@ class PrimaryText extends StatelessWidget {
 }
 
 class SecundaryText extends StatelessWidget {
-  SecundaryText({required this.text, required this.color, required this.align});
+  SecundaryText(
+      {required this.text,
+      required this.color,
+      required this.align,
+      this.maxl,
+      this.over});
   String text;
   Color color;
   TextAlign align;
+  TextOverflow? over;
+  int? maxl;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: Text(
         text,
+        maxLines: maxl,
+        overflow: over,
         textAlign: align,
         style: GoogleFonts.montserrat(
           fontSize: 20,
@@ -74,7 +83,7 @@ class ButtonText extends StatelessWidget {
           fontSize: 24,
           textStyle: TextStyle(
             fontWeight: FontWeight.w600,
-            color: colorText ?? nightColor, 
+            color: colorText ?? nightColor,
             decoration: TextDecoration.none,
           ),
         ),
@@ -108,20 +117,25 @@ class ButtomSecundary extends StatelessWidget {
 }
 
 class SubText extends StatelessWidget {
-  SubText({
-    required this.text,
-    required this.align,
-    this.color,
-  });
+  SubText(
+      {required this.text,
+      required this.align,
+      this.color,
+      this.maxl,
+      this.over});
   String text;
   TextAlign align;
   Color? color;
+  TextOverflow? over;
+  int? maxl;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: Text(
         text,
+        overflow: over,
+        maxLines: maxl,
         textAlign: align,
         style: GoogleFonts.montserrat(
           fontSize: 12,

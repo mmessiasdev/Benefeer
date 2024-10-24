@@ -129,10 +129,10 @@ class RemoteAuthService {
     return listItens;
   }
 
-  Future<List<CategoriesModel>> getCategories({
+  Future<List<CategoryModel>> getCategories({
     required String? token,
   }) async {
-    List<CategoriesModel> listItens = [];
+    List<CategoryModel> listItens = [];
     var response = await client.get(
       Uri.parse('$url/categories'),
       headers: {
@@ -143,7 +143,7 @@ class RemoteAuthService {
     var body = jsonDecode(response.body);
     var itemCount = body;
     for (var i = 0; i < itemCount.length; i++) {
-      listItens.add(CategoriesModel.fromJson(itemCount[i]));
+      listItens.add(CategoryModel.fromJson(itemCount[i]));
     }
     return listItens;
   }
@@ -180,11 +180,11 @@ class RemoteAuthService {
     return itens;
   }
 
-  Future<List<OnlineStore>> getOneCategoryStories({
+  Future<List<OnlineStores>> getOneCategoryStories({
     required String? token,
     required String? id,
   }) async {
-    List<OnlineStore> listItens = [];
+    List<OnlineStores> listItens = [];
     var response = await client.get(
       Uri.parse('$url/categories/$id'),
       headers: {
@@ -194,9 +194,10 @@ class RemoteAuthService {
       },
     );
     var body = jsonDecode(response.body);
-    var itemCount = body['online_store'];
+    var itemCount = body['online_stores'];
+    print(itemCount);
     for (var i = 0; i < itemCount.length; i++) {
-      listItens.add(OnlineStore.fromJson(itemCount[i]));
+      listItens.add(OnlineStores.fromJson(itemCount[i]));
     }
     return listItens;
   }

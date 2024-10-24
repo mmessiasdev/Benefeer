@@ -1,45 +1,49 @@
-class CategoriesModel {
+class CategoryModel {
   int? id;
   String? name;
-  OnlineStore? onlineStore;
   String? illustrationurl;
   String? createdAt;
   String? updatedAt;
+  List<OnlineStores>? onlineStores;
 
-  CategoriesModel(
+  CategoryModel(
       {this.id,
       this.name,
-      this.onlineStore,
       this.illustrationurl,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.onlineStores});
 
-  CategoriesModel.fromJson(Map<String, dynamic> json) {
+  CategoryModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    onlineStore = json['online_store'] != null
-        ? new OnlineStore.fromJson(json['online_store'])
-        : null;
     illustrationurl = json['illustrationurl'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    if (json['online_stores'] != null) {
+      onlineStores = <OnlineStores>[];
+      json['online_stores'].forEach((v) {
+        onlineStores!.add(new OnlineStores.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
-    if (this.onlineStore != null) {
-      data['online_store'] = this.onlineStore!.toJson();
-    }
     data['illustrationurl'] = this.illustrationurl;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    if (this.onlineStores != null) {
+      data['online_stores'] =
+          this.onlineStores!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
 
-class OnlineStore {
+class OnlineStores {
   int? id;
   String? name;
   String? desc;
@@ -49,7 +53,7 @@ class OnlineStore {
   String? createdAt;
   String? updatedAt;
 
-  OnlineStore(
+  OnlineStores(
       {this.id,
       this.name,
       this.desc,
@@ -59,7 +63,7 @@ class OnlineStore {
       this.createdAt,
       this.updatedAt});
 
-  OnlineStore.fromJson(Map<String, dynamic> json) {
+  OnlineStores.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     desc = json['desc'];

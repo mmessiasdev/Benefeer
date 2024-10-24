@@ -79,120 +79,113 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        color: lightColor,
-        child: ListView(
-          children: [
-            Padding(
-              padding: defaultPaddingHorizon,
-              child: MainHeader(
-                title: "Benefeer",
-                icon: Icons.qr_code,
-                onClick: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => QRCodeScannerPage(),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: defaultPaddingHorizon,
-              child: const SearchInput(),
-            ),
-            const SizedBox(height: 25),
-            Padding(
-              padding: defaultPaddingHorizon,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconList(
-                    title: "Perto de você",
-                    icon: Icons.location_on,
-                    onClick: () {},
+    return token == ""
+        ? const SizedBox()
+        : SafeArea(
+            child: ListView(
+              children: [
+                Padding(
+                  padding: defaultPaddingHorizon,
+                  child: MainHeader(
+                    title: "Benefeer",
+                    icon: Icons.qr_code,
+                    onClick: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QRCodeScannerPage(),
+                        ),
+                      );
+                    },
                   ),
-                  IconList(
-                    title: "Recomendados",
-                    icon: Icons.star,
-                    onClick: () {},
-                  ),
-                  IconList(
-                    title: "Ofertas Relâmpago",
-                    icon: Icons.flash_on,
-                    onClick: () {},
-                  ),
-                  IconList(
-                    title: "Mais",
-                    icon: Icons.more_horiz,
-                    onClick: () {},
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 40),
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(75),
-              ),
-              child: Container(
-                height: 100,
-                width: double.infinity,
-                decoration: BoxDecoration(color: SecudaryColor),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                      child: SubText(
-                        text: "Online",
-                        align: TextAlign.center,
-                        color: screen == "online" ? nightColor : OffColor,
-                      ),
-                      onTap: () {
-                        setState(() {
-                          screen = "online";
-                        });
-                      },
-                    ),
-                    GestureDetector(
-                      child: SubText(
-                        text: "Perto de você",
-                        align: TextAlign.center,
-                        color: screen == "close" ? nightColor : OffColor,
-                      ),
-                      onTap: () {
-                        setState(() {
-                          screen = "close";
-                        });
-                      },
-                    ),
-                  ],
                 ),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(color: SecudaryColor),
-              child: Padding(
-                padding: defaultPaddingVertical,
-                child: screen == "online"
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const SizedBox(height: 40),
-                          Padding(
-                            padding: defaultPaddingHorizon,
-                            child: const ListTitle(title: "Destaques"),
+                Padding(
+                  padding: defaultPaddingHorizon,
+                  child: const SearchInput(),
+                ),
+                const SizedBox(height: 25),
+                Padding(
+                  padding: defaultPaddingHorizon,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconList(
+                        title: "Perto de você",
+                        icon: Icons.location_on,
+                        onClick: () {},
+                      ),
+                      IconList(
+                        title: "Recomendados",
+                        icon: Icons.star,
+                        onClick: () {},
+                      ),
+                      IconList(
+                        title: "Ofertas Relâmpago",
+                        icon: Icons.flash_on,
+                        onClick: () {},
+                      ),
+                      IconList(
+                        title: "Mais",
+                        icon: Icons.more_horiz,
+                        onClick: () {},
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40),
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(75),
+                  ),
+                  child: Container(
+                    height: 75,
+                    decoration: BoxDecoration(color: SecudaryColor),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                          child: SubText(
+                            text: "Online",
+                            align: TextAlign.center,
+                            color: screen == "online" ? nightColor : OffColor,
                           ),
-                          SizedBox(
-                            height:
-                                250, // Altura definida para o ListView
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: [
-                                FutureBuilder<List<StoresModel>>(
+                          onTap: () {
+                            setState(() {
+                              screen = "online";
+                            });
+                          },
+                        ),
+                        GestureDetector(
+                          child: SubText(
+                            text: "Perto de você",
+                            align: TextAlign.center,
+                            color: screen == "close" ? nightColor : OffColor,
+                          ),
+                          onTap: () {
+                            setState(() {
+                              screen = "close";
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  color: SecudaryColor,
+                  child: Padding(
+                    padding: defaultPaddingVertical,
+                    child: screen == "online"
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Padding(
+                                padding: defaultPaddingHorizon,
+                                child: const ListTitle(title: "Destaques"),
+                              ),
+                              SizedBox(
+                                height: 250, // Altura definida para o ListView
+                                child: FutureBuilder<List<StoresModel>>(
                                   future: RemoteAuthService()
                                       .getStores(token: token),
                                   builder: (context, snapshot) {
@@ -207,34 +200,19 @@ class _HomePageState extends State<HomePage> {
                                       } else {
                                         return ListView.builder(
                                           shrinkWrap: true,
-                                          scrollDirection:
-                                              Axis.horizontal,
+                                          scrollDirection: Axis.horizontal,
                                           physics:
                                               const NeverScrollableScrollPhysics(),
-                                          itemCount:
-                                              snapshot.data!.length,
+                                          itemCount: snapshot.data!.length,
                                           itemBuilder: (context, index) {
-                                            var renders =
-                                                snapshot.data![index];
-                                            return Row(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets
-                                                          .all(8.0),
-                                                  child: ContentProduct(
-                                                    urlLogo: renders
-                                                        .logourl
-                                                        .toString(),
-                                                    drules:
-                                                        "${renders.percentcashback}% de cashback",
-                                                    title: renders.name
-                                                        .toString(),
-                                                    id: renders.id
-                                                        .toString(),
-                                                  ),
-                                                ),
-                                              ],
+                                            var renders = snapshot.data![index];
+                                            return ContentProduct(
+                                              urlLogo:
+                                                  renders.logourl.toString(),
+                                              drules:
+                                                  "${renders.percentcashback}% de cashback",
+                                              title: renders.name.toString(),
+                                              id: renders.id.toString(),
                                             );
                                           },
                                         );
@@ -242,10 +220,10 @@ class _HomePageState extends State<HomePage> {
                                     } else if (snapshot.hasError) {
                                       return Center(
                                         child: Text(
-                                            "Erro ao carregar dados: ${snapshot.error}"),
+                                          "Erro ao carregar dados: ${snapshot.error}",
+                                        ),
                                       );
                                     }
-      
                                     return SizedBox(
                                       height: 300,
                                       child: Center(
@@ -256,20 +234,79 @@ class _HomePageState extends State<HomePage> {
                                     );
                                   },
                                 ),
-                              ],
+                              ),
+                              SizedBox(
+                                height: 40,
+                              ),
+                              Padding(
+                                padding: defaultPaddingHorizon,
+                                child: const ListTitle(title: "Destaques"),
+                              ),
+                              SizedBox(
+                                height: 250, // Altura definida para o ListView
+                                child: FutureBuilder<List<OnlineStores>>(
+                                  future: RemoteAuthService()
+                                      .getOneCategoryStories(
+                                          token: token, id: '1'),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                            ConnectionState.done &&
+                                        snapshot.hasData) {
+                                      if (snapshot.data!.isEmpty) {
+                                        return const Center(
+                                          child: Text(
+                                              "Nenhuma loja disponível no momento."),
+                                        );
+                                      } else {
+                                        return ListView.builder(
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: snapshot.data!.length,
+                                          itemBuilder: (context, index) {
+                                            var renders = snapshot.data![index];
+                                            return ContentProduct(
+                                              urlLogo:
+                                                  renders.logourl.toString(),
+                                              drules:
+                                                  "${renders.percentcashback}% de cashback",
+                                              title: renders.name.toString(),
+                                              id: renders.id.toString(),
+                                            );
+                                          },
+                                        );
+                                      }
+                                    } else if (snapshot.hasError) {
+                                      return Center(
+                                        child: Text(
+                                          "Erro ao carregar dados: ${snapshot.error}",
+                                        ),
+                                      );
+                                    }
+                                    return SizedBox(
+                                      height: 300,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: nightColor,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          )
+                        : SizedBox(
+                            height: MediaQuery.of(context).size.height * .5,
+                            child: ErrorPost(
+                              text: "Em breve!",
                             ),
                           ),
-                        ],
-                      )
-                    : SizedBox(
-                        height: MediaQuery.of(context).size.height * .5,
-                        child: ErrorPost(text: "Em breve!"),
-                      ),
-              ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }

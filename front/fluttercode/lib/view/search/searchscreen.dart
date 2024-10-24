@@ -63,7 +63,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 padding: defaultPadding,
                 child: ListView(
                   children: [
-                    FutureBuilder<List<CategoriesModel>>(
+                    FutureBuilder<List<CategoryModel>>(
                         future: RemoteAuthService().getCategories(token: token),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {

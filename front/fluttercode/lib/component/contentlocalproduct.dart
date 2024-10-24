@@ -1,4 +1,5 @@
 import 'package:Benefeer/component/colors.dart';
+import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/view/store/localstorescreen.dart';
 import 'package:Benefeer/view/store/storescreen.dart';
@@ -20,64 +21,76 @@ class ContentLocalProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        (Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LocalStoreScreen(id: id)),
-        ));
-      },
-      child: Container(
-          width: 150,
-          decoration: BoxDecoration(
-            color: SecudaryColor,
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  width: 75,
-                  height: 100,
-                  child: Image.network(urlLogo ?? "", fit: BoxFit.contain),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: PrimaryColor,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SubText(
-                      color: lightColor,
-                      text: benefit,
-                      align: TextAlign.center,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 1,
-                  height: 40,
-                  child: Flexible(
-                    child: SubText(
-                      text: title,
-                      color: nightColor,
-                      align: TextAlign.start,
-                    ),
-                  ),
-                ),
-              ],
+    return SizedBox(
+      width: double.infinity,
+      child: GestureDetector(
+        onTap: () {
+          (Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => StoreScreen(id: id)),
+          ));
+        },
+        child: Container(
+            decoration: BoxDecoration(
+              color: SixthColor,
+              borderRadius: BorderRadius.circular(10),
             ),
-          )),
+            child: Padding(
+              padding: defaultPadding,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 100,
+                    child: Image.network(
+                      urlLogo ?? "",
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: PrimaryColor,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SubText(
+                                color: lightColor,
+                                text: benefit,
+                                align: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: SizedBox(
+                            child: SubText( //esse widget
+                              text: title,
+                              color: nightColor,
+                              align: TextAlign.start,
+                              over: TextOverflow.fade,
+                              maxl: 1,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )),
+      ),
     );
   }
 }

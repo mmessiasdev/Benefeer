@@ -100,7 +100,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           ),
                         );
                       }),
-                  FutureBuilder<List<OnlineStore>>(
+                  FutureBuilder<List<OnlineStores>>(
                     future: RemoteAuthService()
                         .getOneCategoryStories(token: token, id: widget.id),
                     builder: (context, snapshot) {

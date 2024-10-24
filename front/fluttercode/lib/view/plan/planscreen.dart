@@ -208,35 +208,30 @@ class _PlanScreenState extends State<PlanScreen> {
                                                   .getOnePlansLocalStores(
                                                       token: token, id: idPlan),
                                             );
-                                            return GridView.builder(
+                                            return ListView.builder(
                                               shrinkWrap: true,
-                                              gridDelegate:
-                                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                                crossAxisCount: 2,
-                                                crossAxisSpacing: 10,
-                                                mainAxisSpacing: 5,
-                                                childAspectRatio:
-                                                    0.75, // Proporção padrão
-                                              ),
+                                              // gridDelegate:
+                                              //     const SliverGridDelegateWithFixedCrossAxisCount(
+                                              //   crossAxisCount: 2,
+                                              //   crossAxisSpacing: 10,
+                                              //   mainAxisSpacing: 5,
+                                              //   childAspectRatio:
+                                              //       0.75, // Proporção padrão
+                                              // ),
                                               itemCount: snapshot.data!.length,
                                               itemBuilder: (context, index) {
                                                 var renders =
                                                     snapshot.data![index];
                                                 // Verificação se o idPlan não é nulo
                                                 if (idPlan != null) {
-                                                  return Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: ContentLocalProduct(
-                                                      urlLogo: renders.urllogo
-                                                          .toString(),
-                                                      benefit: renders.benefit
-                                                          .toString(),
-                                                      title: renders.name
-                                                          .toString(),
-                                                      id: renders.id.toString(),
-                                                    ),
+                                                  return ContentLocalProduct(
+                                                    urlLogo: renders.urllogo
+                                                        .toString(),
+                                                    benefit: renders.benefit
+                                                        .toString(),
+                                                    title:
+                                                        renders.name.toString(),
+                                                    id: renders.id.toString(),
                                                   );
                                                 }
                                                 return const SizedBox(
