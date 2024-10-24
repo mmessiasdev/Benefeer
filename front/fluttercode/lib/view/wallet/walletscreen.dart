@@ -30,11 +30,11 @@ class _WalletScreenState extends State<WalletScreen> {
             ),
           ),
           SizedBox(
-            height: 50,
+            height: 25,
           ),
           Expanded(
             child: Container(
-              color: EighthColor,
+              color: lightColor,
               child: Padding(
                 padding: defaultPaddingHorizon,
                 child: ListView(
@@ -74,12 +74,12 @@ class _WalletScreenState extends State<WalletScreen> {
                     ),
                     screen == "saldo"
                         ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               const SizedBox(
                                 height: 40,
                               ),
-                              BankCard(
-                              ),
+                              BankCard(),
                               const SizedBox(
                                 height: 40,
                               ),
@@ -91,6 +91,8 @@ class _WalletScreenState extends State<WalletScreen> {
                                 height: 40,
                               ),
                               DefaultButton(
+                                color: nightColor,
+                                colorText: lightColor,
                                 text: "Resgatar saldo",
                                 padding: EdgeInsets.all(20),
                               ),

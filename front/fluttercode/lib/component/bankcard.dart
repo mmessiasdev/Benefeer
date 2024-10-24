@@ -32,7 +32,7 @@ class BankCard extends StatelessWidget {
               text: "Benefeer",
             ),
             const SizedBox(
-              height: 35,
+              height: 50,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

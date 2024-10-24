@@ -201,8 +201,6 @@ class _HomePageState extends State<HomePage> {
                                         return ListView.builder(
                                           shrinkWrap: true,
                                           scrollDirection: Axis.horizontal,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
                                           itemCount: snapshot.data!.length,
                                           itemBuilder: (context, index) {
                                             var renders = snapshot.data![index];
