@@ -195,7 +195,6 @@ class RemoteAuthService {
     );
     var body = jsonDecode(response.body);
     var itemCount = body['online_stores'];
-    print(itemCount);
     for (var i = 0; i < itemCount.length; i++) {
       listItens.add(OnlineStores.fromJson(itemCount[i]));
     }
@@ -292,26 +291,28 @@ class RemoteAuthService {
     return itens;
   }
 
-  // Future<List<PostsModel>> getPostSearch(
-  //     {required String token,
-  //     required String query,
-  //     required String chunkId}) async {
-  //   List<PostsModel> listItens = [];
-  //   var response = await client.get(
-  //     Uri.parse("$url/posts?title_contains=$query&chunk.id_eq=$chunkId"),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "Authorization": "Bearer $token",
-  //       'ngrok-skip-browser-warning': "true"
-  //     },
-  //   );
-  //   var body = jsonDecode(response.body);
-  //   var itemCount = body;
-  //   for (var i = 0; i < itemCount.length; i++) {
-  //     listItens.add(PostsModel.fromJson(itemCount[i]));
-  //   }
-  //   return listItens;
-  // }
+  Future<List<StoresModel>> getOnlineStoresSearch({
+    required String token,
+    required String query,
+  }) async {
+    List<StoresModel> listItens = [];
+    var response = await client.get(
+      Uri.parse("$url/online-stores?name_contains=$query"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': "true"
+      },
+    );
+    var body = jsonDecode(response.body);
+    var itemCount = body;
+    for (var i = 0; i < itemCount.length; i++) {
+      listItens.add(StoresModel.fromJson(itemCount[i]));
+    }
+    return listItens;
+  }
+
+  //$url/posts?title_contains=$query&chunk.id_eq=$chunkId
 
   Future<List<Profile>> getProfiles({required String? token}) async {
     List<Profile> listItens = [];

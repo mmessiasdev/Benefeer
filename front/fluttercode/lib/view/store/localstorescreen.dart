@@ -89,7 +89,6 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
                                           var renderQr = snapshot.data!;
-                                          print(renderQr["qrCode"]);
                                           return BankCard(
                                             qrCode:
                                                 renderQr["qrCode"].toString(),
@@ -109,13 +108,16 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                           child: CircularProgressIndicator(),
                                         );
                                       }),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
                                   Padding(
                                     padding: defaultPaddingVertical,
                                     child: Container(
                                       width:
                                           MediaQuery.of(context).size.width * 1,
                                       decoration: BoxDecoration(
-                                        color: PrimaryColor,
+                                        color: nightColor,
                                         borderRadius: BorderRadius.circular(5),
                                       ),
                                       child: Padding(
@@ -139,11 +141,7 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                           color: nightColor,
                                           align: TextAlign.start,
                                         ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Divider(),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 10,
                                         ),
                                         SubText(
@@ -151,9 +149,20 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                           color: nightColor,
                                           align: TextAlign.start,
                                         ),
-                                        SecundaryText(
+                                        SubTextSized(
+                                            size: 15,
+                                            fontweight: FontWeight.w600,
                                             text: render["phone"],
                                             color: nightColor,
+                                            align: TextAlign.start),
+                                        Padding(
+                                          padding: defaultPadding,
+                                          child: const Divider(),
+                                        ),
+                                        SubText(
+                                          color: OffColor,
+                                            text: render["rules"]
+                                                .replaceAll("\\n", "\n\n"),
                                             align: TextAlign.start)
                                       ],
                                     ),

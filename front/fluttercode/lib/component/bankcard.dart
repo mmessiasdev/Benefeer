@@ -32,28 +32,36 @@ class BankCard extends StatelessWidget {
               text: "Benefeer",
             ),
             const SizedBox(
-              height: 10,
+              height: 35,
             ),
-            RichDefaultText(
-              text: "Manoel Messias Farias Alves",
-              size: 16,
-              fontweight: FontWeight.w300,
-              wid: SecundaryText(
-                text: "05516148545",
-                color: nightColor,
-                align: TextAlign.start,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SubText(
+                        text: "Manoel Messias Farias Alves",
+                        align: TextAlign.start),
+                    SecundaryText(
+                        text: "05516148545",
+                        color: nightColor,
+                        align: TextAlign.start),
+                  ],
+                ),
+                const SizedBox(width: 10),
+                if (qrCode != null && qrCode!.startsWith('data:image'))
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: SizedBox(
+                        height: 100, child: _buildQrCodeImage(qrCode!)),
+                  )
+                else
+                  SizedBox(
+                    height: 80,
+                  )
+              ],
             ),
-            const SizedBox(height: 10),
-            if (qrCode != null && qrCode!.startsWith('data:image'))
-              Align(
-                alignment: Alignment.centerRight,
-                child: SizedBox(
-                  height: 100,
-                  child: _buildQrCodeImage(qrCode!)),
-              )
-            else
-              SizedBox(height: 80,)
           ],
         ),
       ),

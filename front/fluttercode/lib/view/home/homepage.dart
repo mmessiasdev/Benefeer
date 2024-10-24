@@ -240,7 +240,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Padding(
                                 padding: defaultPaddingHorizon,
-                                child: const ListTitle(title: "Destaques"),
+                                child: const ListTitle(title: "Eletrônicos"),
                               ),
                               SizedBox(
                                 height: 250, // Altura definida para o ListView

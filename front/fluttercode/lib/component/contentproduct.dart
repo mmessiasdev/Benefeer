@@ -10,12 +10,18 @@ class ContentProduct extends StatelessWidget {
       required this.drules,
       required this.title,
       this.urlLogo,
+      this.maxl,
+      this.over,
+      this.bgcolor,
       required this.id});
 
   final String drules;
   final String title;
   final String? urlLogo;
   String id;
+  int? maxl;
+  TextOverflow? over;
+  Color? bgcolor;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +37,7 @@ class ContentProduct extends StatelessWidget {
         child: Container(
             width: 150,
             decoration: BoxDecoration(
-              color: lightColor,
+              color: bgcolor ?? lightColor,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Padding(
@@ -72,6 +78,8 @@ class ContentProduct extends StatelessWidget {
                     text: title,
                     color: nightColor,
                     align: TextAlign.start,
+                    maxl: maxl,
+                    over: over,
                   ),
                 ],
               ),

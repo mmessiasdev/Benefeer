@@ -176,7 +176,6 @@ class _PlanScreenState extends State<PlanScreen> {
                       } else {
                         // Aqui, você não precisa do setState. Basta definir a variável idPlan diretamente.
                         idPlan = render['plan']['id'].toString();
-                        print(idPlan);
                         return Padding(
                           padding: defaultPaddingHorizon,
                           child: idPlan != null
@@ -203,21 +202,8 @@ class _PlanScreenState extends State<PlanScreen> {
                                                 token: token, id: idPlan),
                                         builder: (context, snapshot) {
                                           if (snapshot.hasData) {
-                                            print(
-                                              RemoteAuthService()
-                                                  .getOnePlansLocalStores(
-                                                      token: token, id: idPlan),
-                                            );
                                             return ListView.builder(
                                               shrinkWrap: true,
-                                              // gridDelegate:
-                                              //     const SliverGridDelegateWithFixedCrossAxisCount(
-                                              //   crossAxisCount: 2,
-                                              //   crossAxisSpacing: 10,
-                                              //   mainAxisSpacing: 5,
-                                              //   childAspectRatio:
-                                              //       0.75, // Proporção padrão
-                                              // ),
                                               itemCount: snapshot.data!.length,
                                               itemBuilder: (context, index) {
                                                 var renders =

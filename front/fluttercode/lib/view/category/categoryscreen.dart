@@ -44,7 +44,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
         backgroundColor: lightColor,
         body: token == "null"
             ? SizedBox()
-            : ListView(
+            : Scaffold(
+                body: Column(
                 children: [
                   FutureBuilder<Map>(
                       future: RemoteAuthService()
@@ -57,7 +58,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               padding: defaultPadding,
                               child: Column(
                                 children: [
-                                  SearchInput(),
+                                  const SearchInput(),
+                                  const SizedBox(
+                                    height: 25,
+                                  ),
                                   MainHeader(
                                       title: render["name"],
                                       icon: Icons.arrow_back_ios,
@@ -100,29 +104,33 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           ),
                         );
                       }),
-                  FutureBuilder<List<OnlineStores>>(
-                    future: RemoteAuthService()
-                        .getOneCategoryStories(token: token, id: widget.id),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return SizedBox(
-                          height: 250,
-                          child: ListView.builder(
-                            scrollDirection:
-                                Axis.horizontal, // Scroll horizontal aqui
+                  Expanded(
+                    child: FutureBuilder<List<OnlineStores>>(
+                      future: RemoteAuthService()
+                          .getOneCategoryStories(token: token, id: widget.id),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 1,
+                              mainAxisSpacing: 1,
+                              childAspectRatio: 0.75, // Proporção padrão
+                            ),
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
                               var renders = snapshot.data![index];
                               if (renders != null) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ContentProduct(
-                                    urlLogo: renders.logourl.toString(),
-                                    drules:
-                                        "${renders.percentcashback}% de cashback",
-                                    title: renders.name.toString(),
-                                    id: renders.id.toString(),
-                                  ),
+                                return ContentProduct(
+                                  bgcolor: SixthColor,
+                                  urlLogo: renders.logourl.toString(),
+                                  drules:
+                                      "${renders.percentcashback}% de cashback",
+                                  title: renders.name.toString(),
+                                  id: renders.id.toString(),
+                                  maxl: 1,
+                                  over: TextOverflow.fade,
                                 );
                               }
                               return const SizedBox(
@@ -132,21 +140,21 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 ),
                               );
                             },
+                          );
+                        }
+                        return SizedBox(
+                          height: 300,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: nightColor,
+                            ),
                           ),
                         );
-                      }
-                      return SizedBox(
-                        height: 300,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            color: nightColor,
-                          ),
-                        ),
-                      );
-                    },
+                      },
+                    ),
                   ),
                 ],
-              ),
+              )),
       ),
     );
   }

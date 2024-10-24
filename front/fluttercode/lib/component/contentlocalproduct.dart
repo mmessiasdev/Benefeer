@@ -27,7 +27,7 @@ class ContentLocalProduct extends StatelessWidget {
         onTap: () {
           (Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => StoreScreen(id: id)),
+            MaterialPageRoute(builder: (context) => LocalStoreScreen(id: id)),
           ));
         },
         child: Container(
@@ -75,7 +75,8 @@ class ContentLocalProduct extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: SizedBox(
-                            child: SubText( //esse widget
+                            child: SubText(
+                              //esse widget
                               text: title,
                               color: nightColor,
                               align: TextAlign.start,
