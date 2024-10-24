@@ -1,5 +1,6 @@
 import 'package:Benefeer/component/buttons.dart';
 import 'package:Benefeer/component/colors.dart';
+import 'package:Benefeer/component/containersLoading.dart';
 import 'package:Benefeer/component/contentproduct.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
@@ -133,23 +134,19 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                   over: TextOverflow.fade,
                                 );
                               }
-                              return const SizedBox(
-                                height: 100,
-                                child: Center(
-                                  child: Text('Não encontrado'),
-                                ),
-                              );
+                              return SizedBox(
+                                  height: 300,
+                                  child: ErrorPost(
+                                      text:
+                                          'Não encontrado. \n\nVerifique sua conexão, por gentileza.'));
                             },
                           );
                         }
                         return SizedBox(
-                          height: 300,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: nightColor,
-                            ),
-                          ),
-                        );
+                            height: 300,
+                            child: ErrorPost(
+                                text:
+                                    'Categoria não encontrada. \n\nVerifique sua conexão, por gentileza.'));
                       },
                     ),
                   ),

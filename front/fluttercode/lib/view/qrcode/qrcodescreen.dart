@@ -97,12 +97,21 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: lightColor,
         body: Padding(
           padding: defaultPaddingHorizon,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              MainHeader(title: "Verifique a loja", onClick: () {}),
+              MainHeader(
+                title: "Verifique o QR Code",
+                onClick: () {
+                  (Navigator.pop(context));
+                },
+                icon: Icons.arrow_back_ios,
+                maxl: 2,
+                over: TextOverflow.fade,
+              ),
               SizedBox(
                 height: 350,
                 child: QRView(
@@ -156,23 +165,44 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
                               ),
                             )
                           : dataResult != null && dataResult != Map
-                              ? Column(
-                                  children: [
-                                    Icon(
-                                      Icons.verified,
-                                      color: FifthColor,
-                                      size: 40,
-                                    ),
-                                    SecundaryText(
-                                        text: "QR Code inválido.",
-                                        color: nightColor,
-                                        align: TextAlign.center),
-                                  ],
+                              ? SizedBox(
+                                  height: 300,
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.dangerous,
+                                        color: FifthColor,
+                                        size: 40,
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      SecundaryText(
+                                          text: "QR Code inválido.",
+                                          color: nightColor,
+                                          align: TextAlign.center),
+                                    ],
+                                  ),
                                 )
-                              : SecundaryText(
-                                  text: 'Escaneie um QR Code',
-                                  color: nightColor,
-                                  align: TextAlign.center,
+                              : SizedBox(
+                                  height: 300,
+                                  child: Center(
+                                    child: Column(
+                                      children: [
+                                        CircularProgressIndicator(
+                                          color: PrimaryColor,
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        SecundaryText(
+                                          text: 'Escaneie um QR Code',
+                                          color: nightColor,
+                                          align: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                 ),
               )

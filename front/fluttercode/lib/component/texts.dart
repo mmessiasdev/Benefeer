@@ -9,16 +9,21 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class PrimaryText extends StatelessWidget {
-  PrimaryText({this.text, required this.color, this.align});
+  PrimaryText(
+      {this.text, required this.color, this.align, this.maxl, this.over});
   String? text;
   Color color;
   TextAlign? align;
+  TextOverflow? over;
+  int? maxl;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: Text(
         text ?? "",
+        maxLines: maxl,
+        overflow: over,
         textAlign: align ?? TextAlign.start,
         style: GoogleFonts.montserrat(
           fontSize: 40,

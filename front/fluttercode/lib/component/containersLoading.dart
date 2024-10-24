@@ -4,39 +4,35 @@ import 'package:flutter/material.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:shimmer/shimmer.dart';
 
-class PostsLoading extends StatelessWidget {
-  const PostsLoading({super.key});
+class WidgetLoading extends StatelessWidget {
+  const WidgetLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 1,
-      child: Center(
-        child: Shimmer.fromColors(
-          direction: ShimmerDirection.ltr,
-          period: Duration(milliseconds: 2500),
-          baseColor: SixthColor,
-          highlightColor: TerciaryColor,
-          child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: 3,
-              // separatorBuilder: (_, __) => const SizedBox(
-              //       height: 15,
-              //     ),
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 50),
-                  child: Container(
-                    height: 200,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: PrimaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+    return Center(
+      child: Shimmer.fromColors(
+        direction: ShimmerDirection.ltr,
+        period: Duration(milliseconds: 2500),
+        baseColor: PrimaryColor,
+        highlightColor: SecudaryColor,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 3,
+            // separatorBuilder: (_, __) => const SizedBox(
+            //       height: 15,
+            //     ),
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Container(
+                  width: 150,
+                  decoration: BoxDecoration(
+                    color: PrimaryColor,
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                );
-              }),
-        ),
+                ),
+              );
+            }),
       ),
     );
   }

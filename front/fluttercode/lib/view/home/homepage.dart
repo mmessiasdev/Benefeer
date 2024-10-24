@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                     title: "Benefeer",
                     icon: Icons.qr_code,
                     onClick: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => QRCodeScannerPage(),
@@ -218,11 +218,7 @@ class _HomePageState extends State<HomePage> {
                                         );
                                       }
                                     } else if (snapshot.hasError) {
-                                      return Center(
-                                        child: Text(
-                                          "Erro ao carregar dados: ${snapshot.error}",
-                                        ),
-                                      );
+                                      return WidgetLoading();
                                     }
                                     return SizedBox(
                                       height: 300,
@@ -278,11 +274,7 @@ class _HomePageState extends State<HomePage> {
                                         );
                                       }
                                     } else if (snapshot.hasError) {
-                                      return Center(
-                                        child: Text(
-                                          "Erro ao carregar dados: ${snapshot.error}",
-                                        ),
-                                      );
+                                      return WidgetLoading();
                                     }
                                     return SizedBox(
                                       height: 300,

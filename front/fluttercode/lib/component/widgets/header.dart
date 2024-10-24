@@ -3,11 +3,19 @@ import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/texts.dart';
 
 class MainHeader extends StatelessWidget {
-  MainHeader({Key? key, required this.title, required this.onClick, this.icon})
+  MainHeader(
+      {Key? key,
+      required this.title,
+      required this.onClick,
+      this.icon,
+      this.over,
+      this.maxl})
       : super(key: key);
   String title;
   final Function onClick;
   IconData? icon;
+  TextOverflow? over;
+  int? maxl;
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +26,13 @@ class MainHeader extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            PrimaryText(
-              color: nightColor,
-              text: title,
+            Expanded(
+              child: PrimaryText(
+                color: nightColor,
+                text: title,
+                over: over,
+                maxl: maxl,
+              ),
             ),
             GestureDetector(
               onTap: () => onClick(),

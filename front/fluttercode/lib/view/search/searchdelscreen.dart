@@ -1,4 +1,5 @@
 import 'package:Benefeer/component/colors.dart';
+import 'package:Benefeer/component/containersLoading.dart';
 import 'package:Benefeer/component/contentproduct.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/model/stores.dart';
@@ -35,7 +36,6 @@ class _RenderContentsState extends State<RenderContents> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: SecudaryColor,
       child: token == null
           ? Center(
               child: CircularProgressIndicator(
@@ -80,12 +80,12 @@ class _RenderContentsState extends State<RenderContents> {
                       });
                 } else if (snapshot.hasError) {
                   print(snapshot.hasError);
-                  return Center(
-                      child: SubText(
-                    text: 'Erro ao pesquisar loja',
-                    color: PrimaryColor,
-                    align: TextAlign.center,
-                  ));
+                  return const SizedBox(
+                      height: 280,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: WidgetLoading(),
+                      ));
                 }
                 return Expanded(
                   child: Center(
@@ -131,9 +131,7 @@ class SearchDelegateScreen extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     if (query.isEmpty) {
-      return Scaffold(
-        backgroundColor: SecudaryColor,
-      );
+      return const Scaffold();
     }
     return RenderContents(
       query: query,
@@ -143,9 +141,7 @@ class SearchDelegateScreen extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     if (query.isEmpty) {
-      return Scaffold(
-        backgroundColor: SecudaryColor,
-      );
+      return const Scaffold();
     }
     return RenderContents(
       query: query,
