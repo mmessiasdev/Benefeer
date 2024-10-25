@@ -1,3 +1,4 @@
+import 'package:Benefeer/component/categorie.dart';
 import 'package:Benefeer/component/containersLoading.dart';
 import 'package:Benefeer/component/contentproduct.dart';
 import 'package:Benefeer/component/widgets/header.dart';
@@ -7,6 +8,7 @@ import 'package:Benefeer/component/widgets/searchInput.dart';
 import 'package:Benefeer/model/categories.dart';
 import 'package:Benefeer/model/stores.dart';
 import 'package:Benefeer/service/remote/auth.dart';
+import 'package:Benefeer/view/category/categoryscreen.dart';
 import 'package:Benefeer/view/qrcode/qrcodescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:Benefeer/component/colors.dart';
@@ -88,15 +90,8 @@ class _HomePageState extends State<HomePage> {
                   padding: defaultPaddingHorizon,
                   child: MainHeader(
                     title: "Benefeer",
-                    icon: Icons.qr_code,
-                    onClick: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => QRCodeScannerPage(),
-                        ),
-                      );
-                    },
+                    icon: Icons.menu,
+                    onClick: () {},
                   ),
                 ),
                 Padding(
@@ -109,27 +104,73 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(
-                        child: IconList(
-                          title: "Saúde",
-                          icon: Icons.monitor_heart,
-                          onClick: () {},
+                      SizedBox(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CategoryScreen(id: '2'),
+                              ),
+                            );
+                          },
+                          child: IconList(
+                            title: "Saúde",
+                            icon: Icons.monitor_heart,
+                            onClick: () {},
+                          ),
                         ),
                       ),
-                      IconList(
-                        title: "Recomendados",
-                        icon: Icons.star,
-                        onClick: () {},
+                      SizedBox(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CategoryScreen(id: '1'),
+                              ),
+                            );
+                          },
+                          child: IconList(
+                            title: "Eletrônicos",
+                            icon: Icons.smartphone,
+                            onClick: () {},
+                          ),
+                        ),
                       ),
-                      IconList(
-                        title: "Ofertas Relâmpago",
-                        icon: Icons.flash_on,
-                        onClick: () {},
+                      SizedBox(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CategoryScreen(id: '4'),
+                              ),
+                            );
+                          },
+                          child: IconList(
+                            title: "Beleza",
+                            icon: Icons.person,
+                            onClick: () {},
+                          ),
+                        ),
                       ),
-                      IconList(
-                        title: "Mais",
-                        icon: Icons.more_horiz,
-                        onClick: () {},
+                      SizedBox(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => QRCodeScannerPage(),
+                              ),
+                            );
+                          },
+                          child: IconList(
+                            title: "Verificar Loja",
+                            icon: Icons.qr_code,
+                            onClick: () {},
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -137,7 +178,8 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 40),
                 ClipRRect(
                   borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(75),
+                    topLeft: Radius.circular(35),
+                    topRight: Radius.circular(35),
                   ),
                   child: Container(
                     height: 75,

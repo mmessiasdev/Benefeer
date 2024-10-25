@@ -33,11 +33,13 @@ class _WalletScreenState extends State<WalletScreen> {
     var strFullName = await LocalAuthService().getFullName("fullname");
     var strCpf = await LocalAuthService().getCpf("cpf");
 
-    setState(() {
-      cpf = strCpf.toString();
-      fullname = strFullName.toString();
-      token = strToken.toString();
-    });
+    if (mounted) {
+      setState(() {
+        cpf = strCpf.toString();
+        fullname = strFullName.toString();
+        token = strToken.toString();
+      });
+    }
   }
 
   @override

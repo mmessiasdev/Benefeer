@@ -50,8 +50,6 @@ class _SignInScreenState extends State<SignInScreen> {
         InputLogin(title: "Senha", controller: passwordController),
       ];
 
-  
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
