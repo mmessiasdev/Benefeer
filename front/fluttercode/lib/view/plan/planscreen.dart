@@ -6,9 +6,11 @@ import 'package:Benefeer/component/contentlocalproduct.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/widgets/header.dart';
+import 'package:Benefeer/component/widgets/plancontainer.dart';
 import 'package:Benefeer/model/plans.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
+import 'package:Benefeer/view/plan/listplanscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -70,8 +72,103 @@ class _PlanScreenState extends State<PlanScreen> {
 
                           // Verifica se o campo "plan" é nulo
                           if (render != null && render['plan'] == null) {
-                            // Código existente para renderizar o widget quando o plano é nulo
-                            // ...
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Padding(
+                                  padding: defaultPaddingHorizon,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      PlanViewUpdated(
+                                          planname: 'Benefeer Free'),
+                                      SizedBox(
+                                        height: 35,
+                                      ),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: SizedBox(
+                                            height: 235,
+                                            child: Image.asset(
+                                              "assets/images/illustrator/illustrator2.png",
+                                              fit: BoxFit.cover,
+                                            )),
+                                      ),
+                                      SizedBox(
+                                        height: 40,
+                                      ),
+                                      SubText(
+                                        text:
+                                            "Adquira para aproveitar o máximo de benefícios que temos a oferecer para você, sua família e sua empresa! ",
+                                        color: nightColor,
+                                        align: TextAlign.center,
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Icon(Icons.arrow_downward),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 600,
+                                  child: Center(
+                                    child: FutureBuilder<List<Plans>>(
+                                        future: RemoteAuthService()
+                                            .getPlans(token: token),
+                                        builder: (context, planSnapshot) {
+                                          if (planSnapshot.hasData) {
+                                            return ListView.builder(
+                                                shrinkWrap: true,
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount:
+                                                    planSnapshot.data!.length,
+                                                itemBuilder: (context, index) {
+                                                  var renders =
+                                                      planSnapshot.data![index];
+                                                  if (renders != null) {
+                                                    return Padding(
+                                                      padding:
+                                                          defaultPaddingHorizon,
+                                                      child: PlanContainer(
+                                                          name: renders.name
+                                                              .toString(),
+                                                          value: renders.value
+                                                              .toString(),
+                                                          rules: renders.rules
+                                                              .toString(),
+                                                          benefit: renders
+                                                              .benefits
+                                                              .toString()),
+                                                    );
+                                                  }
+                                                  return const SizedBox(
+                                                    height: 100,
+                                                    child: Center(
+                                                      child: Text(
+                                                          'Plano não encontrado'),
+                                                    ),
+                                                  );
+                                                });
+                                          }
+                                          return SizedBox(
+                                            height: 300,
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                color: nightColor,
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                  ),
+                                ),
+                              ],
+                            );
                           } else {
                             idPlan = render['plan']['id'].toString();
                             return Padding(
@@ -81,15 +178,31 @@ class _PlanScreenState extends State<PlanScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.stretch,
                                       children: [
+                                        PlanViewUpdated(
+                                          planname: render['plan']['name'],
+                                        ),
                                         SizedBox(
-                                          height: 30,
+                                          height: 20,
+                                        ),
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          child: SizedBox(
+                                              height: 205,
+                                              child: Image.asset(
+                                                "assets/images/illustrator/illustrator1.png",
+                                                fit: BoxFit.cover,
+                                              )),
+                                        ),
+                                        SizedBox(
+                                          height: 35,
                                         ),
                                         SecundaryText(
                                             text: "Seus beneficios",
                                             color: nightColor,
                                             align: TextAlign.start),
                                         SizedBox(
-                                          height: 25,
+                                          height: 20,
                                         ),
                                         SizedBox(
                                           height:
@@ -103,6 +216,8 @@ class _PlanScreenState extends State<PlanScreen> {
                                               if (snapshot.hasData) {
                                                 return ListView.builder(
                                                   shrinkWrap: true,
+                                                  physics:
+                                                      NeverScrollableScrollPhysics(),
                                                   itemCount:
                                                       snapshot.data!.length,
                                                   itemBuilder:
@@ -111,15 +226,24 @@ class _PlanScreenState extends State<PlanScreen> {
                                                         snapshot.data![index];
                                                     // Verificação se o idPlan não é nulo
                                                     if (idPlan != null) {
-                                                      return ContentLocalProduct(
-                                                        urlLogo: renders.urllogo
-                                                            .toString(),
-                                                        benefit: renders.benefit
-                                                            .toString(),
-                                                        title: renders.name
-                                                            .toString(),
-                                                        id: renders.id
-                                                            .toString(),
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                vertical: 10),
+                                                        child:
+                                                            ContentLocalProduct(
+                                                          urlLogo: renders
+                                                              .urllogo
+                                                              .toString(),
+                                                          benefit: renders
+                                                              .benefit
+                                                              .toString(),
+                                                          title: renders.name
+                                                              .toString(),
+                                                          id: renders.id
+                                                              .toString(),
+                                                        ),
                                                       );
                                                     }
                                                     return SizedBox(
@@ -173,7 +297,6 @@ class _PlanScreenState extends State<PlanScreen> {
                         ),
                       );
                     }
-                    return CircularProgressIndicator();
                   },
                 ),
                 SizedBox(
@@ -181,6 +304,67 @@ class _PlanScreenState extends State<PlanScreen> {
                 ),
               ],
             ),
+    );
+  }
+}
+
+class PlanViewUpdated extends StatelessWidget {
+  PlanViewUpdated({super.key, required this.planname});
+
+  String planname;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            SubTextSized(
+                fontweight: FontWeight.w400,
+                size: 12,
+                text: "Seu Plano:",
+                color: nightColor,
+                align: TextAlign.start),
+            SizedBox(
+              width: 5,
+            ),
+            SubText(
+              text: planname,
+              align: TextAlign.start,
+              over: TextOverflow.fade,
+              maxl: 2,
+            ),
+          ],
+        ),
+        SizedBox(
+          width: 5,
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ListPlanScreen(),
+              ),
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: PrimaryColor,
+            ),
+            child: Padding(
+              padding: defaultPadding,
+              child: SubText(
+                text: "Fazer Upgrade",
+                align: TextAlign.center,
+                color: lightColor,
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return token == ""
+    return token == null
         ? const SizedBox()
         : SafeArea(
             child: ListView(
@@ -109,10 +109,12 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconList(
-                        title: "Perto de você",
-                        icon: Icons.location_on,
-                        onClick: () {},
+                      GestureDetector(
+                        child: IconList(
+                          title: "Saúde",
+                          icon: Icons.monitor_heart,
+                          onClick: () {},
+                        ),
                       ),
                       IconList(
                         title: "Recomendados",

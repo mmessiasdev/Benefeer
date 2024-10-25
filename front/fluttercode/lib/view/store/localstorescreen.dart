@@ -23,11 +23,10 @@ class LocalStoreScreen extends StatefulWidget {
 
 class _LocalStoreScreenState extends State<LocalStoreScreen> {
   var client = http.Client();
-  var email;
-  var lname;
+  var fullname;
+  var cpf;
+
   var token;
-  var id;
-  var chunkId;
   var fileBytes;
   var fileName;
 
@@ -39,8 +38,12 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
 
   void getString() async {
     var strToken = await LocalAuthService().getSecureToken("token");
+    var strFullName = await LocalAuthService().getFullName("fullname");
+    var strCpf = await LocalAuthService().getCpf("cpf");
 
     setState(() {
+      cpf = strCpf.toString();
+      fullname = strFullName.toString();
       token = strToken.toString();
     });
   }
@@ -90,6 +93,8 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                         if (snapshot.hasData) {
                                           var renderQr = snapshot.data!;
                                           return BankCard(
+                                            name: fullname,
+                                            cpf: cpf,
                                             qrCode:
                                                 renderQr["qrCode"].toString(),
                                           );
@@ -160,7 +165,7 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                           child: const Divider(),
                                         ),
                                         SubText(
-                                          color: OffColor,
+                                            color: OffColor,
                                             text: render["rules"]
                                                 .replaceAll("\\n", "\n\n"),
                                             align: TextAlign.start)

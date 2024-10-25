@@ -30,7 +30,7 @@ class MainHeader extends StatelessWidget {
               child: PrimaryText(
                 color: nightColor,
                 text: title,
-                over: over,
+                over: TextOverflow.fade,
                 maxl: maxl,
               ),
             ),

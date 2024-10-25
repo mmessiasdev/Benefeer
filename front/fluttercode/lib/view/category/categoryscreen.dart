@@ -144,9 +144,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         }
                         return SizedBox(
                             height: 300,
-                            child: ErrorPost(
-                                text:
-                                    'Categoria não encontrada. \n\nVerifique sua conexão, por gentileza.'));
+                            child: ErrorPost(text: 'Carregando...'));
                       },
                     ),
                   ),

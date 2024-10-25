@@ -6,10 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class BankCard extends StatelessWidget {
-  BankCard({super.key, this.urllogo, this.qrCode});
+  BankCard(
+      {super.key,
+      this.urllogo,
+      this.qrCode,
+      required this.name,
+      required this.cpf});
 
   String? urllogo;
   String? qrCode;
+  String name;
+  String cpf;
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +47,9 @@ class BankCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SubText(
-                        text: "Manoel Messias Farias Alves",
-                        align: TextAlign.start),
+                    SubText(text: name, align: TextAlign.start),
                     SecundaryText(
-                        text: "05516148545",
+                        text: cpf,
                         color: nightColor,
                         align: TextAlign.start),
                   ],

@@ -5,6 +5,7 @@ import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/tips.dart';
 import 'package:Benefeer/component/widgets/header.dart';
+import 'package:Benefeer/service/local/auth.dart';
 import 'package:flutter/material.dart';
 
 class WalletScreen extends StatefulWidget {
@@ -16,6 +17,28 @@ class WalletScreen extends StatefulWidget {
 
 class _WalletScreenState extends State<WalletScreen> {
   String screen = "saldo";
+
+  var token;
+  var fullname;
+  var cpf;
+
+  @override
+  void initState() {
+    super.initState();
+    getString();
+  }
+
+  void getString() async {
+    var strToken = await LocalAuthService().getSecureToken("token");
+    var strFullName = await LocalAuthService().getFullName("fullname");
+    var strCpf = await LocalAuthService().getCpf("cpf");
+
+    setState(() {
+      cpf = strCpf.toString();
+      fullname = strFullName.toString();
+      token = strToken.toString();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +102,10 @@ class _WalletScreenState extends State<WalletScreen> {
                               const SizedBox(
                                 height: 40,
                               ),
-                              BankCard(),
+                              BankCard(
+                                cpf: cpf ?? "",
+                                name: fullname ?? "",
+                              ),
                               const SizedBox(
                                 height: 40,
                               ),

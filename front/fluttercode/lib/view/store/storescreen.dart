@@ -72,6 +72,7 @@ class _StoreScreenState extends State<StoreScreen> {
                               child: Column(
                                 children: [
                                   MainHeader(
+                                      maxl: 1,
                                       title: render["name"],
                                       icon: Icons.arrow_back_ios,
                                       onClick: () {

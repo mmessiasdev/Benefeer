@@ -9,30 +9,33 @@ class WidgetLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Shimmer.fromColors(
-        direction: ShimmerDirection.ltr,
-        period: Duration(milliseconds: 2500),
-        baseColor: PrimaryColor,
-        highlightColor: SecudaryColor,
-        child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 3,
-            // separatorBuilder: (_, __) => const SizedBox(
-            //       height: 15,
-            //     ),
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Container(
-                  width: 150,
-                  decoration: BoxDecoration(
-                    color: PrimaryColor,
-                    borderRadius: BorderRadius.circular(10),
+    return SizedBox(
+      height: 250,
+      child: Center(
+        child: Shimmer.fromColors(
+          direction: ShimmerDirection.ltr,
+          period: Duration(milliseconds: 2500),
+          baseColor: PrimaryColor,
+          highlightColor: SecudaryColor,
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 3,
+              // separatorBuilder: (_, __) => const SizedBox(
+              //       height: 15,
+              //     ),
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Container(
+                    width: 150,
+                    decoration: BoxDecoration(
+                      color: PrimaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+        ),
       ),
     );
   }

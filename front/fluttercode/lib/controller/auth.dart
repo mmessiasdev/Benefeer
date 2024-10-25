@@ -103,6 +103,8 @@ class AuthController extends GetxController {
           var lname = userData['lname'];
           var fname = userData['fname'];
           var id = userData['id'];
+          var fullname = userData['fullname'];
+          var cpf = userData['user']['username'];
 
           user.value = userFromJson(userResult.body);
 
@@ -112,6 +114,8 @@ class AuthController extends GetxController {
             lname: lname,
             id: id,
             fname: fname,
+            fullname: fullname,
+            cpf: cpf,
           );
 
           EasyLoading.showSuccess("Bem vindo ao Benefeer");
