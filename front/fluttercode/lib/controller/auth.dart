@@ -20,8 +20,7 @@ class AuthController extends GetxController {
   }
 
   void signUp({
-    required String fname,
-    required String lname,
+    required String fullname,
     required String email,
     required String username,
     required String password,
@@ -47,8 +46,7 @@ class AuthController extends GetxController {
 
         // Fazer a requisição para criar o perfil
         var userResult = await RemoteAuthService().createProfile(
-          fname: fname,
-          lname: lname,
+          fullname: fullname,
           token: token,
         );
 
@@ -100,8 +98,6 @@ class AuthController extends GetxController {
           var userData = jsonDecode(userResult.body);
 
           var email = userData['email'];
-          var lname = userData['lname'];
-          var fname = userData['fname'];
           var id = userData['id'];
           var fullname = userData['fullname'];
           var cpf = userData['user']['username'];
@@ -111,9 +107,7 @@ class AuthController extends GetxController {
           await LocalAuthService().storeToken(token);
           await LocalAuthService().storeAccount(
             email: email,
-            lname: lname,
             id: id,
-            fname: fname,
             fullname: fullname,
             cpf: cpf,
           );

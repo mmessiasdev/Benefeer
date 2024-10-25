@@ -75,7 +75,7 @@ class DefaultTitle extends StatelessWidget {
             fontweight: FontWeight.w300,
             wid: subbuttom),
         SizedBox(
-          height: 70,
+          height: 20,
         ),
       ],
     );

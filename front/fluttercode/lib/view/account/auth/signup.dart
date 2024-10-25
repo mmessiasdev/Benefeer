@@ -1,5 +1,7 @@
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/widgets/title.dart';
+import 'package:Benefeer/controller/controllers.dart';
+import 'package:Benefeer/view/account/auth/signin.dart';
 import 'package:Benefeer/view/dashboard/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:Benefeer/component/colors.dart';
@@ -15,8 +17,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController fnameController = TextEditingController();
-  TextEditingController lnameController = TextEditingController();
+  TextEditingController fullnameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
@@ -44,92 +45,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: ListView(
             children: [
               Padding(
-                padding: defaultPaddingHorizonTop,
+                padding: defaultPaddingHorizon,
                 child: DefaultTitle(
-                  buttom: true,
+                  buttom: false,
                   title: "Crie sua conta!",
-                  subtitle: "Para se conectar com seus amigos ",
+                  subtitle: "Para desfrutar de todos benefícios ",
                   subbuttom: SubTextSized(
                     align: TextAlign.start,
                     fontweight: FontWeight.w600,
-                    text: "ou com você mesmo.",
+                    text: "que preparamos pra você!.",
                     size: 20,
                     color: nightColor,
                   ),
                 ),
               ),
-
-              // Column(
-              //   children: [
-              //     InputRegister(
-              //       borderRadius: const BorderRadius.only(
-              //           bottomLeft: Radius.circular(40),
-              //           topLeft: Radius.circular(40)),
-              //       padding: defaultPaddingHorizon,
-              //       ftitle: true,
-              //       textController: usernameController,
-              //       title: "Seu nickname",
-              //       subdesc:
-              //           "No Benefeer, você não precisa ser feliz o tempo todo. ",
-              //       subdescwid: "Apenas seja você!",
-              //     ),
-              //     InputRegister(
-              //       borderRadius: const BorderRadius.only(
-              //           bottomLeft: Radius.circular(40),
-              //           topLeft: Radius.circular(40)),
-              //       padding: defaultPaddingHorizon,
-              //       ftitle: true,
-              //       textController: fnameController,
-              //       title: "Seu primeiro nome: (o nome que será chamado)",
-              //       subdesc:
-              //           "No Benefeer, você não precisa ser feliz o tempo todo. ",
-              //       subdescwid: "Apenas seja você!",
-              //     ),
-              //     InputRegister(
-              //       borderRadius: const BorderRadius.only(
-              //           bottomRight: Radius.circular(40),
-              //           topRight: Radius.circular(40)),
-              //       padding: defaultPaddingHorizon,
-              //       ftitle: false,
-              //       textController: lnameController,
-              //       title: "Seu segundo nome:",
-              //       subdesc: "Não se trata de uma rede social... ",
-              //       subdescwid: "O Benefeer é um diário social.",
-              //     ),
-              //     InputRegister(
-              //       borderRadius: const BorderRadius.only(
-              //           bottomLeft: Radius.circular(40),
-              //           topLeft: Radius.circular(40)),
-              //       padding: defaultPaddingHorizon,
-              //       ftitle: false,
-              //       textController: emailController,
-              //       title: "Seu email:",
-              //       subdesc: "Poste o que quiser, aonde quiser e ",
-              //       subdescwid: "para quem quiser!",
-              //       textCondition: (String? value) {
-              //         if (value == null || value.isEmpty) {
-              //           return "Esse campo não pode ficar vazio.";
-              //         } else if (!value.isValidEmail) {
-              //           return "Insira os caracteres válido.";
-              //         }
-              //         return null;
-              //       },
-              //     ),
-              //     InputRegister(
-              //       borderRadius: const BorderRadius.only(
-              //           bottomLeft: Radius.circular(40),
-              //           topLeft: Radius.circular(40)),
-              //       padding: defaultPaddingHorizon,
-              //       ftitle: true,
-              //       password: true,
-              //       textController: passwordController,
-              //       title: "Sua senha:",
-              //       subdesc: "Aqui, a sua única obrigação é não ter medo. ",
-              //       subdescwid:
-              //           "Todas suas postagens são criptografadas por você.",
-              //     ),
-              //   ],
-              // ),
+              Column(
+                children: [
+                  InputLogin(
+                    inputTitle: 'CPF',
+                    controller: usernameController,
+                    keyboardType: TextInputType.number,
+                  ),
+                  InputLogin(
+                    inputTitle: 'Nome Completo',
+                    controller: fullnameController,
+                    keyboardType: TextInputType.text,
+                  ),
+                  InputLogin(
+                    inputTitle: 'Email',
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  InputLogin(
+                    inputTitle: 'Senha',
+                    controller: passwordController,
+                    obsecureText: true,
+                  ),
+                ],
+              ),
               const SizedBox(height: 40),
               Padding(
                 padding: defaultPaddingHorizon,
@@ -152,13 +105,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ),
                                 );
                               },
-                              child: SubTextSized(
-                                align: TextAlign.start,
-                                color: FourtyColor,
-                                size: 16,
-                                text: "Entre",
-                                fontweight: FontWeight.w600,
-                                tdeco: TextDecoration.underline,
+                              child: GestureDetector(
+                                onTap: () {
+                                  (Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SignInScreen(),
+                                      )));
+                                },
+                                child: SubTextSized(
+                                  align: TextAlign.start,
+                                  color: FourtyColor,
+                                  size: 16,
+                                  text: "Entre",
+                                  fontweight: FontWeight.w600,
+                                ),
                               ),
                             ),
                             text: "Já tem um login? ",
@@ -178,13 +139,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            // authController.signUp(
-                            //   fname: fnameController.text,
-                            //   lname: lnameController.text,
-                            //   email: emailController.text,
-                            //   username: usernameController.text,
-                            //   password: passwordController.text,
-                            // );
+                            authController.signUp(
+                              fullname: fullnameController.text,
+                              email: emailController.text,
+                              username: usernameController.text,
+                              password: passwordController.text,
+                            );
                           }
                         },
                       ),

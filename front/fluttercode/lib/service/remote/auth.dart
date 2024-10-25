@@ -49,13 +49,11 @@ class RemoteAuthService {
   }
 
   Future<dynamic> createProfile({
-    required String fname,
-    required String lname,
+    required String fullname,
     required String token,
   }) async {
     var body = {
-      "fname": fname,
-      "lname": lname,
+      "fullname": fullname,
     };
     var response = await client.post(
       Uri.parse('$url/profile/me'),

@@ -35,7 +35,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void getString() async {
     var strToken = await LocalAuthService().getSecureToken("token");
-    var strFname = await LocalAuthService().getFname("fname");
     var strId = await LocalAuthService().getId("id");
 
     // Verifique se o widget ainda está montado antes de chamar setState
@@ -43,7 +42,6 @@ class _SearchScreenState extends State<SearchScreen> {
       setState(() {
         token = strToken;
         id = strId;
-        fname = strFname;
       });
     }
   }

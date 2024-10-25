@@ -1,20 +1,13 @@
-import 'package:Benefeer/component/buttons.dart';
 import 'package:Benefeer/component/defaultButton.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/controller/auth.dart';
-import 'package:Benefeer/controller/controllers.dart';
-import 'package:Benefeer/view/dashboard/screen.dart';
+import 'package:Benefeer/view/account/auth/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/component/texts.dart';
-import 'package:Benefeer/extention/string_extention.dart';
 import 'package:Benefeer/component/inputdefault.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/request/request.dart';
-import 'package:get/get_navigation/src/routes/default_transitions.dart';
-
-import 'signup.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -46,8 +39,16 @@ class _SignInScreenState extends State<SignInScreen> {
   int _currentPage = 0;
 
   List<Widget> get _pages => [
-        InputLogin(title: "CPF", controller: emailController),
-        InputLogin(title: "Senha", controller: passwordController),
+        InputLogin(
+          title: "CPF",
+          controller: emailController,
+          keyboardType: TextInputType.number,
+        ),
+        InputLogin(
+          title: "Senha",
+          controller: passwordController,
+          obsecureText: true,
+        ),
       ];
 
   @override
@@ -55,98 +56,107 @@ class _SignInScreenState extends State<SignInScreen> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: lightColor,
-      body: Padding(
-        padding: defaultPaddingHorizon,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              MainHeader(title: "Benefeer", onClick: () {}),
-              Expanded(
-                child: PageView.builder(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _currentPage = index;
-                    });
-                  },
-                  itemCount: _pages.length,
-                  itemBuilder: (context, index) {
-                    return _pages[index];
-                  },
-                ),
+      body: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            Padding(
+              padding: defaultPaddingHorizon,
+              child: MainHeader(title: "Benefeer", onClick: () {}),
+            ),
+            Expanded(
+              child: PageView.builder(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                },
+                itemCount: _pages.length,
+                itemBuilder: (context, index) {
+                  return _pages[index];
+                },
               ),
-              SizedBox(
-                height: 200,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Botão "Voltar"
-                    // if (_currentPage > 0)
-                    //   GestureDetector(
-                    //     onTap: () {
-                    //       _pageController.previousPage(
-                    //         duration: Duration(milliseconds: 300),
-                    //         curve: Curves.easeIn,
-                    //       );
-                    //     },
-                    //     child: DefaultButton(
-                    //       text: "Voltar",
-                    //       color: PrimaryColor,
-                    //       padding:
-                    //           EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                    //     ),
-                    //   ),
-                    // Spacer(),
-                    // Botão "Próximo" ou "Concluir"
-                    GestureDetector(
-                        onTap: () {
-                          if (_currentPage == _pages.length - 1) {
-                            // Se for a última página, finalize o tutorial
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const SignInScreen(),
-                              ),
-                            );
-                          } else {
-                            // Caso contrário, vá para a próxima página
-                            _pageController.nextPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeIn,
-                            );
-                          }
-                        },
-                        child: DefaultCircleButton(
-                          color: PrimaryColor,
-                          iconColor: lightColor,
-                          onClick: () {
-                            if (_currentPage == _pages.length - 1) {
-                              // Se for a última página, finalize o tutorial
-                              print(emailController.text);
-                              print(passwordController.text);
-                              if (_formKey.currentState!.validate()) {
-                                authController.signIn(
-                                    email: emailController.text,
-                                    password: passwordController.text);
+            ),
+            SizedBox(
+              height: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        if (_currentPage == _pages.length - 1) {
+                          // Se for a última página, finalize o tutorial
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignInScreen(),
+                            ),
+                          );
+                        } else {
+                          // Caso contrário, vá para a próxima página
+                          _pageController.nextPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeIn,
+                          );
+                        }
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          DefaultCircleButton(
+                            color: PrimaryColor,
+                            iconColor: lightColor,
+                            onClick: () {
+                              if (_currentPage == _pages.length - 1) {
+                                // Se for a última página, finalize o tutorial
+                                if (_formKey.currentState!.validate()) {
+                                  authController.signIn(
+                                      email: emailController.text,
+                                      password: passwordController.text);
+                                }
+                              } else {
+                                // Caso contrário, vá para a próxima página
+                                _pageController.nextPage(
+                                  duration: Duration(milliseconds: 500),
+                                  curve: Curves.easeIn,
+                                );
                               }
-                            } else {
-                              // Caso contrário, vá para a próxima página
-                              _pageController.nextPage(
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.easeIn,
-                              );
-                            }
-                          },
-                        )),
-                    SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
+                            },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          RichDefaultText(
+                            text: 'Não tem conta? ',
+                            size: 12,
+                            wid: GestureDetector(
+                              onTap: () {
+                                (
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SignUpScreen(),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: SubText(
+                                text: 'Crie uma aqui!',
+                                align: TextAlign.start,
+                                color: PrimaryColor,
+                              ),
+                            ),
+                          )
+                        ],
+                      )),
+                  SizedBox(
+                    height: 10,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     ));
@@ -154,33 +164,49 @@ class _SignInScreenState extends State<SignInScreen> {
 }
 
 class InputLogin extends StatelessWidget {
-  InputLogin({super.key, required this.title, required this.controller});
+  InputLogin(
+      {super.key,
+      this.title,
+      this.inputTitle,
+      required this.controller,
+      this.keyboardType,
+      this.obsecureText});
 
-  String title;
+  String? title;
+  String? inputTitle;
+
   TextEditingController controller;
+  bool? obsecureText;
+  TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        PrimaryText(
-          color: nightColor,
-          text: title,
-        ),
-        const SizedBox(
-          height: 25,
-        ),
-        Padding(
-          padding: defaultPaddingHorizon,
-          child: InputTextField(
-            textEditingController: controller,
-            title: "",
-            fill: true,
+    return Padding(
+      padding: defaultPaddingHorizonTop,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          PrimaryText(
+            color: nightColor,
+            text: title,
           ),
-        ),
-      ],
+          const SizedBox(
+            height: 25,
+          ),
+          Padding(
+            padding: defaultPaddingHorizon,
+            child: InputTextField(
+              obsecureText: obsecureText ?? false,
+              textEditingController: controller,
+              textInputType: keyboardType ?? TextInputType.text,
+              title: inputTitle ?? "",
+              fill: true,
+              maxLines: 1, // Define maxLines para 1
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

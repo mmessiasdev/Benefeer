@@ -42,7 +42,6 @@ class _HomePageState extends State<HomePage> {
 
   void getString() async {
     var strToken = await LocalAuthService().getSecureToken("token");
-    var strFname = await LocalAuthService().getFname("fname");
     var strId = await LocalAuthService().getId("id");
 
     // Verifique se o widget ainda está montado antes de chamar setState
@@ -50,7 +49,6 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         token = strToken;
         id = strId;
-        fname = strFname;
       });
     }
   }
@@ -104,73 +102,56 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CategoryScreen(id: '2'),
-                              ),
-                            );
-                          },
-                          child: IconList(
-                            title: "Saúde",
-                            icon: Icons.monitor_heart,
-                            onClick: () {},
-                          ),
-                        ),
+                      IconList(
+                        title: "Saúde",
+                        icon: Icons.monitor_heart,
+                        onClick: () {
+                          (Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CategoryScreen(
+                                      id: '2',
+                                    )),
+                          ));
+                        },
                       ),
-                      SizedBox(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CategoryScreen(id: '1'),
-                              ),
-                            );
-                          },
-                          child: IconList(
-                            title: "Eletrônicos",
-                            icon: Icons.smartphone,
-                            onClick: () {},
-                          ),
-                        ),
+                      IconList(
+                        title: "Eletrônicos",
+                        icon: Icons.computer,
+                        onClick: () {
+                          (Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CategoryScreen(
+                                      id: '1',
+                                    )),
+                          ));
+                        },
                       ),
-                      SizedBox(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CategoryScreen(id: '4'),
-                              ),
-                            );
-                          },
-                          child: IconList(
-                            title: "Beleza",
-                            icon: Icons.person,
-                            onClick: () {},
-                          ),
-                        ),
+                      IconList(
+                        title: "Beleza",
+                        icon: Icons.brush,
+                        onClick: () {
+                          (Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CategoryScreen(
+                                      id: '4',
+                                    )),
+                          ));
+                        },
                       ),
-                      SizedBox(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => QRCodeScannerPage(),
-                              ),
-                            );
-                          },
-                          child: IconList(
-                            title: "Verificar Loja",
-                            icon: Icons.qr_code,
-                            onClick: () {},
-                          ),
-                        ),
+                      IconList(
+                        title: "Verificar Loja",
+                        icon: Icons.qr_code,
+                        onClick: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => QRCodeScannerPage(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

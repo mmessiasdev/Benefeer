@@ -13,16 +13,12 @@ class LocalAuthService {
 
   Future storeAccount({
     required String email,
-    required String lname,
-    required String fname,
     required String fullname,
     required String cpf,
     required int id,
   }) async {
     await _storage.write(key: "id", value: id.toString());
     await _storage.write(key: "email", value: email);
-    await _storage.write(key: "lname", value: lname);
-    await _storage.write(key: "fname", value: fname);
     await _storage.write(key: "fullname", value: fullname);
     await _storage.write(key: "cpf", value: cpf.toString());
   }
@@ -33,14 +29,6 @@ class LocalAuthService {
 
   Future<String?> getId(String unicKey) async {
     return await _storage.read(key: "id");
-  }
-
-  Future<String?> getLname(String unicKey) async {
-    return await _storage.read(key: "lname");
-  }
-
-  Future<String?> getFname(String unicKey) async {
-    return await _storage.read(key: "fname");
   }
 
   Future<String?> getFullName(String unicKey) async {
