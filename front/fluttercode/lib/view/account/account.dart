@@ -22,7 +22,8 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   var email;
-  var lname;
+  var fullname;
+  var cpf;
   var id;
   var token;
 
@@ -34,11 +35,15 @@ class _AccountScreenState extends State<AccountScreen> {
 
   void getString() async {
     var strEmail = await LocalAuthService().getEmail("email");
+    var strFullname = await LocalAuthService().getFullName("fullname");
+    var strCpf = await LocalAuthService().getCpf("cpf");
     var strId = await LocalAuthService().getId("id");
     var strToken = await LocalAuthService().getSecureToken("token");
 
     setState(() {
       email = strEmail.toString();
+      fullname = strFullname.toString();
+      cpf = strCpf.toString();
       id = strId.toString();
       token = strToken.toString();
     });
@@ -47,7 +52,6 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     print(token);
-
     return Container(
       color: lightColor,
       child: Padding(
@@ -60,11 +64,16 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
             Column(
               children: [
-                InfoText(title: "Nome:", stitle: lname == "null" ? "" : lname),
+                InfoText(
+                    title: "Nome:", stitle: fullname == "null" ? "" : fullname),
                 SizedBox(
-                  height: 35,
+                  height: 20,
                 ),
                 InfoText(title: "Email:", stitle: email == "null" ? "" : email),
+                SizedBox(
+                  height: 20,
+                ),
+                InfoText(title: "CPF:", stitle: cpf == "null" ? "" : cpf),
                 SizedBox(
                   height: 70,
                 ),
@@ -72,7 +81,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   title: email == "null" ? "Entrar na conta" : "Sair da conta",
                   onClick: () {
                     if (token != "null") {
-                      // authController.signOut();
+                      authController.signOut();
                       Navigator.pop(
                         context,
                         MaterialPageRoute(
