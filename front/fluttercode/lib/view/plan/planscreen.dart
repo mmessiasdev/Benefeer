@@ -136,6 +136,7 @@ class _PlanScreenState extends State<PlanScreen> {
                                                       padding:
                                                           defaultPaddingHorizon,
                                                       child: PlanContainer(
+                                                          // esse widget será clicado
                                                           name: renders.name
                                                               .toString(),
                                                           value: renders.value

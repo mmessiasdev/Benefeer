@@ -6,13 +6,13 @@ class MainHeader extends StatelessWidget {
   MainHeader(
       {Key? key,
       required this.title,
-      required this.onClick,
+      this.onClick,
       this.icon,
       this.over,
       this.maxl})
       : super(key: key);
   String title;
-  final Function onClick;
+  final Function? onClick;
   IconData? icon;
   TextOverflow? over;
   int? maxl;
@@ -35,7 +35,7 @@ class MainHeader extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () => onClick(),
+              onTap: () => onClick!(),
               child: Icon(
                 icon,
                 size: 34,

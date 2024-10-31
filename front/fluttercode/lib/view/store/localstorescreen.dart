@@ -8,6 +8,7 @@ import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/component/widgets/searchInput.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
+import 'package:Benefeer/view/store/verfiedlocalstore.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -168,37 +169,32 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                             color: OffColor,
                                             text: render["rules"]
                                                 .replaceAll("\\n", "\n\n"),
-                                            align: TextAlign.start)
+                                            align: TextAlign.start),
+                                        Padding(
+                                          padding: defaultPadding,
+                                          child: const Divider(),
+                                        ),
+                                        SizedBox(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              (Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DocumentScannerScreen()),
+                                              ));
+                                            },
+                                            child: DefaultButton(
+                                              text: "Ativar cashback",
+                                              color: nightColor,
+                                              padding: defaultPadding,
+                                              colorText: lightColor,
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
-                                  // Padding(
-                                  //   padding: defaultPaddingVertical,
-                                  //   child: GestureDetector(
-                                  //     onTap: () {
-                                  //       setState(() {
-                                  //         Uri urlAff =
-                                  //             Uri.parse(render["afflink"]);
-                                  //         _launchURL(urlAff);
-                                  //       });
-                                  //     },
-                                  //     child: DefaultButton(
-                                  //       text: "Ativar cashback",
-                                  //       color: nightColor,
-                                  //       padding: defaultPadding,
-                                  //       colorText: lightColor,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // Tips(
-                                  //     desc:
-                                  //         "Ao clicar em “Ativar cashback”, você será redirecionado ao site ou app."),
-                                  // Tips(
-                                  //     desc:
-                                  //         "Qualquer item comprado dentro do nosso link, será acrescentado dentro do seu seu saldo no nosso app!"),
-                                  // Tips(
-                                  //     desc:
-                                  //         "O saldo do cashback irá cair na sua conta em até no máximo 7 dias uteis.")
                                 ],
                               ),
                             ),
