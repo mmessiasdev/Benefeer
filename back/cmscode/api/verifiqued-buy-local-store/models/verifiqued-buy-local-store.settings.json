@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "verifiqued_buy_local_stores",
+  "info": {
+    "name": "VerifiquedBuyLocalStore",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "profile": {
+      "model": "profile",
+      "via": "verifiqued_buy_local_store"
+    },
+    "local_store": {
+      "model": "local-store",
+      "via": "verifiqued_buy_local_store"
+    },
+    "receipt": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false,
+      "pluginOptions": {}
+    }
+  }
+}

@@ -15,12 +15,12 @@
     "name": {
       "type": "string"
     },
-    "online_store": {
-      "model": "online-store",
-      "via": "categories"
-    },
     "illustrationurl": {
       "type": "string"
+    },
+    "online_stores": {
+      "via": "categories",
+      "collection": "online-store"
     }
   }
 }

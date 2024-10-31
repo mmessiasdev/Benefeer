@@ -1,0 +1,60 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/local-stores",
+      "handler": "local-store.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/local-stores/count",
+      "handler": "local-store.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/local-stores/:id",
+      "handler": "local-store.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/local-stores/:id/qrcode",
+      "handler": "local-store.generateQRCode",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/local-stores",
+      "handler": "local-store.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/local-stores/:id",
+      "handler": "local-store.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/local-stores/:id",
+      "handler": "local-store.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

@@ -56,6 +56,8 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
     }
   }
 
+  late String logo;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -71,6 +73,7 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           var render = snapshot.data!;
+                          logo = render["urllogo"];
                           return SizedBox(
                             child: Padding(
                               padding: defaultPaddingHorizon,
@@ -82,9 +85,8 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                       onClick: () {
                                         (Navigator.pop(context));
                                       }),
-                                  const SearchInput(),
                                   SizedBox(
-                                    height: 40,
+                                    height: 10,
                                   ),
                                   FutureBuilder<Map>(
                                       future: RemoteAuthService()
@@ -94,6 +96,7 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                         if (snapshot.hasData) {
                                           var renderQr = snapshot.data!;
                                           return BankCard(
+                                            logo: logo,
                                             name: fullname,
                                             cpf: cpf,
                                             qrCode:
@@ -142,34 +145,43 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.stretch,
                                       children: [
-                                        SecundaryText(
-                                          text: render["name"],
-                                          color: nightColor,
-                                          align: TextAlign.start,
+                                        Row(
+                                          children: [
+                                            Icon(Icons.location_on),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SubTextSized(
+                                                  fontweight: FontWeight.w900,
+                                                  size: 18,
+                                                  text: render["name"],
+                                                  color: nightColor,
+                                                  align: TextAlign.start,
+                                                ),
+                                                SubText(
+                                                  text: render["localization"],
+                                                  color: nightColor,
+                                                  align: TextAlign.start,
+                                                ),
+                                                SubTextSized(
+                                                    size: 15,
+                                                    fontweight: FontWeight.w600,
+                                                    text: render["phone"],
+                                                    color: nightColor,
+                                                    align: TextAlign.start),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                         const SizedBox(
                                           height: 10,
                                         ),
-                                        SubText(
-                                          text: render["localization"],
-                                          color: nightColor,
-                                          align: TextAlign.start,
-                                        ),
-                                        SubTextSized(
-                                            size: 15,
-                                            fontweight: FontWeight.w600,
-                                            text: render["phone"],
-                                            color: nightColor,
-                                            align: TextAlign.start),
-                                        Padding(
-                                          padding: defaultPadding,
-                                          child: const Divider(),
-                                        ),
-                                        SubText(
-                                            color: OffColor,
-                                            text: render["rules"]
-                                                .replaceAll("\\n", "\n\n"),
-                                            align: TextAlign.start),
                                         Padding(
                                           padding: defaultPadding,
                                           child: const Divider(),
@@ -177,21 +189,33 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                         SizedBox(
                                           child: GestureDetector(
                                             onTap: () {
-                                              (Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DocumentScannerScreen()),
-                                              ));
+                                              (
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          DocumentScannerScreen()),
+                                                ),
+                                              );
                                             },
                                             child: DefaultButton(
-                                              text: "Ativar cashback",
-                                              color: nightColor,
+                                              text: "Pegar cashback",
+                                              icon: Icons.attach_money,
+                                              color: SeventhColor,
                                               padding: defaultPadding,
                                               colorText: lightColor,
                                             ),
                                           ),
                                         ),
+                                        Padding(
+                                          padding: defaultPadding,
+                                          child: const SizedBox(),
+                                        ),
+                                        SubText(
+                                            color: OffColor,
+                                            text: render["rules"]
+                                                .replaceAll("\\n", "\n\n"),
+                                            align: TextAlign.start),
                                       ],
                                     ),
                                   ),

@@ -12,12 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "fname": {
-      "type": "string"
-    },
-    "lname": {
-      "type": "string"
-    },
     "email": {
       "type": "string"
     },
@@ -28,6 +22,14 @@
     },
     "fullname": {
       "type": "string"
+    },
+    "plan": {
+      "via": "profiles",
+      "model": "plan"
+    },
+    "verifiqued_buy_local_store": {
+      "via": "profile",
+      "model": "verifiqued-buy-local-store"
     }
   }
 }

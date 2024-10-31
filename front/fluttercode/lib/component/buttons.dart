@@ -10,11 +10,13 @@ class DefaultButton extends StatelessWidget {
       required this.text,
       this.color,
       this.padding,
+      this.icon,
       this.colorText});
   String text;
   Color? color;
   Color? colorText;
   EdgeInsetsGeometry? padding;
+  IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +27,17 @@ class DefaultButton extends StatelessWidget {
       ),
       child: Padding(
         padding: padding ?? defaultPaddingHorizon,
-        child: ButtonText(
-          text: text,
-          colorText: colorText ?? nightColor,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: colorText ?? nightColor,),
+            SizedBox(width: 10,),
+            ButtonText(
+              text: text,
+              colorText: colorText ?? nightColor,
+            ),
+          ],
         ),
       ),
     );

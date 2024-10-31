@@ -2,8 +2,7 @@
   "kind": "collectionType",
   "collectionName": "local_stores",
   "info": {
-    "name": "LocalStore",
-    "description": ""
+    "name": "LocalStore"
   },
   "options": {
     "increments": true,
@@ -30,15 +29,22 @@
     "code": {
       "type": "uid"
     },
-    "CEP": {
-      "type": "string"
+    "cep": {
+      "type": "integer"
     },
     "benefit": {
+      "type": "string"
+    },
+    "verifiqued": {
       "type": "string"
     },
     "plans": {
       "via": "local_stores",
       "collection": "plan"
+    },
+    "verifiqued_buy_local_store": {
+      "via": "local_store",
+      "model": "verifiqued-buy-local-store"
     }
   }
 }

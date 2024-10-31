@@ -1,3 +1,7 @@
+import 'package:Benefeer/component/buttons.dart';
+import 'package:Benefeer/component/colors.dart';
+import 'package:Benefeer/component/padding.dart';
+import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/view/home/homepage.dart';
 import 'package:Benefeer/view/store/verifiedscreen.dart';
 import 'package:camera/camera.dart';
@@ -78,16 +82,52 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
       return Center(child: CircularProgressIndicator());
     }
 
-    return Scaffold(
-      appBar: AppBar(title: Text("Document Scanner")),
-      body: Column(
-        children: [
-          Expanded(child: CameraPreview(_controller!)),
-          ElevatedButton(
-            onPressed: _captureAndDetectDocument,
-            child: Text("Capturar e Analisar"),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: lightColor,
+        body: Padding(
+          padding: defaultPaddingHorizon,
+          child: Column(
+            children: [
+              MainHeader(
+                title: "Area do Comprovante",
+                onClick: () {
+                  Navigator.of(context).pop();
+                },
+                icon: Icons.arrow_back_ios,
+              ),
+              SizedBox(
+                height: 35,
+              ),
+              Expanded(
+                  flex: 2,
+                  child: Center(
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: CameraPreview(_controller!)))),
+              SizedBox(
+                height: 35,
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: defaultPadding,
+                  child: GestureDetector(
+                    onTap: _captureAndDetectDocument,
+                    child: DefaultButton(
+                      text: 'Tirar foto',
+                      icon: Icons.camera,
+                      color: SeventhColor,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 35,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

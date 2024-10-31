@@ -1,8 +1,19 @@
-'use strict';
+// ./api/plan/controllers/plan.js
 
-/**
- * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#core-controllers)
- * to customize this controller
- */
+module.exports = {
+  async create(ctx) {
+    const { name, value } = ctx.request.body;
 
-module.exports = {};
+    // Criação do novo produto
+    const newPlan = await strapi.services.plan.create({ name, value });
+
+    // Criação do link de pagamento
+    const paymentResponse = await strapi.services.plan.createPaymentLink(newPlan);
+
+    // Retorne os dados do produto com o link de pagamento
+    ctx.send({
+      plan: newPlan,
+      paymentLink: paymentResponse.paymentLink // Retorna o link de pagamento no map `paymentLink`
+    });
+  },
+};

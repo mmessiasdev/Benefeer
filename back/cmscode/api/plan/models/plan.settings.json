@@ -14,7 +14,7 @@
   "attributes": {
     "name": {
       "type": "string"
-    },
+    },  
     "desc": {
       "type": "string"
     },
@@ -27,6 +27,10 @@
     "value": {
       "default": 0,
       "type": "decimal"
+    },
+    "profiles": {
+      "via": "plan",
+      "collection": "profile"
     },
     "local_stores": {
       "collection": "local-store",

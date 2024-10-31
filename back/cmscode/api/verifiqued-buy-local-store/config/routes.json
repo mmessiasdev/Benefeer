@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/verifiqued-buy-local-stores",
+      "handler": "verifiqued-buy-local-store.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/verifiqued-buy-local-stores/count",
+      "handler": "verifiqued-buy-local-store.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/verifiqued-buy-local-stores/:id",
+      "handler": "verifiqued-buy-local-store.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/verifiqued-buy-local-stores",
+      "handler": "verifiqued-buy-local-store.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/verifiqued-buy-local-stores/:id",
+      "handler": "verifiqued-buy-local-store.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/verifiqued-buy-local-stores/:id",
+      "handler": "verifiqued-buy-local-store.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}
