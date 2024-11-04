@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:Benefeer/model/categories.dart';
+import 'package:Benefeer/model/localstoriesverifiquedbuy.dart';
 import 'package:Benefeer/model/plans.dart';
 import 'package:Benefeer/model/postsnauth.dart';
 import 'package:Benefeer/model/profiles.dart';
@@ -97,6 +98,27 @@ class RemoteAuthService {
     };
     var response = await client.post(
       Uri.parse('$url/posts'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': "true"
+      },
+      body: jsonEncode(body),
+    );
+    return response;
+  }
+
+  Future addVerificationLocalStore({
+    required int? profile,
+    required int? local_store,
+    required String? token,
+  }) async {
+    final body = {
+      "profile": profile.toString(),
+      "local_store": local_store.toString(),
+    };
+    var response = await client.post(
+      Uri.parse('$url/verifiqued-buy-local-stores'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -287,6 +309,25 @@ class RemoteAuthService {
     );
     var itens = json.decode(response.body);
     return itens;
+  }
+
+  Future<List<Receipt>> getVerifiquedLocalStoriesFiles(
+      {required String? token, required String? id}) async {
+    List<Receipt> listItens = [];
+    var response = await client.get(
+      Uri.parse('$url/verifiqued-buy-local-stores/${id}'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': "true"
+      },
+    );
+    var body = jsonDecode(response.body);
+    var itemCount = body["receipt"];
+    for (var i = 0; i < itemCount.length; i++) {
+      listItens.add(Receipt.fromJson(itemCount[i]));
+    }
+    return listItens;
   }
 
   Future<List<StoresModel>> getOnlineStoresSearch({

@@ -9,6 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';
 
 class DocumentScannerScreen extends StatefulWidget {
+  DocumentScannerScreen({super.key, required this.localstoreId});
+
+  int localstoreId;
+
   @override
   _DocumentScannerScreenState createState() => _DocumentScannerScreenState();
 }
@@ -62,7 +66,8 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
       // Navega para `VerifiedScreen` com o caminho da imagem
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => VerifiedScreen(imagePath: imagePath),
+          builder: (_) => VerifiedScreen(
+              imagePath: imagePath, localstoreId: widget.localstoreId),
         ),
       );
     }

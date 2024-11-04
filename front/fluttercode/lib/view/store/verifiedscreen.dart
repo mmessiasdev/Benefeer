@@ -5,13 +5,49 @@ import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/widgets/header.dart';
+import 'package:Benefeer/controller/auth.dart';
+import 'package:Benefeer/service/local/auth.dart';
+import 'package:Benefeer/service/remote/auth.dart';
 import 'package:Benefeer/view/dashboard/screen.dart';
 import 'package:Benefeer/view/store/verfiedlocalstore.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class VerifiedScreen extends StatelessWidget {
-  const VerifiedScreen({super.key, required this.imagePath});
+class VerifiedScreen extends StatefulWidget {
+  VerifiedScreen({
+    super.key,
+    required this.imagePath,
+    required this.localstoreId,
+  });
   final String imagePath;
+  int localstoreId;
+
+  @override
+  State<VerifiedScreen> createState() => _VerifiedScreenState();
+}
+
+class _VerifiedScreenState extends State<VerifiedScreen> {
+  var profileId;
+  var tokenId;
+
+  @override
+  void initState() {
+    super.initState();
+    getString();
+  }
+
+  void getString() async {
+    var strProfileId = await LocalAuthService().getId("id");
+    var strToken = await LocalAuthService().getSecureToken("token");
+
+    // Verifique se o widget ainda está montado antes de chamar setState
+    if (mounted) {
+      setState(() {
+        tokenId = strToken;
+        profileId = strProfileId;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +87,7 @@ class VerifiedScreen extends StatelessWidget {
                     SizedBox(
                       height: 400,
                       child: Image.file(
-                        File(imagePath),
+                        File(widget.imagePath),
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -73,7 +109,9 @@ class VerifiedScreen extends StatelessWidget {
                             (Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => DocumentScannerScreen(),
+                                builder: (context) => DocumentScannerScreen(
+                                  localstoreId: widget.localstoreId,
+                                ),
                               ),
                             ));
                           },
@@ -89,17 +127,21 @@ class VerifiedScreen extends StatelessWidget {
                       height: 40,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        (Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const DashboardScreen()),
-                        ));
+                      onTap: () async {
+                        // Obtenha o arquivo a partir do caminho
+                        File imageFile = File(widget.imagePath);
+                        // Chame a função, passando o arquivo diretamente
+                        AuthController().uploadImageToStrapi(
+                          token: tokenId,
+                          profileId: profileId,
+                          localStoreId: widget.localstoreId.toString(),
+                          filePath: widget.imagePath,
+                        );
                       },
                       child: DefaultButton(
                           color: FourtyColor,
                           padding: defaultPadding,
-                          text: "FInalizar"),
+                          text: "Finalizar"),
                     ),
                     const SizedBox(
                       height: 40,

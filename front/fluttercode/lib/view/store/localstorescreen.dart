@@ -194,7 +194,10 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          DocumentScannerScreen()),
+                                                          DocumentScannerScreen(
+                                                            localstoreId:
+                                                                render["id"],
+                                                          )),
                                                 ),
                                               );
                                             },
