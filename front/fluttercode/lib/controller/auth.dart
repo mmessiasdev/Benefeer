@@ -203,16 +203,13 @@ class AuthController extends GetxController {
         status: 'Loading...',
         dismissOnTap: false,
       );
-
-      // Obter o token e fazer a requisição para addVerificationLocalStore
       var token = await LocalAuthService().getSecureToken("token");
       var result = await RemoteAuthService().addVerificationLocalStore(
         token: token.toString(),
         profile: int.tryParse(profileId),
         local_store: int.tryParse(localStoreId),
       );
-
-      EasyLoading.showSuccess("Seu relato foi enviado.");
+      EasyLoading.showSuccess("Seu relato poster enviado.");
       Navigator.of(Get.overlayContext!).pushReplacementNamed('/');
 
       if (result.statusCode == 200) {
@@ -243,10 +240,8 @@ class AuthController extends GetxController {
         );
 
         // Adicionar os outros campos do content-type VerifiquedBuyLocalStore
-        request.fields['ref'] =
-            'verifiqued-buy-local-stores'; // Certifique-se de que o nome está correto
-        request.fields['refId'] =
-            receiptId.toString(); // ID do registro no Strapi
+        request.fields['ref'] = 'verifiqued-buy-local-store';
+        request.fields['refId'] = receiptId.toString(); // ID do registro no Strapi
         request.fields['field'] =
             'receipt'; // Nome do campo da imagem no Strapi
 
@@ -263,7 +258,7 @@ class AuthController extends GetxController {
           print("Erro no upload: ${response.statusCode}");
         }
       } else {
-        print("Erro: Não foi possível verificar informações da conta.");
+        print("Erro: Não foi possivel verificar informações da conta.");
       }
     } catch (e) {
       print("Erro: $e");
