@@ -10,6 +10,7 @@ class PlanContainer extends StatelessWidget {
       required this.value,
       required this.rules,
       this.onClick,
+      required this.bgcolor,
       required this.benefit});
 
   String name;
@@ -17,6 +18,7 @@ class PlanContainer extends StatelessWidget {
   String rules;
   String benefit;
   Function? onClick;
+  Color bgcolor;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class PlanContainer extends StatelessWidget {
       child: Center(
         child: GestureDetector(
           onTap: () {
-            onClick!();
+            onClick!() ?? null;
           },
           child: ClipRRect(
             // esse widget
@@ -32,7 +34,7 @@ class PlanContainer extends StatelessWidget {
             child: Container(
               width: 250,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(22),
                 border: Border.all(
                   color: Colors.black, // Cor da borda preta
                   width: 2, // Largura da borda de 1 pixel
@@ -47,7 +49,7 @@ class PlanContainer extends StatelessWidget {
                           topLeft: Radius.circular(20),
                           topRight: Radius.circular(20)),
                       gradient: LinearGradient(
-                        colors: [PrimaryColor, SecudaryColor],
+                        colors: [bgcolor, SecudaryColor],
                         begin: Alignment.topCenter, // Início do degradê
                         end: Alignment.bottomRight, // Fim do degradê
                       ),
@@ -55,7 +57,11 @@ class PlanContainer extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 25, vertical: 25),
-                      child: SubText(text: name, align: TextAlign.center),
+                      child: SubText(
+                        text: name,
+                        align: TextAlign.center,
+                        color: lightColor,
+                      ),
                     ),
                   ),
                   Padding(

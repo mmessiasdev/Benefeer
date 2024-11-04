@@ -1,36 +1,39 @@
-import 'package:flutter/material.dart';
-
 class Plans {
   int? id;
   String? name;
   String? desc;
-  double? value;
   String? benefits;
   String? rules;
+  double? value;
+  String? color;
   String? publishedAt;
   String? createdAt;
   String? updatedAt;
+  List<Null>? profiles;
   List<LocalStores>? localStores;
 
   Plans(
       {this.id,
       this.name,
       this.desc,
-      this.value,
       this.benefits,
       this.rules,
+      this.value,
+      this.color,
       this.publishedAt,
       this.createdAt,
       this.updatedAt,
+      this.profiles,
       this.localStores});
 
   Plans.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     desc = json['desc'];
-    value = json['value'];
     benefits = json['benefits'];
     rules = json['rules'];
+    value = json['value'];
+    color = json['color'];
     publishedAt = json['published_at'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -47,9 +50,10 @@ class Plans {
     data['id'] = this.id;
     data['name'] = this.name;
     data['desc'] = this.desc;
-    data['value'] = this.value;
     data['benefits'] = this.benefits;
     data['rules'] = this.rules;
+    data['value'] = this.value;
+    data['color'] = this.color;
     data['published_at'] = this.publishedAt;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
@@ -68,8 +72,9 @@ class LocalStores {
   String? phone;
   String? urllogo;
   String? code;
-  String? cEP;
+  int? cep;
   String? benefit;
+  Null? verifiqued;
   String? publishedAt;
   String? createdAt;
   String? updatedAt;
@@ -82,8 +87,9 @@ class LocalStores {
       this.phone,
       this.urllogo,
       this.code,
-      this.cEP,
+      this.cep,
       this.benefit,
+      this.verifiqued,
       this.publishedAt,
       this.createdAt,
       this.updatedAt});
@@ -96,8 +102,9 @@ class LocalStores {
     phone = json['phone'];
     urllogo = json['urllogo'];
     code = json['code'];
-    cEP = json['CEP'];
+    cep = json['cep'];
     benefit = json['benefit'];
+    verifiqued = json['verifiqued'];
     publishedAt = json['published_at'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -112,8 +119,9 @@ class LocalStores {
     data['phone'] = this.phone;
     data['urllogo'] = this.urllogo;
     data['code'] = this.code;
-    data['CEP'] = this.cEP;
+    data['cep'] = this.cep;
     data['benefit'] = this.benefit;
+    data['verifiqued'] = this.verifiqued;
     data['published_at'] = this.publishedAt;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;

@@ -31,6 +31,24 @@ class _ListPlanScreenState extends State<ListPlanScreen> {
     });
   }
 
+  // Método para converter string para cor
+  Color getColorFromString(String color) {
+    switch (color.toLowerCase()) {
+      case 'red':
+        return Colors.red;
+      case 'black':
+        return Colors.black;
+      case 'yellow':
+        return Colors.yellow;
+      case 'green':
+        return Colors.green;
+      case 'blue':
+        return Colors.blue;
+      default:
+        return PrimaryColor; // Cor padrão se a cor não for reconhecida
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -68,6 +86,8 @@ class _ListPlanScreenState extends State<ListPlanScreen> {
                                 return Padding(
                                   padding: defaultPaddingHorizon,
                                   child: PlanContainer(
+                                      bgcolor: getColorFromString(
+                                          renders.color.toString()),
                                       name: renders.name.toString(),
                                       value: renders.value.toString(),
                                       rules: renders.rules.toString(),

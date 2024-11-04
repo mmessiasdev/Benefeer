@@ -40,6 +40,24 @@ class _PlanScreenState extends State<PlanScreen> {
     });
   }
 
+  // Método para converter string para cor
+  Color getColorFromString(String color) {
+    switch (color.toLowerCase()) {
+      case 'red':
+        return Colors.red;
+      case 'black':
+        return Colors.black;
+      case 'yellow':
+        return Colors.yellow;
+      case 'green':
+        return Colors.green;
+      case 'blue':
+        return Colors.blue;
+      default:
+        return PrimaryColor; // Cor padrão se a cor não for reconhecida
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,8 +68,7 @@ class _PlanScreenState extends State<PlanScreen> {
               children: [
                 Padding(
                   padding: defaultPaddingHorizon,
-                  child: MainHeader(
-                      title: "Benefeer", icon: Icons.menu, onClick: () {}),
+                  child: MainHeader(title: "Benefeer"),
                 ),
                 FutureBuilder(
                   future: RemoteAuthService().getProfile(token: token),
@@ -120,22 +137,26 @@ class _PlanScreenState extends State<PlanScreen> {
                                     child: FutureBuilder<List<Plans>>(
                                         future: RemoteAuthService()
                                             .getPlans(token: token),
-                                        builder: (context, planSnapshot) {
-                                          if (planSnapshot.hasData) {
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
                                             return ListView.builder(
                                                 shrinkWrap: true,
                                                 scrollDirection:
                                                     Axis.horizontal,
                                                 itemCount:
-                                                    planSnapshot.data!.length,
+                                                    snapshot.data!.length,
                                                 itemBuilder: (context, index) {
                                                   var renders =
-                                                      planSnapshot.data![index];
+                                                      snapshot.data![index];
                                                   if (renders != null) {
                                                     return Padding(
                                                       padding:
                                                           defaultPaddingHorizon,
                                                       child: PlanContainer(
+                                                          bgcolor:
+                                                              getColorFromString(
+                                                                  renders.color
+                                                                      .toString()),
                                                           // esse widget será clicado
                                                           name: renders.name
                                                               .toString(),
@@ -158,7 +179,7 @@ class _PlanScreenState extends State<PlanScreen> {
                                                 });
                                           }
                                           return SizedBox(
-                                            height: 300,
+                                            height: 200,
                                             child: Center(
                                               child: CircularProgressIndicator(
                                                 color: nightColor,
