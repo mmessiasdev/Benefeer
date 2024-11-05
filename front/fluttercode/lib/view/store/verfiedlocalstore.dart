@@ -84,7 +84,9 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
   @override
   Widget build(BuildContext context) {
     if (_controller == null || !_controller!.value.isInitialized) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
     }
 
     return SafeArea(
@@ -101,16 +103,19 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
                 },
                 icon: Icons.arrow_back_ios,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 35,
               ),
               Expanded(
-                  flex: 2,
-                  child: Center(
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: CameraPreview(_controller!)))),
-              SizedBox(
+                flex: 2,
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: CameraPreview(_controller!),
+                  ),
+                ),
+              ),
+              const SizedBox(
                 height: 35,
               ),
               Expanded(
@@ -127,7 +132,7 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 35,
               ),
             ],

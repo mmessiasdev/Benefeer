@@ -192,6 +192,46 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<bool> iniciarPagamentoMercadoPago(double valor) async {
+    final url = Uri.parse("https://api.mercadopago.com/v1/payments");
+
+    final response = await http.post(
+      url,
+      headers: {
+        "Authorization":
+            "Bearer TEST-2869162016512406-102909-e3a08dc42979eadc840e775ebf8c7a28-1983614734", // Substitua pelo seu token
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode(
+        {
+          "transaction_amount": valor,
+          "description": "Acesso especial",
+          "payment_method_id": "pix",
+          "payer": {
+            "email": "mmessiasdev@gmail.com",
+          },
+        },
+      ),
+    );
+
+    if (response.statusCode == 201) {
+      final paymentResponse = jsonDecode(response.body);
+
+      // Verifique o status do pagamento
+      final status = paymentResponse["status"];
+      if (status == "approved") {
+        print("Pagamento aprovado!");
+        return true;
+      } else {
+        print("Pagamento não aprovado. Status: $status");
+        return false;
+      }
+    } else {
+      print("Erro no pagamento: ${response.statusCode}");
+      return false;
+    }
+  }
+
   Future<void> uploadImageToStrapi({
     required String token,
     required String profileId,
@@ -241,7 +281,8 @@ class AuthController extends GetxController {
 
         // Adicionar os outros campos do content-type VerifiquedBuyLocalStore
         request.fields['ref'] = 'verifiqued-buy-local-store';
-        request.fields['refId'] = receiptId.toString(); // ID do registro no Strapi
+        request.fields['refId'] =
+            receiptId.toString(); // ID do registro no Strapi
         request.fields['field'] =
             'receipt'; // Nome do campo da imagem no Strapi
 

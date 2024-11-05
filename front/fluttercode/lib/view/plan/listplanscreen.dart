@@ -2,6 +2,7 @@ import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/component/widgets/plancontainer.dart';
+import 'package:Benefeer/controller/auth.dart';
 import 'package:Benefeer/model/plans.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
@@ -86,6 +87,22 @@ class _ListPlanScreenState extends State<ListPlanScreen> {
                                 return Padding(
                                   padding: defaultPaddingHorizon,
                                   child: PlanContainer(
+                                      onClick: () async {
+                                        double valorPagamento =
+                                            renders.value ?? 0.0;
+
+                                        bool pagamentoAprovado =
+                                            await AuthController()
+                                                .iniciarPagamentoMercadoPago(
+                                                    valorPagamento); // Valor do pagamento
+
+                                        if (pagamentoAprovado) {
+                                          print(
+                                              "PAGAMENTO REALIZADO"); // Liberar acesso no Strapi
+                                        } else {
+                                          print("Pagamento não foi aprovado.");
+                                        }
+                                      },
                                       bgcolor: getColorFromString(
                                           renders.color.toString()),
                                       name: renders.name.toString(),

@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:Benefeer/model/categories.dart';
 import 'package:Benefeer/model/localstoriesverifiquedbuy.dart';
 import 'package:Benefeer/model/plans.dart';
+import 'package:Benefeer/model/localstores.dart';
+
 import 'package:Benefeer/model/postsnauth.dart';
 import 'package:Benefeer/model/profiles.dart';
 import 'package:Benefeer/model/stores.dart';
@@ -260,6 +262,25 @@ class RemoteAuthService {
     return listItens;
   }
 
+  Future<List<LocalStores>> getLocalStores({
+    required String? token,
+  }) async {
+    List<LocalStores> listItens = [];
+    var response = await client.get(
+      Uri.parse('$url/local-stores'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+    var body = jsonDecode(response.body);
+    var itemCount = body;
+    for (var i = 0; i < itemCount.length; i++) {
+      listItens.add(LocalStores.fromJson(itemCount[i]));
+    }
+    return listItens;
+  }
+
   Future<Map> getLocalStore({
     required String id,
     required String? token,
@@ -274,25 +295,6 @@ class RemoteAuthService {
     );
     var itens = json.decode(response.body);
     return itens;
-  }
-
-  Future<List<PostFiles>> getPostsFiles(
-      {required String? token, required String? id}) async {
-    List<PostFiles> listItens = [];
-    var response = await client.get(
-      Uri.parse('$url/posts/${id}'),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
-      },
-    );
-    var body = jsonDecode(response.body);
-    var itemCount = body["files"];
-    for (var i = 0; i < itemCount.length; i++) {
-      listItens.add(PostFiles.fromJson(itemCount[i]));
-    }
-    return listItens;
   }
 
   Future<Map> getQrCodeLocalStore({

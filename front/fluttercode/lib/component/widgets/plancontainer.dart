@@ -9,7 +9,7 @@ class PlanContainer extends StatelessWidget {
       required this.name,
       required this.value,
       required this.rules,
-      this.onClick,
+      required this.onClick,
       required this.bgcolor,
       required this.benefit});
 
@@ -17,7 +17,7 @@ class PlanContainer extends StatelessWidget {
   String value;
   String rules;
   String benefit;
-  Function? onClick;
+  Function onClick;
   Color bgcolor;
 
   @override
@@ -26,7 +26,7 @@ class PlanContainer extends StatelessWidget {
       child: Center(
         child: GestureDetector(
           onTap: () {
-            onClick!() ?? null;
+            onClick();
           },
           child: ClipRRect(
             // esse widget

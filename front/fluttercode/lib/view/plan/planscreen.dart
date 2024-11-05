@@ -7,6 +7,7 @@ import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/component/widgets/plancontainer.dart';
+import 'package:Benefeer/controller/auth.dart';
 import 'package:Benefeer/model/plans.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
@@ -153,6 +154,25 @@ class _PlanScreenState extends State<PlanScreen> {
                                                       padding:
                                                           defaultPaddingHorizon,
                                                       child: PlanContainer(
+                                                          onClick: () async {
+                                                            double
+                                                                valorPagamento =
+                                                                renders.value ??
+                                                                    0.0;
+                                                            bool
+                                                                pagamentoAprovado =
+                                                                await AuthController()
+                                                                    .iniciarPagamentoMercadoPago(
+                                                                        valorPagamento); // Valor do pagamento
+
+                                                            if (pagamentoAprovado) {
+                                                              print(
+                                                                  "PAGAMENTO REALIZADO"); // Liberar acesso no Strapi
+                                                            } else {
+                                                              print(
+                                                                  "Pagamento não foi aprovado.");
+                                                            }
+                                                          },
                                                           bgcolor:
                                                               getColorFromString(
                                                                   renders.color
@@ -225,70 +245,6 @@ class _PlanScreenState extends State<PlanScreen> {
                                             align: TextAlign.start),
                                         SizedBox(
                                           height: 20,
-                                        ),
-                                        SizedBox(
-                                          height:
-                                              400, // Altura definida para o ListView
-                                          child:
-                                              FutureBuilder<List<LocalStores>>(
-                                            future: RemoteAuthService()
-                                                .getOnePlansLocalStores(
-                                                    token: token, id: idPlan),
-                                            builder: (context, snapshot) {
-                                              if (snapshot.hasData) {
-                                                return ListView.builder(
-                                                  shrinkWrap: true,
-                                                  physics:
-                                                      NeverScrollableScrollPhysics(),
-                                                  itemCount:
-                                                      snapshot.data!.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    var renders =
-                                                        snapshot.data![index];
-                                                    // Verificação se o idPlan não é nulo
-                                                    if (idPlan != null) {
-                                                      return Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                vertical: 10),
-                                                        child:
-                                                            ContentLocalProduct(
-                                                          urlLogo: renders
-                                                              .urllogo
-                                                              .toString(),
-                                                          benefit: renders
-                                                              .benefit
-                                                              .toString(),
-                                                          title: renders.name
-                                                              .toString(),
-                                                          id: renders.id
-                                                              .toString(),
-                                                        ),
-                                                      );
-                                                    }
-                                                    return SizedBox(
-                                                      height: 100,
-                                                      child: Center(
-                                                          child: ErrorPost(
-                                                              text:
-                                                                  "Não encontrado")),
-                                                    );
-                                                  },
-                                                );
-                                              }
-                                              return SizedBox(
-                                                height: 300,
-                                                child: Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    color: nightColor,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
                                         ),
                                       ],
                                     )

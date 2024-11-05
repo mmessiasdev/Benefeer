@@ -1,16 +1,19 @@
 import 'package:Benefeer/component/categorie.dart';
 import 'package:Benefeer/component/containersLoading.dart';
+import 'package:Benefeer/component/contentlocalproduct.dart';
 import 'package:Benefeer/component/contentproduct.dart';
 import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/component/widgets/iconlist.dart';
 import 'package:Benefeer/component/widgets/listTitle.dart';
 import 'package:Benefeer/component/widgets/searchInput.dart';
 import 'package:Benefeer/model/categories.dart';
+import 'package:Benefeer/model/localstores.dart';
 import 'package:Benefeer/model/stores.dart';
 import 'package:Benefeer/service/remote/auth.dart';
 import 'package:Benefeer/view/account/account.dart';
 import 'package:Benefeer/view/category/categoryscreen.dart';
 import 'package:Benefeer/view/qrcode/qrcodescreen.dart';
+import 'package:Benefeer/view/store/localstorelist.dart';
 import 'package:flutter/material.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/padding.dart';
@@ -201,9 +204,10 @@ class _HomePageState extends State<HomePage> {
                             (Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CategoryScreen(
-                                        id: '4',
-                                      )),
+                                builder: (context) => CategoryScreen(
+                                  id: '4',
+                                ),
+                              ),
                             ));
                           },
                         ),
@@ -322,8 +326,81 @@ class _HomePageState extends State<HomePage> {
                                     },
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 40,
+                                const SizedBox(
+                                  height: 60,
+                                ),
+                                Padding(
+                                  padding: defaultPaddingHorizon,
+                                  child: const ListTitle(title: "Lojas locais"),
+                                ),
+                                FutureBuilder<List<LocalStores>>(
+                                  future: RemoteAuthService()
+                                      .getLocalStores(token: token),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                            ConnectionState.done &&
+                                        snapshot.hasData) {
+                                      if (snapshot.data!.isEmpty) {
+                                        return const Center(
+                                          child: Text(
+                                              "Nenhuma loja disponível no momento."),
+                                        );
+                                      } else {
+                                        return ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: 2,
+                                          itemBuilder: (context, index) {
+                                            var renders = snapshot.data![index];
+                                            // Verificação se o idPlan não é nulo
+                                            return Padding(
+                                              padding: defaultPadding,
+                                              child: ContentLocalProduct(
+                                                urlLogo:
+                                                    renders.urllogo.toString(),
+                                                benefit:
+                                                    renders.benefit.toString(),
+                                                title: renders.name.toString(),
+                                                id: renders.id.toString(),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      }
+                                    } else if (snapshot.hasError) {
+                                      return WidgetLoading();
+                                    }
+                                    return SizedBox(
+                                      height: 300,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: nightColor,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            LocalStoreListScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: SubTextSized(
+                                    text: "Ver mais",
+                                    align: TextAlign.center,
+                                    fontweight: FontWeight.w600,
+                                    size: 12,
+                                    tdeco: TextDecoration.underline,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 60,
                                 ),
                                 Padding(
                                   padding: defaultPaddingHorizon,
