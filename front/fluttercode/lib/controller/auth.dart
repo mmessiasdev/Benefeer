@@ -198,7 +198,6 @@ class AuthController extends GetxController {
     var uuid = Uuid();
     String idempotencyKey = uuid.v4();
 
-    print(valor);
     final url = Uri.parse("https://api.mercadopago.com/v1/payments");
 
     final response = await http.post(
@@ -216,26 +215,51 @@ class AuthController extends GetxController {
       }),
     );
 
-    print(idempotencyKey);
-    print("Essa é a resposta ${response.statusCode}");
-
     if (response.statusCode == 201) {
       final paymentResponse = jsonDecode(response.body);
       final qrCodeBase64 = paymentResponse['point_of_interaction']
           ['transaction_data']['qr_code_base64'];
       final qrCodeCopyPaste = paymentResponse['point_of_interaction']
           ['transaction_data']['qr_code'];
-      print(qrCodeBase64);
-      print(qrCodeCopyPaste);
+      final paymentId = paymentResponse['id']
+          .toString(); // ID do pagamento para futuras verificações
 
-      // Retorna ambos os valores em um Map
       return {
         "qrCodeBase64": qrCodeBase64,
         "qrCodeCopyPaste": qrCodeCopyPaste,
+        "paymentId": paymentId,
       };
     } else {
       print("Erro no pagamento: ${response.statusCode}");
       return null;
+    }
+  }
+
+  Future<bool> verificarStatusPagamento(String paymentId) async {
+    final url = Uri.parse("https://api.mercadopago.com/v1/payments/$paymentId");
+
+    final response = await http.get(
+      url,
+      headers: {
+        "Authorization":
+            "Bearer TEST-2869162016512406-102909-e3a08dc42979eadc840e775ebf8c7a28",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final paymentResponse = jsonDecode(response.body);
+      print(paymentResponse['status']);
+
+      // Verifique se o status do pagamento é "approved"
+      if (paymentResponse['status'] == "approved") {
+        return true; // Retorna true se o status for "approved"
+      } else {
+        print("Pagamento não aprovado. Status: ${paymentResponse['status']}");
+        return false; // Retorna false se o status não for "approved"
+      }
+    } else {
+      print("Erro ao verificar o status: ${response.statusCode}");
+      return false; // Retorna false se o status code não for 200
     }
   }
 

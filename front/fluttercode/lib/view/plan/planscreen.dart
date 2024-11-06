@@ -142,6 +142,9 @@ class _PlansScreenState extends State<PlansScreen> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   QrCodeBuyPlanScreen(
+                                                idPlan: render['id'],
+                                                paymentId:
+                                                    paymentData['paymentId']!,
                                                 qrCode: paymentData[
                                                     'qrCodeBase64']!,
                                                 qrCodeCopyPaste: paymentData[

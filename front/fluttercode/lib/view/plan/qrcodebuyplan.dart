@@ -1,24 +1,60 @@
 import 'dart:convert';
+
 import 'package:Benefeer/component/buttons.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/widgets/header.dart';
+import 'package:Benefeer/controller/auth.dart';
+import 'package:Benefeer/service/local/auth.dart';
+import 'package:Benefeer/service/remote/auth.dart';
 import 'package:Benefeer/view/dashboard/binding.dart';
 import 'package:Benefeer/view/dashboard/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'package:uuid/uuid.dart';
 
-class QrCodeBuyPlanScreen extends StatelessWidget {
+class QrCodeBuyPlanScreen extends StatefulWidget {
   QrCodeBuyPlanScreen(
-      {super.key, required this.qrCode, required this.qrCodeCopyPaste});
+      {super.key,
+      required this.qrCode,
+      required this.qrCodeCopyPaste,
+      required this.idPlan,
+      required this.paymentId});
 
-  final String qrCode;
-  final String qrCodeCopyPaste;
+  String qrCode;
+  String qrCodeCopyPaste;
+  String paymentId;
+  int idPlan;
+
+  @override
+  State<QrCodeBuyPlanScreen> createState() => _QrCodeBuyPlanScreenState();
+}
+
+class _QrCodeBuyPlanScreenState extends State<QrCodeBuyPlanScreen> {
+  var token;
+  var idProfile;
+
+  @override
+  void initState() {
+    super.initState();
+    getString();
+  }
+
+  void getString() async {
+    var strToken = await LocalAuthService().getSecureToken("token");
+    var strId = await LocalAuthService().getId("id");
+
+    // Verifique se o widget ainda está montado antes de chamar setState
+    if (mounted) {
+      setState(() {
+        idProfile = strId;
+        token = strToken;
+      });
+    }
+  }
 
   Widget _buildQrCodeImage(String base64String) {
+    // Remove a parte 'data:image/png;base64,' da string
     final decodedBytes = base64Decode(
         base64String.split(',').last); // Decodifica a string Base64
 
@@ -42,109 +78,6 @@ class QrCodeBuyPlanScreen extends StatelessWidget {
     );
   }
 
-  // Função para iniciar a compra do plano e monitorar o status do pagamento
-  Future<void> iniciarCompraPlano(BuildContext context, double valor) async {
-    var uuid = Uuid();
-    String idempotencyKey = uuid.v4();
-
-    final url = Uri.parse("https://api.mercadopago.com/v1/payments");
-
-    final response = await http.post(
-      url,
-      headers: {
-        "Authorization":
-            "Bearer TEST-2869162016512406-102909-e3a08dc42979eadc840e775ebf8c7a28-1983614734",
-        "X-Idempotency-Key": idempotencyKey,
-      },
-      body: jsonEncode({
-        "transaction_amount": valor,
-        "description": "Acesso especial",
-        "payment_method_id": "pix",
-        "payer": {"email": "mmessiasltk@gmail.com"}
-      }),
-    );
-
-    if (response.statusCode == 201) {
-      final paymentResponse = jsonDecode(response.body);
-      final paymentId = paymentResponse['id'].toString();
-
-      // Verifica o status do pagamento a cada 5 segundos até ser aprovado
-      bool pagamentoAprovado = false;
-      while (!pagamentoAprovado) {
-        await Future.delayed(Duration(seconds: 5));
-        pagamentoAprovado = await verificarStatusPagamento(paymentId);
-
-        if (pagamentoAprovado) {
-          print("Pagamento aprovado!");
-
-          // Atualiza o plano na API Strapi
-          await atualizarPlanoNaApi();
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content:
-                    Text("Pagamento aprovado! Plano atualizado com sucesso.")),
-          );
-
-          // Volta para a tela principal após o sucesso
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DashboardScreen(),
-            ),
-          );
-          break;
-        }
-      }
-    } else {
-      print("Erro ao iniciar pagamento");
-    }
-  }
-
-  // Função para verificar o status do pagamento
-  Future<bool> verificarStatusPagamento(String paymentId) async {
-    final url = Uri.parse("https://api.mercadopago.com/v1/payments/$paymentId");
-
-    final response = await http.get(
-      url,
-      headers: {
-        "Authorization":
-            "Bearer TEST-2869162016512406-102909-e3a08dc42979eadc840e775ebf8c7a28-1983614734",
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final paymentResponse = jsonDecode(response.body);
-      return paymentResponse['status'] == "approved";
-    } else {
-      print("Erro ao verificar o status: ${response.statusCode}");
-      return false;
-    }
-  }
-
-  // Função para atualizar o plano na API Strapi
-  Future<void> atualizarPlanoNaApi() async {
-    final url = Uri.parse("https://sua-api.com/endpoint-de-atualizacao");
-
-    final response = await http.post(
-      url,
-      headers: {
-        "Authorization": "Bearer SEU_TOKEN_STRAPI",
-        "Content-Type": "application/json",
-      },
-      body: jsonEncode({
-        "usuarioId": "ID_DO_USUARIO",
-        "novoPlano": "ID_DO_PLANO_COMPRADO",
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      print("Plano atualizado com sucesso na API");
-    } else {
-      print("Erro ao atualizar o plano: ${response.statusCode}");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -163,12 +96,13 @@ class QrCodeBuyPlanScreen extends StatelessWidget {
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child: SizedBox(child: _buildQrCodeImage(qrCode)),
+                  child: SizedBox(child: _buildQrCodeImage(widget.qrCode)),
                 ),
                 SizedBox(
                   child: GestureDetector(
                     onTap: () {
-                      Clipboard.setData(ClipboardData(text: qrCodeCopyPaste));
+                      Clipboard.setData(
+                          ClipboardData(text: widget.qrCodeCopyPaste));
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                             backgroundColor: PrimaryColor,
@@ -196,7 +130,7 @@ class QrCodeBuyPlanScreen extends StatelessWidget {
                             ),
                             Expanded(
                               child: SubText(
-                                text: qrCodeCopyPaste,
+                                text: widget.qrCodeCopyPaste,
                                 color: nightColor,
                                 align: TextAlign.center,
                                 maxl: 2,
@@ -226,9 +160,31 @@ class QrCodeBuyPlanScreen extends StatelessWidget {
                   height: 30,
                 ),
                 GestureDetector(
-                  onTap: () {
-                    iniciarCompraPlano(context,
-                        100.0); // Substitua "100.0" pelo valor do plano
+                  onTap: () async {
+                    bool isPaymentApproved = await AuthController()
+                        .verificarStatusPagamento(widget.paymentId);
+
+                    if (isPaymentApproved) {
+                      RemoteAuthService().addProfilePlan(
+                          idProfile: idProfile,
+                          idPlan: widget.idPlan.toString(),
+                          token: token);
+                      // Navega para outra tela se o pagamento foi aprovado
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DashboardScreen(),
+                        ),
+                      );
+                    } else {
+                      // Mostra uma mensagem de erro se o pagamento não foi aprovado
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: FifthColor,
+                          content: Text("O pagamento ainda não foi realizado."),
+                        ),
+                      );
+                    }
                   },
                   child: DefaultButton(
                     text: "Já fiz o pagamento!",

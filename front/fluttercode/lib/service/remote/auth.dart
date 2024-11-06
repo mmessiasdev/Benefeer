@@ -258,6 +258,26 @@ class RemoteAuthService {
     return itens;
   }
 
+  Future addProfilePlan({
+    required int? idProfile,
+    required String? idPlan,
+    required String? token,
+  }) async {
+    final body = {
+      "profiles": [idProfile]
+    };
+    var response = await client.post(
+      Uri.parse('$url/plans/$idPlan'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': "true"
+      },
+      body: jsonEncode(body),
+    );
+    return response;
+  }
+
   Future<List<LocalStores>> getOnePlansLocalStores({
     required String? token,
     required String? id,
