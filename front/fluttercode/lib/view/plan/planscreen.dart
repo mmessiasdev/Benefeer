@@ -1,33 +1,27 @@
-import 'dart:convert';
-
+import 'package:Benefeer/component/buttons.dart';
 import 'package:Benefeer/component/colors.dart';
-import 'package:Benefeer/component/containersLoading.dart';
-import 'package:Benefeer/component/contentlocalproduct.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/widgets/header.dart';
-import 'package:Benefeer/component/widgets/plancontainer.dart';
+import 'package:Benefeer/component/widgets/searchInput.dart';
 import 'package:Benefeer/controller/auth.dart';
-import 'package:Benefeer/model/plans.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
-import 'package:Benefeer/view/plan/listplanscreen.dart';
+import 'package:Benefeer/view/plan/qrcodebuyplan.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
-class PlanScreen extends StatefulWidget {
-  const PlanScreen({super.key});
+class PlansScreen extends StatefulWidget {
+  PlansScreen({super.key, required this.id});
+  var id;
 
   @override
-  State<PlanScreen> createState() => _PlanScreenState();
+  State<PlansScreen> createState() => _PlansScreenState();
 }
 
-class _PlanScreenState extends State<PlanScreen> {
-  var client = http.Client();
-  var token;
-  var idPlan;
-
+class _PlansScreenState extends State<PlansScreen> {
   @override
+  var token;
+
   void initState() {
     super.initState();
     getString();
@@ -41,308 +35,163 @@ class _PlanScreenState extends State<PlanScreen> {
     });
   }
 
-  // Método para converter string para cor
-  Color getColorFromString(String color) {
-    switch (color.toLowerCase()) {
-      case 'red':
-        return Colors.red;
-      case 'black':
-        return Colors.black;
-      case 'yellow':
-        return Colors.yellow;
-      case 'green':
-        return Colors.green;
-      case 'blue':
-        return Colors.blue;
-      default:
-        return PrimaryColor; // Cor padrão se a cor não for reconhecida
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: lightColor,
-      body: token == null
-          ? const Center(child: CircularProgressIndicator())
-          : ListView(
-              children: [
-                Padding(
-                  padding: defaultPaddingHorizon,
-                  child: MainHeader(title: "Benefeer"),
-                ),
-                FutureBuilder(
-                  future: RemoteAuthService().getProfile(token: token),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return const WidgetLoading();
-                    } else if (snapshot.hasData) {
-                      var response = snapshot.data as http.Response;
-
-                      // Verifica se o status da resposta é 200 (OK)
-                      if (response.statusCode == 200) {
-                        // Verifica se o conteúdo da resposta é JSON
-                        try {
-                          var render =
-                              jsonDecode(response.body) as Map<String, dynamic>;
-
-                          // Verifica se o campo "plan" é nulo
-                          if (render != null && render['plan'] == null) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Padding(
-                                  padding: defaultPaddingHorizon,
-                                  child: Column(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: lightColor,
+        body: ListView(
+          children: [
+            FutureBuilder<Map>(
+                future: RemoteAuthService()
+                    .getOnePlan(token: token, id: widget.id.toString()),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var render = snapshot.data!;
+                    return SizedBox(
+                      child: Padding(
+                        padding: defaultPadding,
+                        child: Column(
+                          children: [
+                            MainHeader(
+                                title: render["name"],
+                                icon: Icons.arrow_back_ios,
+                                onClick: () {
+                                  (Navigator.pop(context));
+                                }),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: SizedBox(
+                                height: 100,
+                                width: MediaQuery.of(context).size.width * 1,
+                                child: Image.network(
+                                  render['illustrationurl'],
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 30),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  SubText(
+                                      text: "${render['desc']}",
+                                      align: TextAlign.start),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Divider(),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  SubText(
+                                      text: "Benefícios:",
+                                      align: TextAlign.start),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  SubText(
+                                      text: "${render['benefits']}"
+                                          .replaceAll("\\n", "\n\n"),
+                                      color: nightColor,
+                                      align: TextAlign.start),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Divider(),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.stretch,
                                     children: [
-                                      PlanViewUpdated(
-                                          planname: 'Benefeer Free'),
-                                      SizedBox(
-                                        height: 35,
-                                      ),
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
-                                        child: SizedBox(
-                                            height: 235,
-                                            child: Image.asset(
-                                              "assets/images/illustrator/illustrator2.png",
-                                              fit: BoxFit.cover,
-                                            )),
-                                      ),
-                                      SizedBox(
-                                        height: 40,
-                                      ),
                                       SubText(
-                                        text:
-                                            "Adquira para aproveitar o máximo de benefícios que temos a oferecer para você, sua família e sua empresa! ",
-                                        color: nightColor,
-                                        align: TextAlign.center,
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Icon(Icons.arrow_downward),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
+                                          text: "${render['rules']}"
+                                              .replaceAll("\\n", "\n\n"),
+                                          color: OffColor,
+                                          align: TextAlign.start),
                                     ],
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 600,
-                                  child: Center(
-                                    child: FutureBuilder<List<Plans>>(
-                                        future: RemoteAuthService()
-                                            .getPlans(token: token),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return ListView.builder(
-                                                shrinkWrap: true,
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                itemCount:
-                                                    snapshot.data!.length,
-                                                itemBuilder: (context, index) {
-                                                  var renders =
-                                                      snapshot.data![index];
-                                                  if (renders != null) {
-                                                    return Padding(
-                                                      padding:
-                                                          defaultPaddingHorizon,
-                                                      child: PlanContainer(
-                                                          onClick: () async {
-                                                            double
-                                                                valorPagamento =
-                                                                renders.value ??
-                                                                    0.0;
-                                                            bool
-                                                                pagamentoAprovado =
-                                                                await AuthController()
-                                                                    .iniciarPagamentoMercadoPago(
-                                                                        valorPagamento); // Valor do pagamento
+                                  SizedBox(
+                                    height: 60,
+                                  ),
+                                  PrimaryText(
+                                    align: TextAlign.end,
+                                    color: nightColor,
+                                    text: "${render['value']}R\$",
+                                  ),
+                                  Padding(
+                                    padding: defaultPaddingVertical,
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        final paymentData =
+                                            await AuthController()
+                                                .iniciarPagamentoMercadoPago(
+                                                    render['value']);
 
-                                                            if (pagamentoAprovado) {
-                                                              print(
-                                                                  "PAGAMENTO REALIZADO"); // Liberar acesso no Strapi
-                                                            } else {
-                                                              print(
-                                                                  "Pagamento não foi aprovado.");
-                                                            }
-                                                          },
-                                                          bgcolor:
-                                                              getColorFromString(
-                                                                  renders.color
-                                                                      .toString()),
-                                                          // esse widget será clicado
-                                                          name: renders.name
-                                                              .toString(),
-                                                          value: renders.value
-                                                              .toString(),
-                                                          rules: renders.rules
-                                                              .toString(),
-                                                          benefit: renders
-                                                              .benefits
-                                                              .toString()),
-                                                    );
-                                                  }
-                                                  return const SizedBox(
-                                                    height: 100,
-                                                    child: Center(
-                                                      child: Text(
-                                                          'Plano não encontrado'),
-                                                    ),
-                                                  );
-                                                });
-                                          }
-                                          return SizedBox(
-                                            height: 200,
-                                            child: Center(
-                                              child: CircularProgressIndicator(
-                                                color: nightColor,
+                                        if (paymentData != null) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  QrCodeBuyPlanScreen(
+                                                qrCode: paymentData[
+                                                    'qrCodeBase64']!,
+                                                qrCodeCopyPaste: paymentData[
+                                                    'qrCodeCopyPaste']!,
                                               ),
                                             ),
                                           );
-                                        }),
+                                        } else {
+                                          print(
+                                              "Falha ao iniciar o pagamento.");
+                                        }
+                                      },
+                                      child: DefaultButton(
+                                        color: SeventhColor,
+                                        colorText: lightColor,
+                                        padding: defaultPadding,
+                                        text: "Adquirir",
+                                        icon: Icons.pix,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            );
-                          } else {
-                            idPlan = render['plan']['id'].toString();
-                            return Padding(
-                              padding: defaultPaddingHorizon,
-                              child: idPlan != null
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [
-                                        PlanViewUpdated(
-                                          planname: render['plan']['name'],
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          child: SizedBox(
-                                              height: 205,
-                                              child: Image.asset(
-                                                "assets/images/illustrator/illustrator1.png",
-                                                fit: BoxFit.cover,
-                                              )),
-                                        ),
-                                        SizedBox(
-                                          height: 35,
-                                        ),
-                                        SecundaryText(
-                                            text: "Seus beneficios",
-                                            color: nightColor,
-                                            align: TextAlign.start),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                      ],
-                                    )
-                                  : Text("data"),
-                            );
-                          }
-                        } catch (e) {
-                          // Exibe uma mensagem de erro se não conseguir decodificar JSON
-                          return Center(
-                            child: Text(
-                                "Erro ao processar a resposta: ${e.toString()}"),
-                          );
-                        }
-                      } else {
-                        // Exibe o código de status HTTP e a resposta bruta
-                        return Center(
-                          child: ErrorPost(
-                              text:
-                                  "Plano não encontrado. \n\nVerifique sua conexão, por gentileza."),
-                        );
-                      }
-                    } else {
-                      return Center(
-                        child: SecundaryText(
-                          align: TextAlign.center,
-                          color: nightColor,
-                          text: "Nenhum Texto encontrado.",
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      );
-                    }
-                  },
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-              ],
-            ),
-    );
-  }
-}
-
-class PlanViewUpdated extends StatelessWidget {
-  PlanViewUpdated({super.key, required this.planname});
-
-  String planname;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            SubTextSized(
-                fontweight: FontWeight.w400,
-                size: 12,
-                text: "Seu Plano:",
-                color: nightColor,
-                align: TextAlign.start),
-            SizedBox(
-              width: 5,
-            ),
-            SubText(
-              text: planname,
-              align: TextAlign.start,
-              over: TextOverflow.fade,
-              maxl: 2,
-            ),
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Expanded(
+                      child: Center(
+                          child: SubText(
+                        text: 'Erro ao pesquisar Plano',
+                        color: PrimaryColor,
+                        align: TextAlign.center,
+                      )),
+                    );
+                  }
+                  return SizedBox(
+                    height: 200,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: PrimaryColor,
+                      ),
+                    ),
+                  );
+                }),
           ],
         ),
-        SizedBox(
-          width: 5,
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ListPlanScreen(),
-              ),
-            );
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: PrimaryColor,
-            ),
-            child: Padding(
-              padding: defaultPadding,
-              child: SubText(
-                text: "Fazer Upgrade",
-                align: TextAlign.center,
-                color: lightColor,
-              ),
-            ),
-          ),
-        )
-      ],
+      ),
     );
   }
 }

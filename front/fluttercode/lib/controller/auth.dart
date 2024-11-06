@@ -9,6 +9,7 @@ import '../model/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:uuid/uuid.dart'; // Você pode adicionar este pacote para gerar UUIDs únicas
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
@@ -192,43 +193,49 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<bool> iniciarPagamentoMercadoPago(double valor) async {
+  Future<Map<String, String?>?> iniciarPagamentoMercadoPago(
+      double valor) async {
+    var uuid = Uuid();
+    String idempotencyKey = uuid.v4();
+
+    print(valor);
     final url = Uri.parse("https://api.mercadopago.com/v1/payments");
 
     final response = await http.post(
       url,
       headers: {
         "Authorization":
-            "Bearer TEST-2869162016512406-102909-e3a08dc42979eadc840e775ebf8c7a28-1983614734", // Substitua pelo seu token
-        "Content-Type": "application/json",
+            "Bearer TEST-2869162016512406-102909-e3a08dc42979eadc840e775ebf8c7a28-1983614734",
+        "X-Idempotency-Key": idempotencyKey,
       },
-      body: jsonEncode(
-        {
-          "transaction_amount": valor,
-          "description": "Acesso especial",
-          "payment_method_id": "pix",
-          "payer": {
-            "email": "mmessiasdev@gmail.com",
-          },
-        },
-      ),
+      body: jsonEncode({
+        "transaction_amount": valor,
+        "description": "Acesso especial",
+        "payment_method_id": "pix",
+        "payer": {"email": "mmessiasltk@gmail.com"}
+      }),
     );
+
+    print(idempotencyKey);
+    print("Essa é a resposta ${response.statusCode}");
 
     if (response.statusCode == 201) {
       final paymentResponse = jsonDecode(response.body);
+      final qrCodeBase64 = paymentResponse['point_of_interaction']
+          ['transaction_data']['qr_code_base64'];
+      final qrCodeCopyPaste = paymentResponse['point_of_interaction']
+          ['transaction_data']['qr_code'];
+      print(qrCodeBase64);
+      print(qrCodeCopyPaste);
 
-      // Verifique o status do pagamento
-      final status = paymentResponse["status"];
-      if (status == "approved") {
-        print("Pagamento aprovado!");
-        return true;
-      } else {
-        print("Pagamento não aprovado. Status: $status");
-        return false;
-      }
+      // Retorna ambos os valores em um Map
+      return {
+        "qrCodeBase64": qrCodeBase64,
+        "qrCodeCopyPaste": qrCodeCopyPaste,
+      };
     } else {
       print("Erro no pagamento: ${response.statusCode}");
-      return false;
+      return null;
     }
   }
 

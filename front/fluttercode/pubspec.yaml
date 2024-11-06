@@ -43,6 +43,7 @@ dependencies:
   flutter_custom_tabs: ^2.1.0
   google_ml_vision: ^0.0.8
   camera: ^0.10.0+1  # Adjust to the latest version compatible with your Flutter SDK
+  uuid: ^4.5.1
 
   
 

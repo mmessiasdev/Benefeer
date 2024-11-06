@@ -6,6 +6,7 @@ import 'package:Benefeer/controller/auth.dart';
 import 'package:Benefeer/model/plans.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
+import 'package:Benefeer/view/plan/planscreen.dart';
 import 'package:flutter/material.dart';
 
 class ListPlanScreen extends StatefulWidget {
@@ -87,21 +88,20 @@ class _ListPlanScreenState extends State<ListPlanScreen> {
                                 return Padding(
                                   padding: defaultPaddingHorizon,
                                   child: PlanContainer(
-                                      onClick: () async {
-                                        double valorPagamento =
-                                            renders.value ?? 0.0;
+                                      onClick: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => PlansScreen(id: renders.id,),
+                                          ),
+                                        );
+                                        // double valorPagamento =
+                                        //     renders.value ?? 0.0;
 
-                                        bool pagamentoAprovado =
-                                            await AuthController()
-                                                .iniciarPagamentoMercadoPago(
-                                                    valorPagamento); // Valor do pagamento
-
-                                        if (pagamentoAprovado) {
-                                          print(
-                                              "PAGAMENTO REALIZADO"); // Liberar acesso no Strapi
-                                        } else {
-                                          print("Pagamento não foi aprovado.");
-                                        }
+                                        // bool pagamentoAprovado =
+                                        //     await AuthController()
+                                        //         .iniciarPagamentoMercadoPago(
+                                        //             valorPagamento); // Valor do pagamento
                                       },
                                       bgcolor: getColorFromString(
                                           renders.color.toString()),

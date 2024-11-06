@@ -79,12 +79,16 @@ class _TutorialScreenState extends State<TutorialScreen> {
                       );
                     }
                   },
-                  child: DefaultButton(
-                    text: _currentPage == _pages.length - 1
-                        ? "Concluir"
-                        : "Próximo",
-                    color: PrimaryColor,
-                    padding: EdgeInsets.symmetric(horizontal: 35, vertical: 25),
+                  child: Padding(
+                    padding: defaultPaddingHorizon,
+                    child: DefaultButton(
+                      text: _currentPage == _pages.length - 1
+                          ? "Concluir"
+                          : "Próximo",
+                      color: PrimaryColor,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 35, vertical: 25),
+                    ),
                   ),
                 ),
                 SizedBox(

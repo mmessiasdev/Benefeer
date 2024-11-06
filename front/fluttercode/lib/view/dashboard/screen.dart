@@ -1,6 +1,6 @@
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/view/account/auth/signin.dart';
-import 'package:Benefeer/view/plan/planscreen.dart';
+import 'package:Benefeer/view/plan/initialplansscreen.dart';
 import 'package:Benefeer/view/search/searchscreen.dart';
 import 'package:Benefeer/view/tutorial/tutorial.dart';
 import 'package:Benefeer/view/wallet/walletscreen.dart';

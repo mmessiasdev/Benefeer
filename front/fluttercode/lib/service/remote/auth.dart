@@ -242,6 +242,22 @@ class RemoteAuthService {
     return listItens;
   }
 
+  Future<Map> getOnePlan({
+    required String id,
+    required String? token,
+  }) async {
+    var response = await client.get(
+      Uri.parse('$url/plans/$id'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': "true"
+      },
+    );
+    var itens = json.decode(response.body);
+    return itens;
+  }
+
   Future<List<LocalStores>> getOnePlansLocalStores({
     required String? token,
     required String? id,
