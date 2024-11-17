@@ -27,9 +27,13 @@
       "via": "profiles",
       "model": "plan"
     },
-    "verifiqued_buy_local_store": {
+    "verifiqued_buy_local_stores": {
       "via": "profile",
-      "model": "verifiqued-buy-local-store"
+      "collection": "verifiqued-buy-local-store"
+    },
+    "verfiqued_exit_balances": {
+      "via": "profile",
+      "collection": "verfiqued-exit-balance"
     }
   }
 }

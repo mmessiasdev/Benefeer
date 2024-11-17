@@ -124,8 +124,7 @@ class TutorialPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+    return ListView(
       children: [
         Padding(
           padding: defaultPaddingHorizon,

@@ -14,11 +14,11 @@
   "attributes": {
     "profile": {
       "model": "profile",
-      "via": "verifiqued_buy_local_store"
+      "via": "verifiqued_buy_local_stores"
     },
     "local_store": {
       "model": "local-store",
-      "via": "verifiqued_buy_local_store"
+      "via": "verifiqued_buy_local_stores"
     },
     "receipt": {
       "model": "file",
@@ -31,6 +31,13 @@
       "plugin": "upload",
       "required": false,
       "pluginOptions": {}
+    },
+    "value": {
+      "type": "biginteger"
+    },
+    "approved": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

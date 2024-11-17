@@ -8,7 +8,7 @@ import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/component/widgets/searchInput.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
-import 'package:Benefeer/view/store/verfiedlocalstore.dart';
+import 'package:Benefeer/view/store/local/verfiedlocalstore.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -122,21 +122,42 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                   ),
                                   Padding(
                                     padding: defaultPaddingVertical,
-                                    child: Container(
-                                      width:
-                                          MediaQuery.of(context).size.width * 1,
-                                      decoration: BoxDecoration(
-                                        color: nightColor,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: SubText(
-                                          color: lightColor,
-                                          text: "${render["benefit"]}",
-                                          align: TextAlign.center,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: nightColor,
+                                              borderRadius: BorderRadius.circular(5),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: SubText(
+                                                color: lightColor,
+                                                text: "${render["benefit"]}",
+                                                align: TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        SizedBox(width: 15,),
+                                        Expanded(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: PrimaryColor,
+                                              borderRadius: BorderRadius.circular(5),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: SubText(
+                                                color: lightColor,
+                                                text: "${render["cashback"]}% de Cashback!",
+                                                align: TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   Padding(
@@ -151,31 +172,33 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
                                             SizedBox(
                                               width: 10,
                                             ),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                SubTextSized(
-                                                  fontweight: FontWeight.w900,
-                                                  size: 18,
-                                                  text: render["name"],
-                                                  color: nightColor,
-                                                  align: TextAlign.start,
-                                                ),
-                                                SubText(
-                                                  text: render["localization"],
-                                                  color: nightColor,
-                                                  align: TextAlign.start,
-                                                ),
-                                                SubTextSized(
-                                                    size: 15,
-                                                    fontweight: FontWeight.w600,
-                                                    text: render["phone"],
+                                            Expanded(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  SubTextSized(
+                                                    fontweight: FontWeight.w900,
+                                                    size: 18,
+                                                    text: render["name"],
                                                     color: nightColor,
-                                                    align: TextAlign.start),
-                                              ],
+                                                    align: TextAlign.start,
+                                                  ),
+                                                  SubText(
+                                                    text: render["localization"],
+                                                    color: nightColor,
+                                                    align: TextAlign.start,
+                                                  ),
+                                                  SubTextSized(
+                                                      size: 15,
+                                                      fontweight: FontWeight.w600,
+                                                      text: render["phone"],
+                                                      color: nightColor,
+                                                      align: TextAlign.start),
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),

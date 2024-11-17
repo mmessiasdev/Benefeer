@@ -54,6 +54,8 @@ class _PlansScreenState extends State<PlansScreen> {
                         child: Column(
                           children: [
                             MainHeader(
+                                maxl: 2,
+                                over: TextOverflow.fade,
                                 title: render["name"],
                                 icon: Icons.arrow_back_ios,
                                 onClick: () {
@@ -64,11 +66,13 @@ class _PlansScreenState extends State<PlansScreen> {
                               child: SizedBox(
                                 height: 100,
                                 width: MediaQuery.of(context).size.width * 1,
-                                child: Image.network(
-                                  render['illustrationurl'],
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                ),
+                                child: render['illustrationurl'] != null
+                                    ? Image.network(
+                                        render['illustrationurl'],
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : SizedBox(),
                               ),
                             ),
                             Padding(

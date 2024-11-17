@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:Benefeer/model/balancelocalstores.dart';
 import 'package:Benefeer/model/categories.dart';
 import 'package:Benefeer/model/localstoriesverifiquedbuy.dart';
 import 'package:Benefeer/model/plans.dart';
@@ -7,6 +8,7 @@ import 'package:Benefeer/model/localstores.dart';
 import 'package:Benefeer/model/postsnauth.dart';
 import 'package:Benefeer/model/profiles.dart';
 import 'package:Benefeer/model/stores.dart';
+import 'package:Benefeer/model/verfiquedexitbalances.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:Benefeer/model/postFiles.dart';
@@ -364,6 +366,46 @@ class RemoteAuthService {
     var itemCount = body["receipt"];
     for (var i = 0; i < itemCount.length; i++) {
       listItens.add(Receipt.fromJson(itemCount[i]));
+    }
+    return listItens;
+  }
+
+  Future<List<BalanceLocalStores>> getBalanceLocalStores(
+      {required String? token, required String? profileId}) async {
+    List<BalanceLocalStores> listItens = [];
+    var response = await client.get(
+      Uri.parse(
+          '$url/verifiqued-buy-local-stores?profile.id_eq=${profileId}&approved=true'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': "true"
+      },
+    );
+    var body = jsonDecode(response.body);
+    var itemCount = body;
+    for (var i = 0; i < itemCount.length; i++) {
+      listItens.add(BalanceLocalStores.fromJson(itemCount[i]));
+    }
+    return listItens;
+  }
+
+  Future<List<VerfiquedExitBalances>> getExitBalances(
+      {required String? token, required String? profileId}) async {
+    List<VerfiquedExitBalances> listItens = [];
+    var response = await client.get(
+      Uri.parse('$url/verfiqued-exit-balances?profile.id_eq=${profileId}'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': "true"
+      },
+    );
+    var body = jsonDecode(response.body);
+    var itemCount = body;
+    print(body);
+    for (var i = 0; i < itemCount.length; i++) {
+      listItens.add(VerfiquedExitBalances.fromJson(itemCount[i]));
     }
     return listItens;
   }

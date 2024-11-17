@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/verfiqued-exit-balances",
+      "handler": "verfiqued-exit-balance.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/verfiqued-exit-balances/count",
+      "handler": "verfiqued-exit-balance.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/verfiqued-exit-balances/:id",
+      "handler": "verfiqued-exit-balance.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/verfiqued-exit-balances",
+      "handler": "verfiqued-exit-balance.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/verfiqued-exit-balances/:id",
+      "handler": "verfiqued-exit-balance.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/verfiqued-exit-balances/:id",
+      "handler": "verfiqued-exit-balance.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

@@ -34,11 +34,14 @@ class MainHeader extends StatelessWidget {
                 maxl: maxl,
               ),
             ),
+            SizedBox(
+              width: 10,
+            ),
             GestureDetector(
               onTap: () => onClick!(),
               child: Icon(
                 icon,
-                size: 34,
+                size: 25,
               ),
             ),
           ],

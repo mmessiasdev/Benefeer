@@ -9,7 +9,7 @@ import 'package:Benefeer/controller/auth.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
 import 'package:Benefeer/view/dashboard/screen.dart';
-import 'package:Benefeer/view/store/verfiedlocalstore.dart';
+import 'package:Benefeer/view/store/local/verfiedlocalstore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 

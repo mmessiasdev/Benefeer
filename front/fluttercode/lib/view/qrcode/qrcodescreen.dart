@@ -165,45 +165,40 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
                               ),
                             )
                           : dataResult != null && dataResult != Map
-                              ? SizedBox(
-                                  height: 300,
-                                  child: Column(
-                                    children: [
-                                      Icon(
-                                        Icons.dangerous,
-                                        color: FifthColor,
-                                        size: 40,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      SecundaryText(
-                                          text: "QR Code inválido.",
-                                          color: nightColor,
-                                          align: TextAlign.center),
-                                    ],
+                              ? Column(
+                                children: [
+                                  Icon(
+                                    Icons.dangerous,
+                                    color: FifthColor,
+                                    size: 40,
                                   ),
-                                )
-                              : SizedBox(
-                                  height: 300,
-                                  child: Center(
-                                    child: Column(
-                                      children: [
-                                        CircularProgressIndicator(
-                                          color: PrimaryColor,
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        SecundaryText(
-                                          text: 'Escaneie um QR Code',
-                                          color: nightColor,
-                                          align: TextAlign.center,
-                                        ),
-                                      ],
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  SecundaryText(
+                                      text: "QR Code inválido.",
+                                      color: nightColor,
+                                      align: TextAlign.center),
+                                ],
+                              )
+                              : Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator(
+                                      color: PrimaryColor,
                                     ),
-                                  ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    SecundaryText(
+                                      text: 'Escaneie um QR Code',
+                                      color: nightColor,
+                                      align: TextAlign.center,
+                                    ),
+                                  ],
                                 ),
+                              ),
                 ),
               )
             ],

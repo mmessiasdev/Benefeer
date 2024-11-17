@@ -13,7 +13,7 @@ import 'package:Benefeer/service/remote/auth.dart';
 import 'package:Benefeer/view/account/account.dart';
 import 'package:Benefeer/view/category/categoryscreen.dart';
 import 'package:Benefeer/view/qrcode/qrcodescreen.dart';
-import 'package:Benefeer/view/store/localstorelist.dart';
+import 'package:Benefeer/view/store/local/localstorelist.dart';
 import 'package:flutter/material.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/padding.dart';

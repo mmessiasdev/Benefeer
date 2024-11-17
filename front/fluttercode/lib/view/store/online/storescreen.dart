@@ -150,7 +150,7 @@ class _StoreScreenState extends State<StoreScreen> {
                           return Expanded(
                             child: Center(
                                 child: SubText(
-                              text: 'Erro ao pesquisar post',
+                              text: 'Erro ao pesquisar Store',
                               color: PrimaryColor,
                               align: TextAlign.center,
                             )),

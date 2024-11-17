@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
+// ignore: must_be_immutable
 class BankCard extends StatelessWidget {
   BankCard(
       {super.key,

@@ -3,7 +3,7 @@ import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/view/home/homepage.dart';
-import 'package:Benefeer/view/store/verifiedscreen.dart';
+import 'package:Benefeer/view/store/local/verifiedscreen.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';

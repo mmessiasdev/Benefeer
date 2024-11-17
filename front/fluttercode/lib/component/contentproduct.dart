@@ -1,6 +1,6 @@
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/texts.dart';
-import 'package:Benefeer/view/store/storescreen.dart';
+import 'package:Benefeer/view/store/online/storescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 

@@ -12,7 +12,7 @@ import 'package:Benefeer/model/localstores.dart';
 import 'package:Benefeer/model/stores.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
-import 'package:Benefeer/view/store/storescreen.dart';
+import 'package:Benefeer/view/store/online/storescreen.dart';
 import 'package:flutter/material.dart';
 
 class LocalStoreListScreen extends StatefulWidget {
