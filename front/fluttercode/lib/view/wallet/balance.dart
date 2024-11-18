@@ -63,9 +63,7 @@ class _EnterBalancesScreenState extends State<EnterBalancesScreen> {
 
                       String formattedDate =
                           formatDateTime(renders.updatedAt.toString());
-
                       print(renders.createdAt);
-
                       return Padding(
                         padding: defaultPadding,
                         child: Container(
@@ -149,83 +147,83 @@ class _ExitBalancesScreemState extends State<ExitBalancesScreem> {
           ),
         ),
         FutureBuilder<List<VerfiquedExitBalances>>(
-            future: RemoteAuthService()
-                .getExitBalances(token: widget.token, profileId: widget.id),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  // Caso os dados não existam ou estejam vazios, retorne algo como um "Nenhum dado encontrado".
-                  return Text('Nenhum dado encontrado');
-                }
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: snapshot.data?.length ??
-                      0, // Use o length para garantir que você não vai acessar um índice inválido
-                  itemBuilder: (context, index) {
-                    var renders = snapshot.data![index];
-                    String formatDateTime(String dateTimeString) {
-                      // Parse a string no formato ISO 8601 ("2024-11-16T14:09:31.396Z")
-                      DateTime dateTime = DateTime.parse(dateTimeString);
+          future: RemoteAuthService()
+              .getExitBalances(token: widget.token, profileId: widget.id),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                // Caso os dados não existam ou estejam vazios, retorne algo como um "Nenhum dado encontrado".
+                return const Text('Nenhum dado encontrado');
+              }
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: snapshot.data?.length ??
+                    0, // Use o length para garantir que você não vai acessar um índice inválido
+                itemBuilder: (context, index) {
+                  var renders = snapshot.data![index];
+                  String formatDateTime(String dateTimeString) {
+                    // Parse a string no formato ISO 8601 ("2024-11-16T14:09:31.396Z")
+                    DateTime dateTime = DateTime.parse(dateTimeString);
 
-                      // Formatar a data e hora para o formato brasileiro "dd/MM/yyyy HH:mm:ss"
-                      String formattedDate =
-                          DateFormat('dd/MM/yyyy HH:mm:ss').format(dateTime);
-
-                      return formattedDate;
-                    }
-
+                    // Formatar a data e hora para o formato brasileiro "dd/MM/yyyy HH:mm:ss"
                     String formattedDate =
-                        formatDateTime(renders.updatedAt.toString());
+                        DateFormat('dd/MM/yyyy HH:mm:ss').format(dateTime);
 
-                    return Padding(
-                      padding: defaultPadding,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: FifthColor,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Padding(
-                          padding: defaultPadding,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              SubTextSized(
-                                text:
-                                    'R\$${double.parse(renders.value.toString())}'
-                                        .replaceAll('.', ','),
-                                size: 12,
-                                color: lightColor,
-                                fontweight: FontWeight.w900,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              SubText(
-                                text: '$formattedDate',
-                                align: TextAlign.start,
-                                color: SecudaryColor,
-                              ),
-                            ],
-                          ),
+                    return formattedDate;
+                  }
+
+                  String formattedDate =
+                      formatDateTime(renders.updatedAt.toString());
+                  return Padding(
+                    padding: defaultPadding,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: FifthColor,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Padding(
+                        padding: defaultPadding,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SubTextSized(
+                              text:
+                                  'R\$${double.parse(renders.value.toString())}'
+                                      .replaceAll('.', ','),
+                              size: 12,
+                              color: lightColor,
+                              fontweight: FontWeight.w900,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SubText(
+                              text: '$formattedDate',
+                              align: TextAlign.start,
+                              color: SecudaryColor,
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  },
-                );
-              } else if (snapshot.hasError) {
-                return const CircularProgressIndicator();
-              }
-              return SizedBox(
-                height: 300,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: nightColor,
-                  ),
-                ),
+                    ),
+                  );
+                },
               );
-            }),
+            } else if (snapshot.hasError) {
+              return const CircularProgressIndicator();
+            }
+            return SizedBox(
+              height: 300,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: nightColor,
+                ),
+              ),
+            );
+          },
+        ),
       ],
     );
   }

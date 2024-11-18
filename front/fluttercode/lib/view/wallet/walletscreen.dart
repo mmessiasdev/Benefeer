@@ -5,6 +5,8 @@ import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/tips.dart';
 import 'package:Benefeer/component/widgets/header.dart';
+import 'package:Benefeer/model/balancelocalstores.dart';
+import 'package:Benefeer/model/verfiquedexitbalances.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
 import 'package:Benefeer/view/wallet/balance.dart';
@@ -23,7 +25,6 @@ class _WalletScreenState extends State<WalletScreen> {
   var fullname;
   var cpf;
   var id;
-  double totalBalance = 0.0; // Variável para armazenar o valor calculado
 
   @override
   void initState() {
@@ -31,6 +32,7 @@ class _WalletScreenState extends State<WalletScreen> {
     getString();
   }
 
+  // Recuperar as informações de autenticação armazenadas
   void getString() async {
     var strToken = await LocalAuthService().getSecureToken("token");
     var strFullName = await LocalAuthService().getFullName("fullname");
@@ -47,47 +49,43 @@ class _WalletScreenState extends State<WalletScreen> {
     }
   }
 
-  // Função para calcular o saldo total
-  Future<void> calculateTotalBalance() async {
+  // Função assíncrona para calcular o saldo total
+  Future<double> calculateTotalBalance({
+    required String? token,
+    required String? profileId,
+  }) async {
     try {
-      // Recuperando os dados das duas chamadas de API
-      var balanceLocalStores = await RemoteAuthService()
-          .getBalanceLocalStores(token: token, profileId: id);
-      var exitBalances = await RemoteAuthService()
-          .getExitBalances(token: token, profileId: id);
+      // Obter as entradas de saldo (BalanceLocalStores)
+      List<BalanceLocalStores> balanceLocalStores = await RemoteAuthService()
+          .getBalanceLocalStores(token: token, profileId: profileId);
 
-      // Calculando a soma dos valores de entradas (balance) e subtraindo as saídas (exit)
+      // Obter as saídas de saldo (VerfiquedExitBalances)
+      List<VerfiquedExitBalances> exitBalances = await RemoteAuthService()
+          .getExitBalances(token: token, profileId: profileId);
+
       double balanceSum = 0.0;
       double exitSum = 0.0;
 
-      // Somando os valores de balance
-      for (var render in balanceLocalStores) {
-        balanceSum += double.parse(render.value.toString());
+      // Somar os valores de balance
+      for (var balance in balanceLocalStores) {
+        balanceSum += double.parse(balance.value.toString());
       }
 
-      // Subtraindo os valores de exit
-      for (var render in exitBalances) {
-        exitSum += double.parse(render.value.toString());
+      // Somar os valores de exit
+      for (var exit in exitBalances) {
+        exitSum += double.parse(exit.value.toString());
       }
 
-      // Calculando o total
-      setState(() {
-        totalBalance = balanceSum - exitSum;
-      });
+      // Calcular o total
+      return balanceSum - exitSum;
     } catch (e) {
       print("Erro ao calcular o saldo: $e");
+      return 0.0; // Retorna 0 em caso de erro
     }
   }
 
-  bool _isActivated = false;
-
   @override
   Widget build(BuildContext context) {
-    // Chama o cálculo do saldo total sempre que a tela for carregada
-    if (token != null && id != null) {
-      calculateTotalBalance();
-    }
-
     return SafeArea(
       child: Column(
         children: [
@@ -98,17 +96,27 @@ class _WalletScreenState extends State<WalletScreen> {
               onClick: () {},
             ),
           ),
-          // Exibir o total de saldo calculado logo abaixo do MainHeader
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Saldo Total: R\$ ${totalBalance.toStringAsFixed(2)}',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+          Center(
+            // Utiliza o FutureBuilder para calcular e exibir o saldo total
+            child: FutureBuilder<double>(
+              future: calculateTotalBalance(token: token, profileId: id),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator(); // Exibe o indicador de carregamento
+                } else if (snapshot.hasError) {
+                  return Text('Erro ao calcular saldo: ${snapshot.error}');
+                } else if (snapshot.hasData) {
+                  return Text(
+                    'Saldo Total: R\$${snapshot.data!.toStringAsFixed(2)}', // Exibe o saldo com 2 casas decimais
+                    style: TextStyle(fontSize: 24),
+                  );
+                } else {
+                  return Text('Nenhum dado encontrado');
+                }
+              },
             ),
           ),
+          // O total de saldo é exibido diretamente pelo FutureBuilder
           SizedBox(height: 25),
           Expanded(
             child: Container(
@@ -252,55 +260,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                     ),
                                   ],
                                 ),
-                                // child: Row(
-                                //   mainAxisAlignment: MainAxisAlignment.center,
-                                //   children: [
-                                //     SecundaryText(
-                                //       text: "Entradas",
-                                //       color: nightColor,
-                                //       align: TextAlign.center,
-                                //     ),
-                                //     SizedBox(
-                                //       width: 15,
-                                //     ),
-                                //     // Interruptor (Switch) para alternar entre ativar e desativar
-                                //     Switch(
-                                //       value:
-                                //           _isActivated, // Valor do switch (true ou false)
-                                //       onChanged: (bool newValue) {
-                                //         // Atualiza o estado quando o usuário muda a posição do switch
-                                //         setState(() {
-                                //           _isActivated = newValue;
-                                //         });
-                                //       },
-                                //       activeColor:
-                                //           FifthColor, // Cor do switch quando ativado
-                                //       inactiveThumbColor:
-                                //           SeventhColor, // Cor do thumb quando desativado
-                                //       activeTrackColor: OffColor,
-                                //       inactiveTrackColor:
-                                //           PrimaryColor, // Cor da trilha quando desativado
-                                //     ),
-                                //     SizedBox(
-                                //       width: 15,
-                                //     ),
-                                //     // Texto indicando o estado atual
-                                //     SecundaryText(
-                                //         text: 'Saídas',
-                                //         color: nightColor,
-                                //         align: TextAlign.center)
-                                //   ],
-                                // ),
                               ),
-                              // _isActivated == false
-                              //     ? EnterBalancesScreen(
-                              //         token: token,
-                              //         id: id,
-                              //       )
-                              //     : ExitBalancesScreem(
-                              //         token: token,
-                              //         id: id,
-                              //       ),
                             ],
                           ),
                   ],

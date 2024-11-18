@@ -373,6 +373,7 @@ class RemoteAuthService {
   Future<List<BalanceLocalStores>> getBalanceLocalStores(
       {required String? token, required String? profileId}) async {
     List<BalanceLocalStores> listItens = [];
+    
     var response = await client.get(
       Uri.parse(
           '$url/verifiqued-buy-local-stores?profile.id_eq=${profileId}&approved=true'),
