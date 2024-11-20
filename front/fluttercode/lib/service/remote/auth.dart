@@ -420,7 +420,7 @@ class RemoteAuthService {
       required String? profileId,
       required String? valueExit}) async {
     final body = {
-      "value:": valueExit,
+      "value": valueExit.toString(),
       "profile": [profileId]
     };
     var response = await client.post(
@@ -432,6 +432,7 @@ class RemoteAuthService {
       },
       body: jsonEncode(body),
     );
+    print("Sua respostaaaaaaaaaaaaaaaaaa ${response.body}");
     if (response.statusCode == 200) {
       EasyLoading.showSuccess("Saldo enviado para conta de destino!");
       Navigator.of(Get.overlayContext!).pushReplacementNamed('/');

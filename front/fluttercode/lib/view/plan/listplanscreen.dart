@@ -61,7 +61,7 @@ class _ListPlanScreenState extends State<ListPlanScreen> {
             Padding(
               padding: defaultPaddingHorizon,
               child: MainHeader(
-                  title: "Nosso Planos!",
+                  title: "Nossos Planos!",
                   maxl: 1,
                   icon: Icons.arrow_back_ios,
                   onClick: () {
@@ -92,7 +92,9 @@ class _ListPlanScreenState extends State<ListPlanScreen> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => PlansScreen(id: renders.id,),
+                                            builder: (context) => PlansScreen(
+                                              id: renders.id,
+                                            ),
                                           ),
                                         );
                                         // double valorPagamento =

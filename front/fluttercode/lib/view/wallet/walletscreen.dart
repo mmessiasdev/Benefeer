@@ -102,36 +102,53 @@ class _WalletScreenState extends State<WalletScreen> {
         return DraggableScrollableSheet(
           expand: false,
           builder: (context, scrollController) {
-            return Form(
-              key: _formKey,
-              child: Container(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: defaultPadding,
-                    child: ListView(
-                      children: [
-                        SecundaryText(
-                            text: "Selecione o valor que você deseja retirar",
-                            color: nightColor,
-                            align: TextAlign.center),
-                        InputLogin(
-                          inputTitle: 'R\$',
-                          controller: valueExit,
-                          keyboardType: TextInputType.number,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
+            return Container(
+                color: Colors.white,
+                child: Padding(
+                  padding: defaultPadding,
+                  child: ListView(
+                    children: [
+                      SecundaryText(
+                        text: "Selecione o valor que você deseja retirar",
+                        color: nightColor,
+                        align: TextAlign.center,
+                      ),
+                      InputLogin(
+                        inputTitle: 'R\$',
+                        controller: valueExit,
+                        keyboardType: TextInputType.number,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Form(
+                        key: _formKey,
+                        child: Padding(
                           padding: defaultPadding,
                           child: GestureDetector(
                             onTap: () {
                               print('TESTEEE ${valueExit.text}');
-                              if (_formKey.currentState!.validate()) {
-                                RemoteAuthService().postExitBalances(
-                                    token: token,
-                                    profileId: id,
-                                    valueExit: valueExit.toString());
+
+                              // Substituindo a vírgula por ponto antes de tentar a conversão
+                              String valueWithDot =
+                                  valueExit.text.replaceAll(',', '.');
+
+                              // Tentando converter o valor com ponto
+                              double? exitValue = double.tryParse(valueWithDot);
+
+                              if (exitValue != null) {
+                                // Se a conversão for bem-sucedida, envie o valor como double
+                                if (_formKey.currentState!.validate()) {
+                                  RemoteAuthService().postExitBalances(
+                                      token: token,
+                                      profileId: id,
+                                      valueExit: exitValue
+                                          .toString()); // Passa como string no formato correto
+                                }
+                              } else {
+                                // Caso a conversão falhe, mostre uma mensagem de erro
+                                print(
+                                    "Valor inválido para conversão: ${valueExit.text}");
                               }
                             },
                             child: DefaultButton(
@@ -140,11 +157,11 @@ class _WalletScreenState extends State<WalletScreen> {
                               color: SeventhColor,
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                  )),
-            );
+                        ),
+                      )
+                    ],
+                  ),
+                ));
           },
         );
       },
