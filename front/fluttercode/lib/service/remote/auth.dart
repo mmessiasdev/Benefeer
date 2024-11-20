@@ -9,9 +9,13 @@ import 'package:Benefeer/model/postsnauth.dart';
 import 'package:Benefeer/model/profiles.dart';
 import 'package:Benefeer/model/stores.dart';
 import 'package:Benefeer/model/verfiquedexitbalances.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:Benefeer/model/postFiles.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 
 // const url = String.fromEnvironment('BASEURL', defaultValue: '');
@@ -373,7 +377,7 @@ class RemoteAuthService {
   Future<List<BalanceLocalStores>> getBalanceLocalStores(
       {required String? token, required String? profileId}) async {
     List<BalanceLocalStores> listItens = [];
-    
+
     var response = await client.get(
       Uri.parse(
           '$url/verifiqued-buy-local-stores?profile.id_eq=${profileId}&approved=true'),
@@ -409,6 +413,32 @@ class RemoteAuthService {
       listItens.add(VerfiquedExitBalances.fromJson(itemCount[i]));
     }
     return listItens;
+  }
+
+  Future postExitBalances(
+      {required String? token,
+      required String? profileId,
+      required String? valueExit}) async {
+    final body = {
+      "value:": valueExit,
+      "profile": [profileId]
+    };
+    var response = await client.post(
+      Uri.parse('$url/verfiqued-exit-balances'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': "true"
+      },
+      body: jsonEncode(body),
+    );
+    if (response.statusCode == 200) {
+      EasyLoading.showSuccess("Saldo enviado para conta de destino!");
+      Navigator.of(Get.overlayContext!).pushReplacementNamed('/');
+    } else {
+      EasyLoading.showSuccess("Algo deu errado. Tente novamente!");
+    }
+    return response;
   }
 
   Future<List<StoresModel>> getOnlineStoresSearch({

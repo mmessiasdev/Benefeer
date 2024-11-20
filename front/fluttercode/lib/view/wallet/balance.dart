@@ -23,16 +23,13 @@ class _EnterBalancesScreenState extends State<EnterBalancesScreen> {
     return SafeArea(
       child: Column(
         children: [
-          Padding(
-            padding: defaultPadding,
-            child: MainHeader(
-              title: "Entradas de saldo",
-              icon: Icons.arrow_back_ios,
-              onClick: () {
-                (Navigator.pop(context));
-              },
-            ),
-          ),
+          // MainHeader(
+          //   title: "Entradas de saldo",
+          //   icon: Icons.arrow_back_ios,
+          //   onClick: () {
+          //     (Navigator.pop(context));
+          //   },
+          // ),
           FutureBuilder<List<BalanceLocalStores>>(
               future: RemoteAuthService().getBalanceLocalStores(
                   token: widget.token, profileId: widget.id),
@@ -136,16 +133,6 @@ class _ExitBalancesScreemState extends State<ExitBalancesScreem> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: defaultPadding,
-          child: MainHeader(
-            title: "Saídas de saldo",
-            icon: Icons.arrow_back_ios,
-            onClick: () {
-              (Navigator.pop(context));
-            },
-          ),
-        ),
         FutureBuilder<List<VerfiquedExitBalances>>(
           future: RemoteAuthService()
               .getExitBalances(token: widget.token, profileId: widget.id),

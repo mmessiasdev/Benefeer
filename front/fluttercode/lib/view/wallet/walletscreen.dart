@@ -9,6 +9,7 @@ import 'package:Benefeer/model/balancelocalstores.dart';
 import 'package:Benefeer/model/verfiquedexitbalances.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
+import 'package:Benefeer/view/account/auth/signin.dart';
 import 'package:Benefeer/view/wallet/balance.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +26,15 @@ class _WalletScreenState extends State<WalletScreen> {
   var fullname;
   var cpf;
   var id;
+  final _formKey = GlobalKey<FormState>();
+
+  TextEditingController valueExit = TextEditingController();
+
+  @override
+  void dispose() {
+    valueExit.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -84,6 +94,65 @@ class _WalletScreenState extends State<WalletScreen> {
     }
   }
 
+  void _showDraggableScrollableSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          builder: (context, scrollController) {
+            return Form(
+              key: _formKey,
+              child: Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: defaultPadding,
+                    child: ListView(
+                      children: [
+                        SecundaryText(
+                            text: "Selecione o valor que você deseja retirar",
+                            color: nightColor,
+                            align: TextAlign.center),
+                        InputLogin(
+                          inputTitle: 'R\$',
+                          controller: valueExit,
+                          keyboardType: TextInputType.number,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: defaultPadding,
+                          child: GestureDetector(
+                            onTap: () {
+                              print('TESTEEE ${valueExit.text}');
+                              if (_formKey.currentState!.validate()) {
+                                RemoteAuthService().postExitBalances(
+                                    token: token,
+                                    profileId: id,
+                                    valueExit: valueExit.toString());
+                              }
+                            },
+                            child: DefaultButton(
+                              text: "Retirar",
+                              padding: defaultPadding,
+                              color: SeventhColor,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  bool _isActivated = false;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -96,175 +165,247 @@ class _WalletScreenState extends State<WalletScreen> {
               onClick: () {},
             ),
           ),
-          Center(
-            // Utiliza o FutureBuilder para calcular e exibir o saldo total
-            child: FutureBuilder<double>(
-              future: calculateTotalBalance(token: token, profileId: id),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator(); // Exibe o indicador de carregamento
-                } else if (snapshot.hasError) {
-                  return Text('Erro ao calcular saldo: ${snapshot.error}');
-                } else if (snapshot.hasData) {
-                  return Text(
-                    'Saldo Total: R\$${snapshot.data!.toStringAsFixed(2)}', // Exibe o saldo com 2 casas decimais
-                    style: TextStyle(fontSize: 24),
-                  );
-                } else {
-                  return Text('Nenhum dado encontrado');
-                }
-              },
-            ),
-          ),
           // O total de saldo é exibido diretamente pelo FutureBuilder
           SizedBox(height: 25),
           Expanded(
-            child: Container(
-              color: Colors.grey[100],
-              child: Padding(
-                padding: defaultPaddingHorizon,
-                child: ListView(
-                  children: [
-                    Padding(
-                      padding: defaultPaddingHorizonTop,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          GestureDetector(
-                            child: Text(
-                              "Saldo",
-                              style: TextStyle(
-                                color: screen == "saldo"
-                                    ? nightColor
-                                    : Colors.grey,
-                                fontSize: 16,
-                              ),
+            child: Padding(
+              padding: defaultPaddingHorizon,
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: defaultPaddingHorizonTop,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                          child: Text(
+                            "Saldo",
+                            style: TextStyle(
+                              color:
+                                  screen == "saldo" ? nightColor : Colors.grey,
+                              fontSize: 16,
                             ),
-                            onTap: () {
-                              setState(() {
-                                screen = "saldo";
-                              });
-                            },
                           ),
-                          GestureDetector(
-                            child: Text(
-                              "Extrato",
-                              style: TextStyle(
-                                color: screen == "extract"
-                                    ? nightColor
-                                    : Colors.grey,
-                                fontSize: 16,
-                              ),
+                          onTap: () {
+                            setState(() {
+                              screen = "saldo";
+                            });
+                          },
+                        ),
+                        GestureDetector(
+                          child: Text(
+                            "Extrato",
+                            style: TextStyle(
+                              color: screen == "extract"
+                                  ? nightColor
+                                  : Colors.grey,
+                              fontSize: 16,
                             ),
-                            onTap: () {
-                              setState(() {
-                                screen = "extract";
-                              });
-                            },
                           ),
-                        ],
-                      ),
+                          onTap: () {
+                            setState(() {
+                              screen = "extract";
+                            });
+                          },
+                        ),
+                      ],
                     ),
-                    screen == "saldo"
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const SizedBox(
-                                height: 40,
-                              ),
-                              BankCard(
-                                cpf: cpf ?? "",
-                                name: fullname ?? "",
-                              ),
-                              const SizedBox(
-                                height: 40,
-                              ),
-                              Tips(
-                                desc:
-                                    "Após a compra de algum produto dentro do link do nosso app, o valor do cashback leva no máximo até 7 dias uteis para ser acrescentado na sua conta.",
-                              ),
-                              const SizedBox(
-                                height: 40,
-                              ),
-                              DefaultButton(
+                  ),
+                  screen == "saldo"
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            FutureBuilder<double>(
+                              future: calculateTotalBalance(
+                                  token: token, profileId: id),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                      child:
+                                          CircularProgressIndicator()); // Exibe o indicador de carregamento
+                                } else if (snapshot.hasError) {
+                                  return SecundaryText(
+                                      text:
+                                          'Erro ao calcular saldo: ${snapshot.error}',
+                                      color: nightColor,
+                                      align: TextAlign.start);
+                                } else if (snapshot.hasData) {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SubText(
+                                          text: 'Saldo disponível:',
+                                          color: nightColor,
+                                          align: TextAlign.start),
+                                      SecundaryText(
+                                          text:
+                                              'R\$${snapshot.data!.toStringAsFixed(2)}',
+                                          color: nightColor,
+                                          align: TextAlign.start),
+                                    ],
+                                  );
+                                } else {
+                                  return Text('Nenhum dado encontrado');
+                                }
+                              },
+                            ),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            BankCard(
+                              cpf: cpf ?? "",
+                              name: fullname ?? "",
+                            ),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            Tips(
+                              desc:
+                                  "Após a compra de algum produto dentro do link do nosso app, o valor do cashback leva no máximo até 7 dias uteis para ser acrescentado na sua conta.",
+                            ),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _showDraggableScrollableSheet(context);
+                              },
+                              child: DefaultButton(
                                 color: nightColor,
                                 colorText: lightColor,
                                 text: "Resgatar saldo",
                                 padding: EdgeInsets.all(20),
                               ),
-                            ],
-                          )
-                        : Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: 25,
-                              ),
-                              Padding(
-                                padding: defaultPadding,
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: defaultPaddingVertical,
-                                      child: GestureDetector(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SecundaryText(
-                                                text: "Entradas",
-                                                color: nightColor,
-                                                align: TextAlign.start),
-                                            Icon(Icons.arrow_right),
-                                          ],
-                                        ),
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EnterBalancesScreen(
-                                                token: token,
-                                                id: id,
-                                              ),
-                                            ),
-                                          );
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                          ],
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 25,
+                            ),
+                            Padding(
+                              padding: defaultPadding,
+                              child: Column(
+                                children: [
+                                  // Padding(
+                                  //   padding: defaultPaddingVertical,
+                                  //   child: GestureDetector(
+                                  //     child: Row(
+                                  //       mainAxisAlignment:
+                                  //           MainAxisAlignment.spaceBetween,
+                                  //       children: [
+                                  //         SecundaryText(
+                                  //             text: "Entradas",
+                                  //             color: nightColor,
+                                  //             align: TextAlign.start),
+                                  //         Icon(Icons.arrow_right),
+                                  //       ],
+                                  //     ),
+                                  //     onTap: () {
+                                  //       Navigator.push(
+                                  //         context,
+                                  //         MaterialPageRoute(
+                                  //           builder: (context) =>
+                                  //               EnterBalancesScreen(
+                                  //             token: token,
+                                  //             id: id,
+                                  //           ),
+                                  //         ),
+                                  //       );
+                                  //     },
+                                  //   ),
+                                  // ),
+                                  // GestureDetector(
+                                  //   child: Row(
+                                  //     mainAxisAlignment:
+                                  //         MainAxisAlignment.spaceBetween,
+                                  //     children: [
+                                  //       SecundaryText(
+                                  //           text: "Saídas",
+                                  //           color: nightColor,
+                                  //           align: TextAlign.start),
+                                  //       Icon(Icons.arrow_right),
+                                  //     ],
+                                  //   ),
+                                  //   onTap: () {
+                                  //     Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             ExitBalancesScreem(
+                                  //           token: token,
+                                  //           id: id,
+                                  //         ),
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  // ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SecundaryText(
+                                        text: "Entradas",
+                                        color: nightColor,
+                                        align: TextAlign.center,
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      // Interruptor (Switch) para alternar entre ativar e desativar
+                                      Switch(
+                                        value:
+                                            _isActivated, // Valor do switch (true ou false)
+                                        onChanged: (bool newValue) {
+                                          // Atualiza o estado quando o usuário muda a posição do switch
+                                          setState(() {
+                                            _isActivated = newValue;
+                                          });
                                         },
+                                        activeColor:
+                                            FifthColor, // Cor do switch quando ativado
+                                        inactiveThumbColor:
+                                            SeventhColor, // Cor do thumb quando desativado
+                                        activeTrackColor: OffColor,
+                                        inactiveTrackColor:
+                                            PrimaryColor, // Cor da trilha quando desativado
                                       ),
-                                    ),
-                                    GestureDetector(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SecundaryText(
-                                              text: "Saídas",
-                                              color: nightColor,
-                                              align: TextAlign.start),
-                                          Icon(Icons.arrow_right),
-                                        ],
+                                      SizedBox(
+                                        width: 15,
                                       ),
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ExitBalancesScreem(
-                                              token: token,
-                                              id: id,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
+                                      // Texto indicando o estado atual
+                                      SecundaryText(
+                                          text: 'Saídas',
+                                          color: nightColor,
+                                          align: TextAlign.center)
+                                    ],
+                                  ),
+                                  _isActivated == false
+                                      ? EnterBalancesScreen(
+                                          token: token,
+                                          id: id,
+                                        )
+                                      : ExitBalancesScreem(
+                                          token: token,
+                                          id: id,
+                                        ),
+                                ],
                               ),
-                            ],
-                          ),
-                  ],
-                ),
+                            ),
+                          ],
+                        ),
+                ],
               ),
             ),
           ),
