@@ -12,6 +12,7 @@ import 'package:Benefeer/service/remote/auth.dart';
 import 'package:Benefeer/view/account/auth/signin.dart';
 import 'package:Benefeer/view/wallet/balance.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({Key? key}) : super(key: key);
@@ -134,16 +135,24 @@ class _WalletScreenState extends State<WalletScreen> {
                                   valueExit.text.replaceAll(',', '.');
 
                               // Tentando converter o valor com ponto
-                              double? exitValue = double.tryParse(valueWithDot);
+                              double? exitValueDouble =
+                                  double.tryParse(valueWithDot);
 
-                              if (exitValue != null) {
-                                // Se a conversão for bem-sucedida, envie o valor como double
-                                if (_formKey.currentState!.validate()) {
-                                  RemoteAuthService().postExitBalances(
-                                      token: token,
-                                      profileId: id,
-                                      valueExit: exitValue
-                                          .toString()); // Passa como string no formato correto
+                              print(exitValueDouble);
+                              print(currentBalanceDoublePrint);
+
+                              if (exitValueDouble != null) {
+                                if (currentBalanceDoublePrint >
+                                    exitValueDouble) {
+                                  if (_formKey.currentState!.validate()) {
+                                    RemoteAuthService().postExitBalances(
+                                        token: token,
+                                        profileId: id,
+                                        valueExit: valueWithDot
+                                            .toString()); // Passa como string no formato correto
+                                  }
+                                } else {
+                                  EasyLoading.showError("Saldo insuficiente.");
                                 }
                               } else {
                                 // Caso a conversão falhe, mostre uma mensagem de erro
@@ -167,6 +176,10 @@ class _WalletScreenState extends State<WalletScreen> {
       },
     );
   }
+
+  String currentBalance = "";
+  double currentBalanceDouble = 0;
+  double currentBalanceDoublePrint = 0.0;
 
   bool _isActivated = false;
 
@@ -242,8 +255,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
                                   return const Center(
-                                      child:
-                                          CircularProgressIndicator()); // Exibe o indicador de carregamento
+                                      child: CircularProgressIndicator());
                                 } else if (snapshot.hasError) {
                                   return SecundaryText(
                                       text:
@@ -251,20 +263,23 @@ class _WalletScreenState extends State<WalletScreen> {
                                       color: nightColor,
                                       align: TextAlign.start);
                                 } else if (snapshot.hasData) {
+                                  currentBalanceDoublePrint = snapshot.data ??
+                                      0.0; // Aqui inicializa a variável
                                   return Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       SubText(
-                                          text: 'Saldo disponível:',
-                                          color: nightColor,
-                                          align: TextAlign.start),
+                                        text: 'Saldo disponível:',
+                                        color: nightColor,
+                                        align: TextAlign.start,
+                                      ),
                                       SecundaryText(
-                                          text:
-                                              'R\$${snapshot.data!.toStringAsFixed(2)}',
-                                          color: nightColor,
-                                          align: TextAlign.start),
+                                        text:
+                                            'R\$${currentBalanceDoublePrint.toStringAsFixed(2)}',
+                                        color: nightColor,
+                                        align: TextAlign.start,
+                                      ),
                                     ],
                                   );
                                 } else {
