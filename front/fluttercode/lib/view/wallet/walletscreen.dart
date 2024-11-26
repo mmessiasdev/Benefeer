@@ -60,7 +60,7 @@ class _WalletScreenState extends State<WalletScreen> {
     }
   }
 
-  // Função assíncrona para calcular o saldo total
+// Função assíncrona para calcular o saldo total
   Future<double> calculateTotalBalance({
     required String? token,
     required String? profileId,
@@ -77,19 +77,32 @@ class _WalletScreenState extends State<WalletScreen> {
       double balanceSum = 0.0;
       double exitSum = 0.0;
 
-      // Somar os valores de balance
+      // Somar os valores de balance (tratando valores nulos e inválidos)
       for (var balance in balanceLocalStores) {
-        balanceSum += double.parse(balance.value.toString());
+        // Usar tryParse para evitar exceções em caso de valor inválido
+        double? value = double.tryParse(balance.value.toString());
+        if (value != null) {
+          balanceSum += value;
+        } else {
+          print("Valor inválido encontrado em balance: ${balance.value}");
+        }
       }
 
-      // Somar os valores de exit
+      // Somar os valores de exit (tratando valores nulos e inválidos)
       for (var exit in exitBalances) {
-        exitSum += double.parse(exit.value.toString());
+        // Usar tryParse para evitar exceções em caso de valor inválido
+        double? value = double.tryParse(exit.value.toString());
+        if (value != null) {
+          exitSum += value;
+        } else {
+          print("Valor inválido encontrado em exit: ${exit.value}");
+        }
       }
 
       // Calcular o total
       return balanceSum - exitSum;
     } catch (e) {
+      // Capturar exceções mais gerais
       print("Erro ao calcular o saldo: $e");
       return 0.0; // Retorna 0 em caso de erro
     }

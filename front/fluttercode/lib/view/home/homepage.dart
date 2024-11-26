@@ -1,4 +1,3 @@
-import 'package:Benefeer/component/categorie.dart';
 import 'package:Benefeer/component/containersLoading.dart';
 import 'package:Benefeer/component/contentlocalproduct.dart';
 import 'package:Benefeer/component/contentproduct.dart';

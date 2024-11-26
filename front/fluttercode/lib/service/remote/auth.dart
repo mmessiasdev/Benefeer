@@ -31,7 +31,7 @@ class RemoteAuthService {
       required String username}) async {
     var body = {"username": username, "email": email, "password": password};
     var response = await client.post(
-      Uri.parse('$url/auth/local/register'),
+      Uri.parse('${url.toString()}/auth/local/register'),
       headers: {
         "Content-Type": "application/json",
         "ngrok-skip-browser-warning": "true"
@@ -47,7 +47,7 @@ class RemoteAuthService {
   }) async {
     var body = {"identifier": email, "password": password};
     var response = await client.post(
-      Uri.parse('$url/auth/local'),
+      Uri.parse('${url.toString()}/auth/local'),
       headers: {
         "Content-Type": "application/json",
         'ngrok-skip-browser-warning': "true"
@@ -65,7 +65,7 @@ class RemoteAuthService {
       "fullname": fullname,
     };
     var response = await client.post(
-      Uri.parse('$url/profile/me'),
+      Uri.parse('${url.toString()}/profile/me'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -81,7 +81,7 @@ class RemoteAuthService {
   }) async {
     // Faz a chamada GET e retorna o objeto Response diretamente
     return await client.get(
-      Uri.parse('$url/profiles/me'),
+      Uri.parse('${url.toString()}/profiles/me'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -105,7 +105,7 @@ class RemoteAuthService {
       "public": public,
     };
     var response = await client.post(
-      Uri.parse('$url/posts'),
+      Uri.parse('${url.toString()}/posts'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -126,7 +126,7 @@ class RemoteAuthService {
       "local_store": local_store.toString(),
     };
     var response = await client.post(
-      Uri.parse('$url/verifiqued-buy-local-stores'),
+      Uri.parse('${url.toString()}/verifiqued-buy-local-stores'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -142,7 +142,7 @@ class RemoteAuthService {
   }) async {
     List<StoresModel> listItens = [];
     var response = await client.get(
-      Uri.parse('$url/online-stores'),
+      Uri.parse('${url.toString()}/online-stores'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -162,7 +162,7 @@ class RemoteAuthService {
   }) async {
     List<CategoryModel> listItens = [];
     var response = await client.get(
-      Uri.parse('$url/categories'),
+      Uri.parse('${url.toString()}/categories'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -181,7 +181,7 @@ class RemoteAuthService {
     required String? token,
   }) async {
     var response = await client.get(
-      Uri.parse('$url/online-stores/$id'),
+      Uri.parse('${url.toString()}/online-stores/$id'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -197,7 +197,7 @@ class RemoteAuthService {
     required String? token,
   }) async {
     var response = await client.get(
-      Uri.parse('$url/categories/$id'),
+      Uri.parse('${url.toString()}/categories/$id'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -214,7 +214,7 @@ class RemoteAuthService {
   }) async {
     List<OnlineStores> listItens = [];
     var response = await client.get(
-      Uri.parse('$url/categories/$id'),
+      Uri.parse('${url.toString()}/categories/$id'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -234,7 +234,7 @@ class RemoteAuthService {
   }) async {
     List<Plans> listItens = [];
     var response = await client.get(
-      Uri.parse('$url/plans'),
+      Uri.parse('${url.toString()}/plans'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -253,7 +253,7 @@ class RemoteAuthService {
     required String? token,
   }) async {
     var response = await client.get(
-      Uri.parse('$url/plans/$id'),
+      Uri.parse('${url.toString()}/plans/$id'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -273,7 +273,7 @@ class RemoteAuthService {
       "profiles": [idProfile]
     };
     var response = await client.post(
-      Uri.parse('$url/plans/$idPlan'),
+      Uri.parse('${url.toString()}/plans/$idPlan'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -290,7 +290,7 @@ class RemoteAuthService {
   }) async {
     List<LocalStores> listItens = [];
     var response = await client.get(
-      Uri.parse('$url/plans/$id'),
+      Uri.parse('${url.toString()}/plans/$id'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -309,7 +309,7 @@ class RemoteAuthService {
   }) async {
     List<LocalStores> listItens = [];
     var response = await client.get(
-      Uri.parse('$url/local-stores'),
+      Uri.parse('${url.toString()}/local-stores'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -328,7 +328,7 @@ class RemoteAuthService {
     required String? token,
   }) async {
     var response = await client.get(
-      Uri.parse('$url/local-stores/$id'),
+      Uri.parse('${url.toString()}/local-stores/$id'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -344,7 +344,7 @@ class RemoteAuthService {
     required String? token,
   }) async {
     var response = await client.get(
-      Uri.parse('$url/local-stores/$id/qrcode'),
+      Uri.parse('${url.toString()}/local-stores/$id/qrcode'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -359,7 +359,7 @@ class RemoteAuthService {
       {required String? token, required String? id}) async {
     List<Receipt> listItens = [];
     var response = await client.get(
-      Uri.parse('$url/verifiqued-buy-local-stores/${id}'),
+      Uri.parse('${url.toString()}/verifiqued-buy-local-stores/${id}'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -380,7 +380,7 @@ class RemoteAuthService {
 
     var response = await client.get(
       Uri.parse(
-          '$url/verifiqued-buy-local-stores?profile.id_eq=${profileId}&approved=true'),
+          '${url.toString()}/verifiqued-buy-local-stores?profile.id_eq=${profileId}&approved=true'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -399,7 +399,8 @@ class RemoteAuthService {
       {required String? token, required String? profileId}) async {
     List<VerfiquedExitBalances> listItens = [];
     var response = await client.get(
-      Uri.parse('$url/verfiqued-exit-balances?profile.id_eq=${profileId}'),
+      Uri.parse(
+          '${url.toString()}/verfiqued-exit-balances?profile.id_eq=${profileId}'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -424,7 +425,7 @@ class RemoteAuthService {
       "profile": [profileId]
     };
     var response = await client.post(
-      Uri.parse('$url/verfiqued-exit-balances'),
+      Uri.parse('${url.toString()}/verfiqued-exit-balances'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -448,7 +449,7 @@ class RemoteAuthService {
   }) async {
     List<StoresModel> listItens = [];
     var response = await client.get(
-      Uri.parse("$url/online-stores?name_contains=$query"),
+      Uri.parse("${url.toString()}/online-stores?name_contains=$query"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -463,12 +464,12 @@ class RemoteAuthService {
     return listItens;
   }
 
-  //$url/posts?title_contains=$query&chunk.id_eq=$chunkId
+  //${url.toString()}/posts?title_contains=$query&chunk.id_eq=$chunkId
 
   Future<List<Profile>> getProfiles({required String? token}) async {
     List<Profile> listItens = [];
     var response = await client.get(
-      Uri.parse('$url/profiles'),
+      Uri.parse('${url.toString()}/profiles'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -487,7 +488,7 @@ class RemoteAuthService {
   //     {required String? token, required String? profileId}) async {
   //   List<Posts> listItens = [];
   //   var response = await client.get(
-  //     Uri.parse('$url/profile/$profileId'),
+  //     Uri.parse('${url.toString()}/profile/$profileId'),
   //     headers: {
   //       "Content-Type": "application/json",
   //       "Authorization": "Bearer $token",
