@@ -269,10 +269,15 @@ class RemoteAuthService {
     required String? idPlan,
     required String? token,
   }) async {
+    if (idProfile == null || idPlan == null || token == null) {
+      throw Exception('Um ou mais parâmetros estão faltando!');
+    }
+
     final body = {
       "profiles": [idProfile]
     };
-    var response = await client.post(
+
+    var response = await client.put(
       Uri.parse('${url.toString()}/plans/$idPlan'),
       headers: {
         "Content-Type": "application/json",
@@ -281,6 +286,16 @@ class RemoteAuthService {
       },
       body: jsonEncode(body),
     );
+
+    // Verifique a resposta
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('Requisição bem-sucedida');
+      print('Resposta: ${response.body}');
+    } else {
+      print('Falha na requisição: ${response.statusCode}');
+      print('Erro: ${response.body}');
+    }
+
     return response;
   }
 

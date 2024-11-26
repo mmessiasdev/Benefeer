@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:Benefeer/component/bankcard.dart';
 import 'package:Benefeer/component/buttons.dart';
 import 'package:Benefeer/component/colors.dart';
@@ -13,6 +15,7 @@ import 'package:Benefeer/view/account/auth/signin.dart';
 import 'package:Benefeer/view/wallet/balance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:http/http.dart' as http;
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({Key? key}) : super(key: key);
@@ -140,7 +143,7 @@ class _WalletScreenState extends State<WalletScreen> {
                         child: Padding(
                           padding: defaultPadding,
                           child: GestureDetector(
-                            onTap: () {
+                            onTap: () async {
                               print('TESTEEE ${valueExit.text}');
 
                               // Substituindo a vírgula por ponto antes de tentar a conversão
@@ -158,11 +161,26 @@ class _WalletScreenState extends State<WalletScreen> {
                                 if (currentBalanceDoublePrint >
                                     exitValueDouble) {
                                   if (_formKey.currentState!.validate()) {
-                                    RemoteAuthService().postExitBalances(
-                                        token: token,
-                                        profileId: id,
-                                        valueExit: valueWithDot
-                                            .toString()); // Passa como string no formato correto
+                                    // Enviar o valor para a conta do Mercado Pago
+                                    try {
+                                      // Chama a função para realizar a transferência para o Mercado Pago
+                                      bool success =
+                                          await _makeMercadoPagoTransfer(
+                                        value: exitValueDouble,
+                                      );
+
+                                      if (success) {
+                                        EasyLoading.showSuccess(
+                                            "Retirada realizada com sucesso.");
+                                      } else {
+                                        EasyLoading.showError(
+                                            "Falha na transferência.");
+                                      }
+                                    } catch (e) {
+                                      print("Erro na transferência: $e");
+                                      EasyLoading.showError(
+                                          "Erro ao processar a retirada.");
+                                    }
                                   }
                                 } else {
                                   EasyLoading.showError("Saldo insuficiente.");
@@ -171,6 +189,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                 // Caso a conversão falhe, mostre uma mensagem de erro
                                 print(
                                     "Valor inválido para conversão: ${valueExit.text}");
+                                EasyLoading.showError("Valor inválido.");
                               }
                             },
                             child: DefaultButton(
@@ -188,6 +207,52 @@ class _WalletScreenState extends State<WalletScreen> {
         );
       },
     );
+  }
+
+// Função para realizar o POST para a API do Mercado Pago usando chave PIX
+  Future<bool> _makeMercadoPagoTransfer({required double value}) async {
+    // URL para a API do Mercado Pago
+    final String url = 'https://api.mercadopago.com/v1/payments';
+
+    // Substitua pelo token de acesso real do Mercado Pago (obtido via OAuth ou credenciais)
+    final String accessToken =
+        'Bearer APP_USR-2869162016512406-102909-f6e7d456e301fbb93bc5fb67004f8e5b-1983614734';
+
+    // Defina os dados necessários para a transferência
+    final Map<String, dynamic> transferData = {
+      'transaction_amount': value, // Valor da transferência
+      'description': 'Transferência de saldo', // Descrição da transação
+      'payer': {
+        'type': 'pix', // Método de pagamento (chave PIX)
+        'pix_key':
+            '6d5b38fa-d8e0-4816-b94a-2747da3201b4', // Chave PIX do destinatário
+      },
+    };
+
+    try {
+      // Fazendo a requisição POST
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+        body: jsonEncode(transferData),
+      );
+
+      if (response.statusCode == 201) {
+        // Sucesso na transferência
+        print("Transferência realizada com sucesso!");
+        return true;
+      } else {
+        // Erro ao processar a transferência
+        print("Falha na transferência: ${response.body}");
+        return false;
+      }
+    } catch (e) {
+      print("Erro ao chamar a API do Mercado Pago: $e");
+      return false;
+    }
   }
 
   String currentBalance = "";

@@ -163,10 +163,11 @@ class _QrCodeBuyPlanScreenState extends State<QrCodeBuyPlanScreen> {
                   onTap: () async {
                     bool isPaymentApproved = await AuthController()
                         .verificarStatusPagamento(widget.paymentId);
-
                     if (isPaymentApproved) {
+                      print('Pagamento aprovado.');
+                      print(idProfile);
                       RemoteAuthService().addProfilePlan(
-                          idProfile: idProfile,
+                          idProfile: int.parse(idProfile),
                           idPlan: widget.idPlan.toString(),
                           token: token);
                       // Navega para outra tela se o pagamento foi aprovado

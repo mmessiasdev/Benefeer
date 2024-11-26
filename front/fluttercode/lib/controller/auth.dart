@@ -204,14 +204,14 @@ class AuthController extends GetxController {
       url,
       headers: {
         "Authorization":
-            "Bearer TEST-2869162016512406-102909-e3a08dc42979eadc840e775ebf8c7a28-1983614734",
+            "Bearer APP_USR-2869162016512406-102909-f6e7d456e301fbb93bc5fb67004f8e5b-1983614734",
         "X-Idempotency-Key": idempotencyKey,
       },
       body: jsonEncode({
         "transaction_amount": valor,
         "description": "Acesso especial",
         "payment_method_id": "pix",
-        "payer": {"email": "mmessiasltk@gmail.com"}
+        "payer": {"email": "mmessiasdev@gmail.com"}
       }),
     );
 
@@ -242,7 +242,7 @@ class AuthController extends GetxController {
       url,
       headers: {
         "Authorization":
-            "Bearer TEST-2869162016512406-102909-e3a08dc42979eadc840e775ebf8c7a28",
+            "Bearer APP_USR-2869162016512406-102909-f6e7d456e301fbb93bc5fb67004f8e5b-1983614734",
       },
     );
 
