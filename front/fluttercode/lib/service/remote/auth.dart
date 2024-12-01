@@ -415,7 +415,7 @@ class RemoteAuthService {
     List<VerfiquedExitBalances> listItens = [];
     var response = await client.get(
       Uri.parse(
-          '${url.toString()}/verfiqued-exit-balances?profile.id_eq=${profileId}'),
+          '${url.toString()}/verfiqued-exit-balances?profile.id_eq=${profileId}&approved=true'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",

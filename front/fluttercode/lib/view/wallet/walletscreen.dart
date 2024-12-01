@@ -14,7 +14,10 @@ import 'package:Benefeer/service/remote/auth.dart';
 import 'package:Benefeer/view/account/auth/signin.dart';
 import 'package:Benefeer/view/wallet/balance.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 
 class WalletScreen extends StatefulWidget {
@@ -31,6 +34,7 @@ class _WalletScreenState extends State<WalletScreen> {
   var cpf;
   var id;
   final _formKey = GlobalKey<FormState>();
+  String? urlEnv = dotenv.env["BASEURL"];
 
   TextEditingController valueExit = TextEditingController();
 
@@ -112,6 +116,10 @@ class _WalletScreenState extends State<WalletScreen> {
   }
 
   void _showDraggableScrollableSheet(BuildContext context) {
+    TextEditingController pixKeyController = TextEditingController();
+    // String? pixRecipientName;
+    // String? pixRecipientBank;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -120,137 +128,188 @@ class _WalletScreenState extends State<WalletScreen> {
           expand: false,
           builder: (context, scrollController) {
             return Container(
-                color: Colors.white,
-                child: Padding(
-                  padding: defaultPadding,
-                  child: ListView(
-                    children: [
-                      SecundaryText(
-                        text: "Selecione o valor que você deseja retirar",
-                        color: nightColor,
-                        align: TextAlign.center,
-                      ),
-                      InputLogin(
-                        inputTitle: 'R\$',
-                        controller: valueExit,
-                        keyboardType: TextInputType.number,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Form(
-                        key: _formKey,
-                        child: Padding(
-                          padding: defaultPadding,
-                          child: GestureDetector(
-                            onTap: () async {
-                              print('TESTEEE ${valueExit.text}');
-
-                              // Substituindo a vírgula por ponto antes de tentar a conversão
-                              String valueWithDot =
-                                  valueExit.text.replaceAll(',', '.');
-
-                              // Tentando converter o valor com ponto
-                              double? exitValueDouble =
-                                  double.tryParse(valueWithDot);
-
-                              print(exitValueDouble);
-                              print(currentBalanceDoublePrint);
-
-                              if (exitValueDouble != null) {
-                                if (currentBalanceDoublePrint >
-                                    exitValueDouble) {
-                                  if (_formKey.currentState!.validate()) {
-                                    // Enviar o valor para a conta do Mercado Pago
-                                    try {
-                                      // Chama a função para realizar a transferência para o Mercado Pago
-                                      bool success =
-                                          await _makeMercadoPagoTransfer(
-                                        value: exitValueDouble,
-                                      );
-
-                                      if (success) {
-                                        EasyLoading.showSuccess(
-                                            "Retirada realizada com sucesso.");
-                                      } else {
-                                        EasyLoading.showError(
-                                            "Falha na transferência.");
-                                      }
-                                    } catch (e) {
-                                      print("Erro na transferência: $e");
-                                      EasyLoading.showError(
-                                          "Erro ao processar a retirada.");
-                                    }
-                                  }
-                                } else {
-                                  EasyLoading.showError("Saldo insuficiente.");
-                                }
-                              } else {
-                                // Caso a conversão falhe, mostre uma mensagem de erro
-                                print(
-                                    "Valor inválido para conversão: ${valueExit.text}");
-                                EasyLoading.showError("Valor inválido.");
-                              }
-                            },
-                            child: DefaultButton(
-                              text: "Retirar",
-                              padding: defaultPadding,
-                              color: SeventhColor,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
+              color: Colors.white,
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: defaultPadding,
+                    child: SecundaryText(
+                      text: "Selecione o valor que você deseja retirar",
+                      color: nightColor,
+                      align: TextAlign.center,
+                    ),
                   ),
-                ));
+                  InputLogin(
+                    inputTitle: 'R\$',
+                    controller: valueExit,
+                    keyboardType: TextInputType.number,
+                  ),
+                  InputLogin(
+                    inputTitle: 'Chave Pix',
+                    controller: pixKeyController,
+                    // onChanged: (value) async {
+                    //   if (value.isNotEmpty) {
+                    //     try {
+                    //       // Simula a chamada à API para obter dados da chave Pix
+                    //       var pixDetails = await _fetchPixDetails(value);
+                    //       pixRecipientName = pixDetails["name"];
+                    //       pixRecipientBank = pixDetails["bank"];
+
+                    //       // Atualiza a UI
+                    //       (context as Element).markNeedsBuild();
+                    //     } catch (e) {
+                    //       print("Erro ao buscar detalhes da chave Pix: $e");
+                    //       EasyLoading.showError(
+                    //           "Erro ao buscar detalhes da chave Pix.");
+                    //     }
+                    //   }
+                    // },
+                  ),
+                  // if (pixRecipientName != null && pixRecipientBank != null)
+                  //   Padding(
+                  //     padding: defaultPadding,
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           "Nome do Destinatário: $pixRecipientName",
+                  //           style: TextStyle(color: Colors.black),
+                  //         ),
+                  //         Text(
+                  //           "Banco do Destinatário: $pixRecipientBank",
+                  //           style: TextStyle(color: Colors.black),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: defaultPadding,
+                    child: Tips(
+                      desc:
+                          "Sua solicitação de retirada passará por uma verificação e dentro de 3 dias o saldo estará na chave Pix adicionada!",
+                    ),
+                  ),
+                  Form(
+                    key: _formKey,
+                    child: Padding(
+                      padding: defaultPadding,
+                      child: GestureDetector(
+                        onTap: () async {
+                          print('TESTEEE ${valueExit.text}');
+
+                          // Substituindo a vírgula por ponto antes de tentar a conversão
+                          String valueWithDot =
+                              valueExit.text.replaceAll(',', '.');
+
+                          // Tentando converter o valor com ponto
+                          double? exitValueDouble =
+                              double.tryParse(valueWithDot);
+
+                          print(exitValueDouble);
+                          print(currentBalanceDoublePrint);
+
+                          if (exitValueDouble != null) {
+                            if (currentBalanceDoublePrint > exitValueDouble) {
+                              if (_formKey.currentState!.validate()) {
+                                try {
+                                  bool success =
+                                      await _getExitBalanceVerifiqued(
+                                          value: exitValueDouble.toString(),
+                                          id: int.parse(id),
+                                          token: token.toString(),
+                                          bankkey: pixKeyController.text);
+
+                                  if (success) {
+                                    Navigator.of(Get.overlayContext!)
+                                        .pushReplacementNamed('/');
+
+                                    EasyLoading.showSuccess(
+                                        "Retirada realizada com sucesso.");
+                                  } else {
+                                    EasyLoading.showError(
+                                        "Falha na transferência.");
+                                  }
+                                } catch (e) {
+                                  print("Erro na transferência: $e");
+                                  EasyLoading.showError(
+                                      "Erro ao processar a retirada.");
+                                }
+                              }
+                            } else {
+                              EasyLoading.showError("Saldo insuficiente.");
+                            }
+                          } else {
+                            print(
+                                "Valor inválido para conversão: ${valueExit.text}");
+                            EasyLoading.showError("Valor inválido.");
+                          }
+                        },
+                        child: DefaultButton(
+                          text: "Retirar",
+                          padding: defaultPadding,
+                          color: SeventhColor,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
           },
         );
       },
     );
   }
 
+// Função simulada para buscar detalhes da chave Pix
+  Future<Map<String, String>> _fetchPixDetails(String pixKey) async {
+    // Substitua por sua integração real
+    await Future.delayed(Duration(seconds: 2)); // Simula um tempo de resposta
+    return {
+      "name": "João da Silva",
+      "bank": "Banco do Brasil",
+    };
+  }
+
 // Função para realizar o POST para a API do Mercado Pago usando chave PIX
-  Future<bool> _makeMercadoPagoTransfer({required double value}) async {
+  Future<bool> _getExitBalanceVerifiqued(
+      {required int id,
+      required String token,
+      required String value,
+      required String bankkey}) async {
     // URL para a API do Mercado Pago
-    final String url = 'https://api.mercadopago.com/v1/payments';
+    final String url = '$urlEnv/verfiqued-exit-balances';
 
     // Substitua pelo token de acesso real do Mercado Pago (obtido via OAuth ou credenciais)
-    final String accessToken =
-        'Bearer APP_USR-2869162016512406-102909-f6e7d456e301fbb93bc5fb67004f8e5b-1983614734';
-
-    // Defina os dados necessários para a transferência
-    final Map<String, dynamic> transferData = {
-      'transaction_amount': value, // Valor da transferência
-      'description': 'Transferência de saldo', // Descrição da transação
-      'payer': {
-        'type': 'pix', // Método de pagamento (chave PIX)
-        'pix_key':
-            '6d5b38fa-d8e0-4816-b94a-2747da3201b4', // Chave PIX do destinatário
-      },
-    };
+    final String accessToken = token;
 
     try {
       // Fazendo a requisição POST
       final response = await http.post(
         Uri.parse(url),
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
         },
-        body: jsonEncode(transferData),
+        body: {
+          "value": "$value",
+          "approved": "false",
+          "profile": "$id",
+          "bankkey": bankkey
+        },
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         // Sucesso na transferência
         print("Transferência realizada com sucesso!");
         return true;
       } else {
         // Erro ao processar a transferência
-        print("Falha na transferência: ${response.body}");
+        print("Algo deu errado: ${response.body}");
         return false;
       }
     } catch (e) {
-      print("Erro ao chamar a API do Mercado Pago: $e");
+      print("Erro ao chamar a API Interna: $e");
       return false;
     }
   }
