@@ -18,6 +18,13 @@
     "profile": {
       "model": "profile",
       "via": "verfiqued_exit_balances"
+    },
+    "approved": {
+      "type": "boolean",
+      "default": false
+    },
+    "bankkey": {
+      "type": "string"
     }
   }
 }

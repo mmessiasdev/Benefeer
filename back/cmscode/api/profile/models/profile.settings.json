@@ -34,6 +34,10 @@
     "verfiqued_exit_balances": {
       "via": "profile",
       "collection": "verfiqued-exit-balance"
+    },
+    "plan_stores": {
+      "via": "profile",
+      "collection": "plan-stores"
     }
   }
 }

@@ -17,8 +17,8 @@
       "via": "verifiqued_buy_local_stores"
     },
     "local_store": {
-      "model": "local-store",
-      "via": "verifiqued_buy_local_stores"
+      "via": "verifiqued_buy_local_stores",
+      "model": "local-store"
     },
     "receipt": {
       "model": "file",

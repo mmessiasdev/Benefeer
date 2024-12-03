@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "banners",
+  "info": {
+    "name": "Banner",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "urlimage": {
+      "type": "string"
+    },
+    "urlroute": {
+      "type": "string"
+    },
+    "carrousels": {
+      "via": "banners",
+      "collection": "carrousel"
+    }
+  }
+}

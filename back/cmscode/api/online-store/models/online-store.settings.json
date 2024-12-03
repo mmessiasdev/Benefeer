@@ -31,6 +31,10 @@
       "via": "online_stores",
       "collection": "category",
       "dominant": true
+    },
+    "ative": {
+      "type": "boolean",
+      "default": true
     }
   }
 }

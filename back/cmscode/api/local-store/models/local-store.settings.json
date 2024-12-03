@@ -42,6 +42,10 @@
     "verifiqued_buy_local_stores": {
       "via": "local_store",
       "collection": "verifiqued-buy-local-store"
+    },
+    "ative": {
+      "type": "boolean",
+      "default": true
     }
   }
 }

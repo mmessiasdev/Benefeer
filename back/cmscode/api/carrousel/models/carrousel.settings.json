@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "carrousels",
+  "info": {
+    "name": "carrousel",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "desc": {
+      "type": "string"
+    },
+    "banners": {
+      "collection": "banner",
+      "via": "carrousels",
+      "dominant": true
+    }
+  }
+}

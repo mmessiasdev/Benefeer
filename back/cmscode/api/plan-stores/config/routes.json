@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/plan-stores",
+      "handler": "plan-stores.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plan-stores/count",
+      "handler": "plan-stores.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plan-stores/:id",
+      "handler": "plan-stores.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/plan-stores",
+      "handler": "plan-stores.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/plan-stores/:id",
+      "handler": "plan-stores.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/plan-stores/:id",
+      "handler": "plan-stores.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

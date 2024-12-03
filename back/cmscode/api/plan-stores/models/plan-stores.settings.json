@@ -1,9 +1,8 @@
 {
   "kind": "collectionType",
-  "collectionName": "plans",
+  "collectionName": "plan_stores",
   "info": {
-    "name": "Plan",
-    "description": ""
+    "name": "PlanStores"
   },
   "options": {
     "increments": true,
@@ -21,20 +20,13 @@
     "benefits": {
       "type": "string"
     },
-    "rules": {
-      "type": "string"
+    "profile": {
+      "model": "profile",
+      "via": "plan_stores"
     },
-    "value": {
-      "default": 0,
-      "type": "decimal"
-    },
-    "profiles": {
-      "via": "plan",
-      "collection": "profile"
-    },
-    "plan_stores": {
-      "via": "plan",
-      "collection": "plan-stores"
+    "plan": {
+      "model": "plan",
+      "via": "plan_stores"
     }
   }
 }
