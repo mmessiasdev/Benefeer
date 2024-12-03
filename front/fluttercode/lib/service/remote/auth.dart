@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:Benefeer/model/balancelocalstores.dart';
+import 'package:Benefeer/model/carrouselbanner.dart';
 import 'package:Benefeer/model/categories.dart';
 import 'package:Benefeer/model/localstoriesverifiquedbuy.dart';
 import 'package:Benefeer/model/plans.dart';
@@ -90,30 +91,26 @@ class RemoteAuthService {
     );
   }
 
-  Future addPost(
-      {required String? title,
-      required String? desc,
-      required String? content,
-      required int? profileId,
-      required String? token,
-      required bool? public}) async {
-    final body = {
-      "title": title.toString(),
-      "desc": desc.toString(),
-      "content": content.toString(),
-      "profile": profileId.toString(),
-      "public": public,
-    };
-    var response = await client.post(
-      Uri.parse('${url.toString()}/posts'),
+    Future<List<Banners>> getCarrouselBanners({
+    required String? token,
+    required String? id,
+  }) async {
+    List<Banners> listItens = [];
+    var response = await client.get(
+      Uri.parse('${url.toString()}/carrousels/$id'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
         'ngrok-skip-browser-warning': "true"
       },
-      body: jsonEncode(body),
     );
-    return response;
+    var body = jsonDecode(response.body);
+    var itemCount = body['banners'];
+    print(itemCount);
+    for (var i = 0; i < itemCount.length; i++) {
+      listItens.add(Banners.fromJson(itemCount[i]));
+    }
+    return listItens;
   }
 
   Future addVerificationLocalStore({

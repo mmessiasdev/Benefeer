@@ -131,67 +131,67 @@ class AuthController extends GetxController {
     }
   }
 
-  void posting({
-    required String title,
-    required String desc,
-    required String content,
-    required int profileId,
-    required bool public,
-    // required int chunkId,
-    String? fileName,
-    // List<int>? selectFile
-  }) async {
-    try {
-      EasyLoading.show(
-        status: 'Loading...',
-        dismissOnTap: false,
-      );
-      var token = await LocalAuthService().getSecureToken("token");
-      var result = await RemoteAuthService().addPost(
-        token: token.toString(),
-        title: title,
-        desc: desc,
-        content: content,
-        profileId: profileId,
-        public: public,
-      );
-      EasyLoading.showSuccess("Seu relato poster enviado.");
-      Navigator.of(Get.overlayContext!).pushReplacementNamed('/');
+  // void posting({
+  //   required String title,
+  //   required String desc,
+  //   required String content,
+  //   required int profileId,
+  //   required bool public,
+  //   // required int chunkId,
+  //   String? fileName,
+  //   // List<int>? selectFile
+  // }) async {
+  //   try {
+  //     EasyLoading.show(
+  //       status: 'Loading...',
+  //       dismissOnTap: false,
+  //     );
+  //     var token = await LocalAuthService().getSecureToken("token");
+  //     var result = await RemoteAuthService().addPost(
+  //       token: token.toString(),
+  //       title: title,
+  //       desc: desc,
+  //       content: content,
+  //       profileId: profileId,
+  //       public: public,
+  //     );
+  //     EasyLoading.showSuccess("Seu relato poster enviado.");
+  //     Navigator.of(Get.overlayContext!).pushReplacementNamed('/');
 
-      // if (result.statusCode == 200) {
-      //   int postId = json.decode(result.body)['id'];
-      //   var url = Uri.parse('$urlEnv/upload');
-      //   var request = http.MultipartRequest("POST", url);
-      //   request.files.add(await http.MultipartFile.fromBytes(
-      //     'files',
-      //     selectFile!,
-      //     contentType: MediaType('application', 'pdf'),
-      //     filename: fileName ?? "Benefeer File",
-      //   ));
+  //     // if (result.statusCode == 200) {
+  //     //   int postId = json.decode(result.body)['id'];
+  //     //   var url = Uri.parse('$urlEnv/upload');
+  //     //   var request = http.MultipartRequest("POST", url);
+  //     //   request.files.add(await http.MultipartFile.fromBytes(
+  //     //     'files',
+  //     //     selectFile!,
+  //     //     contentType: MediaType('application', 'pdf'),
+  //     //     filename: fileName ?? "Benefeer File",
+  //     //   ));
 
-      //   request.files.add(await http.MultipartFile.fromString("ref", "post"));
-      //   request.files
-      //       .add(await http.MultipartFile.fromString("refId", "${postId}"));
+  //     //   request.files.add(await http.MultipartFile.fromString("ref", "post"));
+  //     //   request.files
+  //     //       .add(await http.MultipartFile.fromString("refId", "${postId}"));
 
-      //   request.files
-      //       .add(await http.MultipartFile.fromString("field", "files"));
+  //     //   request.files
+  //     //       .add(await http.MultipartFile.fromString("field", "files"));
 
-      //   request.headers.addAll({"Authorization": "Bearer $token"});
-      //   request.send().then((response) {
-      //     if (response.statusCode == 200) {
-      //       print("FileUpload Successfuly");
-      //     } else {
-      //       print("FileUpload Error");
-      //     }
-      //   });
-      // }
-    } catch (e) {
-      print(e);
-      EasyLoading.showError('Alguma coisa deu errado.');
-    } finally {
-      EasyLoading.dismiss();
-    }
-  }
+  //     //   request.headers.addAll({"Authorization": "Bearer $token"});
+  //     //   request.send().then((response) {
+  //     //     if (response.statusCode == 200) {
+  //     //       print("FileUpload Successfuly");
+  //     //     } else {
+  //     //       print("FileUpload Error");
+  //     //     }
+  //     //   });
+  //     // }
+  //   } catch (e) {
+  //     print(e);
+  //     EasyLoading.showError('Alguma coisa deu errado.');
+  //   } finally {
+  //     EasyLoading.dismiss();
+  //   }
+  // }
 
   Future<Map<String, String?>?> iniciarPagamentoMercadoPago(
       double valor) async {

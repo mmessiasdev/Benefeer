@@ -76,6 +76,7 @@ class _EnterBalancesScreenState extends State<EnterBalancesScreen> {
                                 SubText(
                                     text: '${renders.storeName.toString()}',
                                     align: TextAlign.start),
+                                
                                 SizedBox(
                                   height: 2,
                                 ),
@@ -150,16 +151,20 @@ class _ExitBalancesScreemState extends State<ExitBalancesScreem> {
                     0, // Use o length para garantir que você não vai acessar um índice inválido
                 itemBuilder: (context, index) {
                   var renders = snapshot.data![index];
-                  String formatDateTime(String dateTimeString) {
-                    // Parse a string no formato ISO 8601 ("2024-11-16T14:09:31.396Z")
-                    DateTime dateTime = DateTime.parse(dateTimeString);
+                    String formatDateTime(String dateTimeString) {
+          // Parse a string no formato ISO 8601 ("2024-11-16T14:09:31.396Z")
+          DateTime dateTime = DateTime.parse(dateTimeString);
 
-                    // Formatar a data e hora para o formato brasileiro "dd/MM/yyyy HH:mm:ss"
-                    String formattedDate =
-                        DateFormat('dd/MM/yyyy HH:mm:ss').format(dateTime);
+          // Subtrair 3 horas para ajustar o fuso horário
+          DateTime adjustedDateTime = dateTime.subtract(Duration(hours: 3));
 
-                    return formattedDate;
-                  }
+          // Formatar a data ajustada para o formato brasileiro "dd/MM/yyyy HH:mm:ss"
+          String formattedDate =
+              DateFormat('dd/MM/yyyy HH:mm:ss').format(adjustedDateTime);
+
+          return formattedDate;
+        }
+
 
                   String formattedDate =
                       formatDateTime(renders.updatedAt.toString());
@@ -182,6 +187,11 @@ class _ExitBalancesScreemState extends State<ExitBalancesScreem> {
                               size: 12,
                               color: lightColor,
                               fontweight: FontWeight.w900,
+                            ),
+                            SubText(
+                              text: 'Chave pix: ${renders.bankkey}',
+                              align: TextAlign.start,
+                              color: SecudaryColor,
                             ),
                             const SizedBox(
                               height: 10,

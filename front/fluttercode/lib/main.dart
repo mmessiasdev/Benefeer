@@ -20,7 +20,7 @@ Future main() async {
   ]);
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+  // );ç
 
   // OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
   // OneSignal.initialize("f49b725b-18ff-4f6e-b7b1-9bcadb116e48");

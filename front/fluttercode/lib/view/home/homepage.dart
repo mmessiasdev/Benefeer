@@ -1,3 +1,4 @@
+import 'package:Benefeer/component/bannerlist.dart';
 import 'package:Benefeer/component/containersLoading.dart';
 import 'package:Benefeer/component/contentlocalproduct.dart';
 import 'package:Benefeer/component/contentproduct.dart';
@@ -5,6 +6,7 @@ import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/component/widgets/iconlist.dart';
 import 'package:Benefeer/component/widgets/listTitle.dart';
 import 'package:Benefeer/component/widgets/searchInput.dart';
+import 'package:Benefeer/model/carrouselbanner.dart';
 import 'package:Benefeer/model/categories.dart';
 import 'package:Benefeer/model/localstores.dart';
 import 'package:Benefeer/model/stores.dart';
@@ -13,6 +15,7 @@ import 'package:Benefeer/view/account/account.dart';
 import 'package:Benefeer/view/category/categoryscreen.dart';
 import 'package:Benefeer/view/qrcode/qrcodescreen.dart';
 import 'package:Benefeer/view/store/local/localstorelist.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/padding.dart';
@@ -164,7 +167,63 @@ class _HomePageState extends State<HomePage> {
                     padding: defaultPaddingHorizon,
                     child: const SearchInput(),
                   ),
-                  const SizedBox(height: 25),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  FutureBuilder<List<Banners>>(
+                    future: RemoteAuthService()
+                        .getCarrouselBanners(token: token, id: "1"),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done &&
+                          snapshot.hasData) {
+                        if (snapshot.data!.isEmpty) {
+                          return SizedBox(
+                            height: 50,
+                            child: const Center(
+                              child:
+                                  Text("Nenhum banner disponível no momento."),
+                            ),
+                          );
+                        } else {
+                          return CarouselSlider.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index, realIndex) {
+                              var renders = snapshot.data![index];
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 15),
+                                child: BannerList(
+                                  imageUrl: renders.urlimage.toString(),
+                                  redirectUrl: renders.urlroute.toString(),
+                                ),
+                              );
+                            },
+                            options: CarouselOptions(
+                              height: 175, // Altura do carrossel
+                              autoPlay:
+                                  true, // Habilita o deslizamento automático
+                              autoPlayInterval:
+                                  const Duration(seconds: 3), // Intervalo
+                              enlargeCenterPage:
+                                  true, // Destaque do item central
+                              viewportFraction:
+                                  0.8, // Proporção dos itens visíveis
+                            ),
+                          );
+                        }
+                      } else if (snapshot.hasError) {
+                        return const Center(
+                            child: Text("Erro ao carregar banners."));
+                      }
+                      return SizedBox(
+                        height: 150,
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 15),
                   Padding(
                     padding: defaultPaddingHorizon,
                     child: Row(
@@ -187,27 +246,27 @@ class _HomePageState extends State<HomePage> {
                           title: "Eletrônicos",
                           icon: Icons.computer,
                           onClick: () {
-                            (Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CategoryScreen(
-                                        id: '1',
-                                      )),
-                            ));
+                            // (Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => CategoryScreen(
+                            //             id: '1',
+                            //           )),
+                            // ));
                           },
                         ),
                         IconList(
                           title: "Beleza",
                           icon: Icons.brush,
                           onClick: () {
-                            (Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CategoryScreen(
-                                  id: '4',
-                                ),
-                              ),
-                            ));
+                            // (Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => CategoryScreen(
+                            //       id: '4',
+                            //     ),
+                            //   ),
+                            // ));
                           },
                         ),
                         IconList(
@@ -225,7 +284,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 15),
                   ClipRRect(
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(35),
@@ -340,9 +399,12 @@ class _HomePageState extends State<HomePage> {
                                             ConnectionState.done &&
                                         snapshot.hasData) {
                                       if (snapshot.data!.isEmpty) {
-                                        return const Center(
-                                          child: Text(
-                                              "Nenhuma loja disponível no momento."),
+                                        return SizedBox(
+                                          height: 200,
+                                          child: const Center(
+                                            child: Text(
+                                                "Nenhuma loja disponível no momento."),
+                                          ),
                                         );
                                       } else {
                                         return ListView.builder(
@@ -380,22 +442,25 @@ class _HomePageState extends State<HomePage> {
                                     );
                                   },
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            LocalStoreListScreen(),
-                                      ),
-                                    );
-                                  },
-                                  child: SubTextSized(
-                                    text: "Ver mais",
-                                    align: TextAlign.center,
-                                    fontweight: FontWeight.w600,
-                                    size: 12,
-                                    tdeco: TextDecoration.underline,
+                                Padding(
+                                  padding: defaultPadding,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              LocalStoreListScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: SubTextSized(
+                                      text: "Ver mais",
+                                      align: TextAlign.center,
+                                      fontweight: FontWeight.w600,
+                                      size: 12,
+                                      tdeco: TextDecoration.underline,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(
