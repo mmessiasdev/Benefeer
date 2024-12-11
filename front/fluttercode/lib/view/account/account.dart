@@ -34,11 +34,11 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   void getString() async {
-    var strEmail = await LocalAuthService().getEmail("email");
-    var strFullname = await LocalAuthService().getFullName("fullname");
-    var strCpf = await LocalAuthService().getCpf("cpf");
-    var strId = await LocalAuthService().getId("id");
-    var strToken = await LocalAuthService().getSecureToken("token");
+    var strEmail = await LocalAuthService().getEmail();
+    var strFullname = await LocalAuthService().getFullName();
+    var strCpf = await LocalAuthService().getCpf();
+    var strId = await LocalAuthService().getId();
+    var strToken = await LocalAuthService().getSecureToken();
 
     setState(() {
       email = strEmail.toString();

@@ -35,7 +35,7 @@ class _PlanScreenState extends State<PlanScreen> {
   }
 
   void getString() async {
-    var strToken = await LocalAuthService().getSecureToken("token");
+    var strToken = await LocalAuthService().getSecureToken();
 
     setState(() {
       token = strToken.toString();

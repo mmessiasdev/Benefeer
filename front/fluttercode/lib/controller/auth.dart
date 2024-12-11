@@ -274,7 +274,7 @@ class AuthController extends GetxController {
         status: 'Loading...',
         dismissOnTap: false,
       );
-      var token = await LocalAuthService().getSecureToken("token");
+      var token = await LocalAuthService().getSecureToken();
       var result = await RemoteAuthService().addVerificationLocalStore(
         token: token.toString(),
         profile: int.tryParse(profileId),

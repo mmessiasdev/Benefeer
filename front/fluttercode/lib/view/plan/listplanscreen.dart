@@ -26,7 +26,7 @@ class _ListPlanScreenState extends State<ListPlanScreen> {
   }
 
   void getString() async {
-    var strToken = await LocalAuthService().getSecureToken("token");
+    var strToken = await LocalAuthService().getSecureToken();
 
     setState(() {
       token = strToken.toString();

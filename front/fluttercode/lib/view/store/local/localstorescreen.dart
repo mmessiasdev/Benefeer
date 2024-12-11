@@ -38,9 +38,9 @@ class _LocalStoreScreenState extends State<LocalStoreScreen> {
   }
 
   void getString() async {
-    var strToken = await LocalAuthService().getSecureToken("token");
-    var strFullName = await LocalAuthService().getFullName("fullname");
-    var strCpf = await LocalAuthService().getCpf("cpf");
+    var strToken = await LocalAuthService().getSecureToken();
+    var strFullName = await LocalAuthService().getFullName();
+    var strCpf = await LocalAuthService().getCpf();
 
     setState(() {
       cpf = strCpf.toString();

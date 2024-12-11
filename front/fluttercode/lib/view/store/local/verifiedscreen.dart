@@ -37,8 +37,8 @@ class _VerifiedScreenState extends State<VerifiedScreen> {
   }
 
   void getString() async {
-    var strProfileId = await LocalAuthService().getId("id");
-    var strToken = await LocalAuthService().getSecureToken("token");
+    var strProfileId = await LocalAuthService().getId();
+    var strToken = await LocalAuthService().getSecureToken();
 
     // Verifique se o widget ainda está montado antes de chamar setState
     if (mounted) {

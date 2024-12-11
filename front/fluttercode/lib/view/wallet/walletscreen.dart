@@ -52,10 +52,10 @@ class _WalletScreenState extends State<WalletScreen> {
 
   // Recuperar as informações de autenticação armazenadas
   void getString() async {
-    var strToken = await LocalAuthService().getSecureToken("token");
-    var strFullName = await LocalAuthService().getFullName("fullname");
-    var strCpf = await LocalAuthService().getCpf("cpf");
-    var strProfileId = await LocalAuthService().getId("id");
+    var strToken = await LocalAuthService().getSecureToken();
+    var strFullName = await LocalAuthService().getFullName();
+    var strCpf = await LocalAuthService().getCpf();
+    var strProfileId = await LocalAuthService().getId();
 
     if (mounted) {
       setState(() {

@@ -1,17 +1,18 @@
 import 'package:Benefeer/component/buttons.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/padding.dart';
+import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/widgets/header.dart';
-import 'package:Benefeer/view/home/homepage.dart';
 import 'package:Benefeer/view/store/local/verifiedscreen.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class DocumentScannerScreen extends StatefulWidget {
   DocumentScannerScreen({super.key, required this.localstoreId});
 
-  int localstoreId;
+  final int localstoreId;
 
   @override
   _DocumentScannerScreenState createState() => _DocumentScannerScreenState();
@@ -21,11 +22,24 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
   CameraController? _controller;
   List<CameraDescription>? cameras;
   bool isProcessing = false;
+  bool isPermissionDenied = false;
 
   @override
   void initState() {
     super.initState();
-    _initializeCamera();
+    _checkCameraPermission();
+  }
+
+  Future<void> _checkCameraPermission() async {
+    final status = await Permission.camera.request();
+
+    if (status.isGranted) {
+      await _initializeCamera();
+    } else if (status.isDenied || status.isPermanentlyDenied) {
+      setState(() {
+        isPermissionDenied = true;
+      });
+    }
   }
 
   Future<void> _initializeCamera() async {
@@ -70,6 +84,8 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
               imagePath: imagePath, localstoreId: widget.localstoreId),
         ),
       );
+    } else {
+      print('Documento não identificado.');
     }
 
     // Finaliza o processamento
@@ -83,6 +99,19 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (isPermissionDenied) {
+      return Scaffold(
+        body: Padding(
+          padding: defaultPadding,
+          child: Center(
+              child: SubText(
+                  text:
+                      "Acesso à câmera negado. Por favor, permita o uso da câmera nas configurações.",
+                  align: TextAlign.center)),
+        ),
+      );
+    }
+
     if (_controller == null || !_controller!.value.isInitialized) {
       return const Center(
         child: CircularProgressIndicator(),
@@ -97,7 +126,7 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
           child: Column(
             children: [
               MainHeader(
-                title: "Area do Comprovante",
+                title: "Área do Comprovante",
                 onClick: () {
                   Navigator.of(context).pop();
                 },

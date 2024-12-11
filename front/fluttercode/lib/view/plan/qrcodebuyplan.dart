@@ -41,8 +41,8 @@ class _QrCodeBuyPlanScreenState extends State<QrCodeBuyPlanScreen> {
   }
 
   void getString() async {
-    var strToken = await LocalAuthService().getSecureToken("token");
-    var strId = await LocalAuthService().getId("id");
+    var strToken = await LocalAuthService().getSecureToken();
+    var strId = await LocalAuthService().getId();
 
     // Verifique se o widget ainda está montado antes de chamar setState
     if (mounted) {

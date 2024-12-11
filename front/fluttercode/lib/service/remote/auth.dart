@@ -51,7 +51,7 @@ class RemoteAuthService {
       Uri.parse('${url.toString()}/auth/local'),
       headers: {
         "Content-Type": "application/json",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
       body: jsonEncode(body),
     );
@@ -70,7 +70,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
       body: jsonEncode(body),
     );
@@ -86,12 +86,12 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true",
+        "ngrok-skip-browser-warning": "true"
       },
     );
   }
 
-    Future<List<Banners>> getCarrouselBanners({
+  Future<List<Banners>> getCarrouselBanners({
     required String? token,
     required String? id,
   }) async {
@@ -101,7 +101,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var body = jsonDecode(response.body);
@@ -127,7 +127,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
       body: jsonEncode(body),
     );
@@ -143,7 +143,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var body = jsonDecode(response.body);
@@ -163,6 +163,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var body = jsonDecode(response.body);
@@ -182,7 +183,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var itens = json.decode(response.body);
@@ -198,7 +199,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var itens = json.decode(response.body);
@@ -215,7 +216,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var body = jsonDecode(response.body);
@@ -235,6 +236,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var body = jsonDecode(response.body);
@@ -254,7 +256,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var itens = json.decode(response.body);
@@ -279,7 +281,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
       body: jsonEncode(body),
     );
@@ -306,6 +308,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var body = jsonDecode(response.body);
@@ -325,6 +328,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var body = jsonDecode(response.body);
@@ -344,7 +348,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var itens = json.decode(response.body);
@@ -360,7 +364,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var itens = json.decode(response.body);
@@ -375,7 +379,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var body = jsonDecode(response.body);
@@ -396,7 +400,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var body = jsonDecode(response.body);
@@ -416,7 +420,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var body = jsonDecode(response.body);
@@ -441,7 +445,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
       body: jsonEncode(body),
     );
@@ -465,7 +469,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var body = jsonDecode(response.body);
@@ -485,7 +489,7 @@ class RemoteAuthService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
-        'ngrok-skip-browser-warning': "true"
+        "ngrok-skip-browser-warning": "true"
       },
     );
     var body = jsonDecode(response.body);

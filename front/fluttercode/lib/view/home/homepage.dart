@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getString() async {
-    var strToken = await LocalAuthService().getSecureToken("token");
+    var strToken = await LocalAuthService().getSecureToken();
 
     // Verifique se o widget ainda está montado antes de chamar setState
     if (mounted) {
@@ -112,8 +112,8 @@ class _HomePageState extends State<HomePage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.person),
-                                SizedBox(
+                                const Icon(Icons.person),
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Column(
@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                     padding: defaultPaddingHorizon,
                     child: const SearchInput(),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   FutureBuilder<List<Banners>>(
@@ -177,12 +177,9 @@ class _HomePageState extends State<HomePage> {
                       if (snapshot.connectionState == ConnectionState.done &&
                           snapshot.hasData) {
                         if (snapshot.data!.isEmpty) {
-                          return SizedBox(
+                          return const SizedBox(
                             height: 50,
-                            child: const Center(
-                              child:
-                                  Text("Nenhum banner disponível no momento."),
-                            ),
+                            child: Center(child: SizedBox()),
                           );
                         } else {
                           return CarouselSlider.builder(
@@ -212,8 +209,7 @@ class _HomePageState extends State<HomePage> {
                           );
                         }
                       } else if (snapshot.hasError) {
-                        return const Center(
-                            child: Text("Erro ao carregar banners."));
+                        return const Center(child: SizedBox());
                       }
                       return SizedBox(
                         height: 150,
@@ -233,6 +229,19 @@ class _HomePageState extends State<HomePage> {
                           title: "Saúde",
                           icon: Icons.monitor_heart,
                           onClick: () {
+                            // (Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => CategoryScreen(
+                            //             id: '2',
+                            //           )),
+                            // ));
+                          },
+                        ),
+                        IconList(
+                          title: "Eletrônicos",
+                          icon: Icons.computer,
+                          onClick: () {
                             (Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -240,19 +249,6 @@ class _HomePageState extends State<HomePage> {
                                         id: '2',
                                       )),
                             ));
-                          },
-                        ),
-                        IconList(
-                          title: "Eletrônicos",
-                          icon: Icons.computer,
-                          onClick: () {
-                            // (Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => CategoryScreen(
-                            //             id: '1',
-                            //           )),
-                            // ));
                           },
                         ),
                         IconList(
@@ -399,9 +395,9 @@ class _HomePageState extends State<HomePage> {
                                             ConnectionState.done &&
                                         snapshot.hasData) {
                                       if (snapshot.data!.isEmpty) {
-                                        return SizedBox(
+                                        return const SizedBox(
                                           height: 200,
-                                          child: const Center(
+                                          child: Center(
                                             child: Text(
                                                 "Nenhuma loja disponível no momento."),
                                           ),
@@ -411,9 +407,10 @@ class _HomePageState extends State<HomePage> {
                                           shrinkWrap: true,
                                           physics:
                                               const NeverScrollableScrollPhysics(),
-                                          itemCount: 2,
+                                          itemCount: snapshot.data!.length,
                                           itemBuilder: (context, index) {
                                             var renders = snapshot.data![index];
+                                            print(renders.benefit);
                                             // Verificação se o idPlan não é nulo
                                             return Padding(
                                               padding: defaultPadding,
@@ -476,7 +473,7 @@ class _HomePageState extends State<HomePage> {
                                   child: FutureBuilder<List<OnlineStores>>(
                                     future: RemoteAuthService()
                                         .getOneCategoryStories(
-                                            token: token, id: '1'),
+                                            token: token, id: '2'),
                                     builder: (context, snapshot) {
                                       if (snapshot.connectionState ==
                                               ConnectionState.done &&
