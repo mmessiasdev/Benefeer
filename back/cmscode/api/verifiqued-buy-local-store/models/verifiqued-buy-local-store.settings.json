@@ -32,12 +32,12 @@
       "required": false,
       "pluginOptions": {}
     },
-    "value": {
-      "type": "biginteger"
-    },
     "approved": {
       "type": "boolean",
       "default": false
+    },
+    "value": {
+      "type": "string"
     }
   }
 }

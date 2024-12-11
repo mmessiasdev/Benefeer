@@ -35,6 +35,9 @@
     "plan_stores": {
       "via": "plan",
       "collection": "plan-stores"
+    },
+    "color": {
+      "type": "string"
     }
   }
 }
