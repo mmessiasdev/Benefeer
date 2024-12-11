@@ -41,9 +41,15 @@ class BankCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SubTextSized(
-                      text: "Benefeer", size: 30, fontweight: FontWeight.w600),
+                    text: "Benefeer",
+                    size: 30,
+                    fontweight: FontWeight.w600,
+                  ),
                   SubText(
-                      text: "Seu cartão de benefícios", align: TextAlign.start, color: OffColor,),
+                    text: "Seu cartão de benefícios",
+                    align: TextAlign.start,
+                    color: OffColor,
+                  ),
                   const SizedBox(
                     height: 50,
                   ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:Benefeer/component/bankcard.dart';
 import 'package:Benefeer/component/colors.dart';
 import 'package:Benefeer/component/containersLoading.dart';
 import 'package:Benefeer/component/contentlocalproduct.dart';
@@ -240,6 +241,60 @@ class _PlanScreenState extends State<PlanScreen> {
                                             align: TextAlign.start),
                                         SizedBox(
                                           height: 20,
+                                        ),
+                                        FutureBuilder<List<PlanStores>>(
+                                          future: RemoteAuthService()
+                                              .getPlanStores(
+                                                  token: token, id: idPlan),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                    ConnectionState.done &&
+                                                snapshot.hasData) {
+                                              if (snapshot.data!.isEmpty) {
+                                                return const SizedBox(
+                                                  height: 200,
+                                                  child: Center(
+                                                    child: Text(
+                                                        "Nenhuma loja disponível no momento."),
+                                                  ),
+                                                );
+                                              } else {
+                                                return ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  itemCount:
+                                                      snapshot.data!.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    var renders =
+                                                        snapshot.data![index];
+                                                    // Verificação se o idPlan não é nulo
+                                                    return Padding(
+                                                        padding: defaultPadding,
+                                                        child: BankCard(
+                                                          cpf: renders.name
+                                                              .toString(),
+                                                          name: renders.benefits
+                                                              .toString(),
+                                                          logo: renders.urlLogo,
+                                                        ));
+                                                  },
+                                                );
+                                              }
+                                            } else if (snapshot.hasError) {
+                                              return WidgetLoading();
+                                            }
+                                            return SizedBox(
+                                              height: 300,
+                                              child: Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: nightColor,
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ],
                                     )

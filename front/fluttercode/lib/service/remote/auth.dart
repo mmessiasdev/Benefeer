@@ -339,6 +339,25 @@ class RemoteAuthService {
     return listItens;
   }
 
+  Future<List<PlanStores>> getPlanStores(
+      {required String? token, required String? id}) async {
+    List<PlanStores> listItens = [];
+    var response = await client.get(
+      Uri.parse('${url.toString()}/plans/$id'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "true"
+      },
+    );
+    var body = jsonDecode(response.body);
+    var itemCount = body["plan_stores"];
+    for (var i = 0; i < itemCount.length; i++) {
+      listItens.add(PlanStores.fromJson(itemCount[i]));
+    }
+    return listItens;
+  }
+
   Future<Map> getLocalStore({
     required String id,
     required String? token,
