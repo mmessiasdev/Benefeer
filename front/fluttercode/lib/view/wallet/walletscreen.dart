@@ -1,8 +1,7 @@
-import 'dart:convert';
-
 import 'package:Benefeer/component/bankcard.dart';
 import 'package:Benefeer/component/buttons.dart';
 import 'package:Benefeer/component/colors.dart';
+import 'package:Benefeer/component/inputdefault.dart';
 import 'package:Benefeer/component/padding.dart';
 import 'package:Benefeer/component/texts.dart';
 import 'package:Benefeer/component/tips.dart';
@@ -11,14 +10,15 @@ import 'package:Benefeer/model/balancelocalstores.dart';
 import 'package:Benefeer/model/verfiquedexitbalances.dart';
 import 'package:Benefeer/service/local/auth.dart';
 import 'package:Benefeer/service/remote/auth.dart';
-import 'package:Benefeer/view/account/auth/signin.dart';
 import 'package:Benefeer/view/wallet/balance.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({Key? key}) : super(key: key);
@@ -117,8 +117,6 @@ class _WalletScreenState extends State<WalletScreen> {
 
   void _showDraggableScrollableSheet(BuildContext context) {
     TextEditingController pixKeyController = TextEditingController();
-    // String? pixRecipientName;
-    // String? pixRecipientBank;
 
     showModalBottomSheet(
       context: context,
@@ -139,50 +137,51 @@ class _WalletScreenState extends State<WalletScreen> {
                       align: TextAlign.center,
                     ),
                   ),
-                  InputLogin(
-                    inputTitle: 'R\$',
-                    controller: valueExit,
-                    keyboardType: TextInputType.number,
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: defaultPadding,
+                          child: InputTextField(
+                            textEditingController: valueExit,
+                            title: "R\$",
+                            fcolor: SecudaryColor,
+                            fill: true,
+                            textInputType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              CurrencyInputFormatter(),
+                            ],
+                            validator: (value) {
+                              if (value == null ||
+                                  value.isEmpty ||
+                                  value == '0,00') {
+                                return 'Insira um valor válido.';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: defaultPadding,
+                          child: InputTextField(
+                            textEditingController: pixKeyController,
+                            title: "Chave Pix",
+                            fcolor: SecudaryColor,
+                            fill: true,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'A chave Pix é obrigatória.';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  InputLogin(
-                    inputTitle: 'Chave Pix',
-                    controller: pixKeyController,
-                    // onChanged: (value) async {
-                    //   if (value.isNotEmpty) {
-                    //     try {
-                    //       // Simula a chamada à API para obter dados da chave Pix
-                    //       var pixDetails = await _fetchPixDetails(value);
-                    //       pixRecipientName = pixDetails["name"];
-                    //       pixRecipientBank = pixDetails["bank"];
-
-                    //       // Atualiza a UI
-                    //       (context as Element).markNeedsBuild();
-                    //     } catch (e) {
-                    //       print("Erro ao buscar detalhes da chave Pix: $e");
-                    //       EasyLoading.showError(
-                    //           "Erro ao buscar detalhes da chave Pix.");
-                    //     }
-                    //   }
-                    // },
-                  ),
-                  // if (pixRecipientName != null && pixRecipientBank != null)
-                  //   Padding(
-                  //     padding: defaultPadding,
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         Text(
-                  //           "Nome do Destinatário: $pixRecipientName",
-                  //           style: TextStyle(color: Colors.black),
-                  //         ),
-                  //         Text(
-                  //           "Banco do Destinatário: $pixRecipientBank",
-                  //           style: TextStyle(color: Colors.black),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Padding(
                     padding: defaultPadding,
                     child: Tips(
@@ -190,69 +189,57 @@ class _WalletScreenState extends State<WalletScreen> {
                           "Sua solicitação de retirada passará por uma verificação e dentro de 3 dias o saldo estará na chave Pix adicionada!",
                     ),
                   ),
-                  Form(
-                    key: _formKey,
-                    child: Padding(
-                      padding: defaultPadding,
-                      child: GestureDetector(
-                        onTap: () async {
-                          print('TESTEEE ${valueExit.text}');
+                  Padding(
+                    padding: defaultPadding,
+                    child: GestureDetector(
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          String rawValue = valueExit.text
+                              .replaceAll('.', '')
+                              .replaceAll(',', '.');
 
-                          // Substituindo a vírgula por ponto antes de tentar a conversão
-                          String valueWithDot =
-                              valueExit.text.replaceAll(',', '.');
-
-                          // Tentando converter o valor com ponto
-                          double? exitValueDouble =
-                              double.tryParse(valueWithDot);
-
-                          print(exitValueDouble);
-                          print(currentBalanceDoublePrint);
+                          double? exitValueDouble = double.tryParse(rawValue);
 
                           if (exitValueDouble != null) {
                             if (currentBalanceDoublePrint > exitValueDouble) {
-                              if (_formKey.currentState!.validate()) {
-                                try {
-                                  bool success =
-                                      await _getExitBalanceVerifiqued(
-                                          value: exitValueDouble.toString(),
-                                          id: int.parse(id),
-                                          token: token.toString(),
-                                          bankkey: pixKeyController.text);
+                              try {
+                                bool success = await _getExitBalanceVerifiqued(
+                                  value: exitValueDouble.toString(),
+                                  id: int.parse(id),
+                                  token: token.toString(),
+                                  bankkey: pixKeyController.text,
+                                );
 
-                                  if (success) {
-                                    Navigator.of(Get.overlayContext!)
-                                        .pushReplacementNamed('/');
+                                if (success) {
+                                  Navigator.of(Get.overlayContext!)
+                                      .pushReplacementNamed('/');
 
-                                    EasyLoading.showSuccess(
-                                        "Retirada realizada com sucesso.");
-                                  } else {
-                                    EasyLoading.showError(
-                                        "Falha na transferência.");
-                                  }
-                                } catch (e) {
-                                  print("Erro na transferência: $e");
+                                  EasyLoading.showSuccess(
+                                      "Solicitação de retirada feita com sucesso! Aguarde algumas horas.");
+                                } else {
                                   EasyLoading.showError(
-                                      "Erro ao processar a retirada.");
+                                      "Falha na transferência.");
                                 }
+                              } catch (e) {
+                                print("Erro na transferência: $e");
+                                EasyLoading.showError(
+                                    "Erro ao processar a retirada.");
                               }
                             } else {
                               EasyLoading.showError("Saldo insuficiente.");
                             }
                           } else {
-                            print(
-                                "Valor inválido para conversão: ${valueExit.text}");
                             EasyLoading.showError("Valor inválido.");
                           }
-                        },
-                        child: DefaultButton(
-                          text: "Retirar",
-                          padding: defaultPadding,
-                          color: SeventhColor,
-                        ),
+                        }
+                      },
+                      child: DefaultButton(
+                        text: "Retirar",
+                        padding: defaultPadding,
+                        color: SeventhColor,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             );
@@ -468,59 +455,6 @@ class _WalletScreenState extends State<WalletScreen> {
                               padding: defaultPadding,
                               child: Column(
                                 children: [
-                                  // Padding(
-                                  //   padding: defaultPaddingVertical,
-                                  //   child: GestureDetector(
-                                  //     child: Row(
-                                  //       mainAxisAlignment:
-                                  //           MainAxisAlignment.spaceBetween,
-                                  //       children: [
-                                  //         SecundaryText(
-                                  //             text: "Entradas",
-                                  //             color: nightColor,
-                                  //             align: TextAlign.start),
-                                  //         Icon(Icons.arrow_right),
-                                  //       ],
-                                  //     ),
-                                  //     onTap: () {
-                                  //       Navigator.push(
-                                  //         context,
-                                  //         MaterialPageRoute(
-                                  //           builder: (context) =>
-                                  //               EnterBalancesScreen(
-                                  //             token: token,
-                                  //             id: id,
-                                  //           ),
-                                  //         ),
-                                  //       );
-                                  //     },
-                                  //   ),
-                                  // ),
-                                  // GestureDetector(
-                                  //   child: Row(
-                                  //     mainAxisAlignment:
-                                  //         MainAxisAlignment.spaceBetween,
-                                  //     children: [
-                                  //       SecundaryText(
-                                  //           text: "Saídas",
-                                  //           color: nightColor,
-                                  //           align: TextAlign.start),
-                                  //       Icon(Icons.arrow_right),
-                                  //     ],
-                                  //   ),
-                                  //   onTap: () {
-                                  //     Navigator.push(
-                                  //       context,
-                                  //       MaterialPageRoute(
-                                  //         builder: (context) =>
-                                  //             ExitBalancesScreem(
-                                  //           token: token,
-                                  //           id: id,
-                                  //         ),
-                                  //       ),
-                                  //     );
-                                  //   },
-                                  // ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -532,7 +466,6 @@ class _WalletScreenState extends State<WalletScreen> {
                                       SizedBox(
                                         width: 15,
                                       ),
-                                      // Interruptor (Switch) para alternar entre ativar e desativar
                                       Switch(
                                         value:
                                             _isActivated, // Valor do switch (true ou false)
@@ -580,6 +513,65 @@ class _WalletScreenState extends State<WalletScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class InputTextField extends StatelessWidget {
+  final TextEditingController textEditingController;
+  final String title;
+  final Color fcolor;
+  final bool fill;
+  final TextInputType? textInputType;
+  final List<TextInputFormatter>? inputFormatters;
+  final String? Function(String?)? validator; // Adicionando o parâmetro
+
+  InputTextField({
+    required this.textEditingController,
+    required this.title,
+    required this.fcolor,
+    required this.fill,
+    this.textInputType,
+    this.inputFormatters,
+    this.validator, // Aceitar validação
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: textEditingController,
+      decoration: InputDecoration(
+        labelText: title,
+        filled: fill,
+        fillColor: fcolor,
+      ),
+      keyboardType: textInputType,
+      inputFormatters: inputFormatters,
+      validator: validator, // Aplicar validação no TextFormField
+    );
+  }
+}
+
+class CurrencyInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.text.isEmpty) {
+      return newValue.copyWith(text: '');
+    }
+
+    // Remove caracteres indesejados
+    String numericString = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+
+    // Converte o valor para formato monetário
+    final formatter =
+        NumberFormat.currency(locale: 'pt_BR', symbol: '', decimalDigits: 2);
+    double numericValue = double.parse(numericString) / 100;
+    String formattedText = formatter.format(numericValue);
+
+    return TextEditingValue(
+      text: formattedText,
+      selection: TextSelection.collapsed(offset: formattedText.length),
     );
   }
 }
