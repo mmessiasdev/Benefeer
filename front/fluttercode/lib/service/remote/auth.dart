@@ -499,8 +499,6 @@ class RemoteAuthService {
     return listItens;
   }
 
-  //${url.toString()}/posts?title_contains=$query&chunk.id_eq=$chunkId
-
   Future<List<Profile>> getProfiles({required String? token}) async {
     List<Profile> listItens = [];
     var response = await client.get(
@@ -518,24 +516,4 @@ class RemoteAuthService {
     }
     return listItens;
   }
-
-  // Future<List<Posts>> getMyPosts(
-  //     {required String? token, required String? profileId}) async {
-  //   List<Posts> listItens = [];
-  //   var response = await client.get(
-  //     Uri.parse('${url.toString()}/profile/$profileId'),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "Authorization": "Bearer $token",
-  //       'ngrok-skip-browser-warning': "true"
-  //     },
-  //   );
-  //   var body = jsonDecode(response.body);
-  //   var itemCount = body["posts"];
-  //   print(body);
-  //   for (var i = 0; i < itemCount.length; i++) {
-  //     listItens.add(Posts.fromJson(itemCount[i]));
-  //   }
-  //   return listItens;
-  // }
 }
