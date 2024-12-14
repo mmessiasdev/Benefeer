@@ -273,11 +273,12 @@ class _PlanScreenState extends State<PlanScreen> {
                                                     return Padding(
                                                         padding: defaultPadding,
                                                         child: BankCard(
-                                                          cpf: renders.name
-                                                              .toString(),
-                                                          name: renders.benefits
+                                                          title: renders.name,
+                                                          subtitle: renders
+                                                              .benefits
                                                               .toString(),
                                                           logo: renders.urlLogo,
+                                                          name: "© Beneficio Benefeer",
                                                         ));
                                                   },
                                                 );

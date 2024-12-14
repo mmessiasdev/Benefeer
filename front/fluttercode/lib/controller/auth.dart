@@ -15,6 +15,7 @@ class AuthController extends GetxController {
   static AuthController instance = Get.find();
   Rxn<User> user = Rxn<User>();
   String? urlEnv = dotenv.env["BASEURL"];
+  String? MERCADOPAGOTOKEN = dotenv.env["MERCADOPAGOTOKEN"];
 
   @override
   void onInit() async {
@@ -203,8 +204,7 @@ class AuthController extends GetxController {
     final response = await http.post(
       url,
       headers: {
-        "Authorization":
-            "Bearer APP_USR-2869162016512406-102909-f6e7d456e301fbb93bc5fb67004f8e5b-1983614734",
+        "Authorization": "Bearer ${MERCADOPAGOTOKEN}",
         "X-Idempotency-Key": idempotencyKey,
       },
       body: jsonEncode({
@@ -241,8 +241,7 @@ class AuthController extends GetxController {
     final response = await http.get(
       url,
       headers: {
-        "Authorization":
-            "Bearer APP_USR-2869162016512406-102909-f6e7d456e301fbb93bc5fb67004f8e5b-1983614734",
+        "Authorization": "Bearer ${MERCADOPAGOTOKEN}",
       },
     );
 
@@ -280,7 +279,8 @@ class AuthController extends GetxController {
         profile: int.tryParse(profileId),
         local_store: int.tryParse(localStoreId),
       );
-      EasyLoading.showSuccess("Seu relato poster enviado.");
+      EasyLoading.showSuccess(
+          "Seu comprovante foi enviado e passará por uma verficação");
       Navigator.of(Get.overlayContext!).pushReplacementNamed('/');
 
       if (result.statusCode == 200) {
@@ -336,59 +336,6 @@ class AuthController extends GetxController {
       print("Erro: $e");
     }
   }
-
-  // void VerifiquedBuyLocalStore({
-  //   required int profileId,
-  //   required int localstoreId,
-  //   required String? fileName,
-  //   required List<int>? selectFile,
-  // }) async {
-  //   try {
-  //     EasyLoading.show(
-  //       status: 'Loading...',
-  //       dismissOnTap: false,
-  //     );
-  //     var token = await LocalAuthService().getSecureToken("token");
-  //     var result = await RemoteAuthService().addVerificationLocalStore(
-  //         profile: profileId, local_store: localstoreId, token: token);
-  //     EasyLoading.showSuccess("Seu comprovante foi enviado!");
-
-  //     if (result.statusCode == 200) {
-  //       int receiptId = json.decode(result.body)['id'];
-  //       print(receiptId);
-  //       var url = Uri.parse('$urlEnv/upload');
-  //       var request = http.MultipartRequest("POST", url);
-  //       request.files.add(await http.MultipartFile.fromBytes(
-  //         'files',
-  //         selectFile!,
-  //         contentType: MediaType('image', 'jpeg'),
-  //         filename: fileName ?? "Benefeer File",
-  //       ));
-
-  //       request.files.add(await http.MultipartFile.fromString("ref", "post"));
-  //       request.files
-  //           .add(await http.MultipartFile.fromString("refId", "${receiptId}"));
-
-  //       request.files
-  //           .add(await http.MultipartFile.fromString("field", "files"));
-
-  //       request.headers.addAll({"Authorization": "Bearer $token"});
-  //       request.send().then((response) {
-  //         if (response.statusCode == 200) {
-  //           print("FileUpload Successfuly");
-  //           Navigator.of(Get.overlayContext!).pushReplacementNamed('/');
-  //         } else {
-  //           print("FileUpload Error");
-  //         }
-  //       });
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //     EasyLoading.showError('Alguma coisa deu errado.');
-  //   } finally {
-  //     EasyLoading.dismiss();
-  //   }
-  // }
 
   void signOut() async {
     user.value = null;

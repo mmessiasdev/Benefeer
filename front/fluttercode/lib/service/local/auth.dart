@@ -60,17 +60,12 @@ class LocalAuthService {
   }
 }
 
-
-
-
-
 // import 'dart:convert';
 
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'dart:html' as html;
 
 // class LocalAuthService {
-
 //   bool _isWeb() {
 //     try {
 //       return identical(0, 0.0); // Verificação para Web

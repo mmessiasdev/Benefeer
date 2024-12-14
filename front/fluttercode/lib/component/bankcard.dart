@@ -11,14 +11,18 @@ class BankCard extends StatelessWidget {
       this.logo,
       this.urllogo,
       this.qrCode,
-      required this.name,
-      required this.cpf});
+      this.name,
+      this.title,
+      this.subtitle,
+      this.cpf});
 
   String? urllogo;
   String? qrCode;
-  String name;
-  String cpf;
+  String? name;
+  String? cpf;
   String? logo;
+  String? title;
+  String? subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +45,14 @@ class BankCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SubTextSized(
-                    text: "Benefeer",
+                    text: title == null ? "Benefeer" : title.toString(),
                     size: 30,
                     fontweight: FontWeight.w600,
                   ),
                   SubText(
-                    text: "Seu cartão de benefícios",
+                    text: subtitle == null
+                        ? "Seu cartão de benefícios"
+                        : subtitle.toString(),
                     align: TextAlign.start,
                     color: OffColor,
                   ),
@@ -57,11 +63,11 @@ class BankCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SubText(text: name, align: TextAlign.start),
+                      SubText(text: name ?? "", align: TextAlign.start),
                       SecundaryText(
                           maxl: 1,
                           over: TextOverflow.fade,
-                          text: cpf,
+                          text: cpf ?? "",
                           color: nightColor,
                           align: TextAlign.start),
                     ],

@@ -6,7 +6,7 @@ import 'package:Benefeer/component/widgets/header.dart';
 import 'package:Benefeer/view/store/local/verifiedscreen.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:google_ml_vision/google_ml_vision.dart';
+// import 'package:google_ml_vision/google_ml_vision.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class DocumentScannerScreen extends StatefulWidget {
@@ -69,24 +69,31 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
     // Captura a imagem da câmera
     final image = await _controller!.takePicture();
     final imagePath = image.path; // Salva o caminho da imagem
-    final visionImage = GoogleVisionImage.fromFilePath(imagePath);
-    final textRecognizer = GoogleVision.instance.textRecognizer();
+    // final visionImage = GoogleVisionImage.fromFilePath(imagePath);
+    // final textRecognizer = GoogleVision.instance.textRecognizer();
 
-    // Processa a imagem para detectar texto
-    final visionText = await textRecognizer.processImage(visionImage);
+    // // Processa a imagem para detectar texto
+    // final visionText = await textRecognizer.processImage(visionImage);
 
     // Verifica se algum texto foi detectado (simulando a detecção de um documento)
-    if (visionText.text?.isNotEmpty ?? false) {
-      // Navega para `VerifiedScreen` com o caminho da imagem
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => VerifiedScreen(
-              imagePath: imagePath, localstoreId: widget.localstoreId),
-        ),
-      );
-    } else {
-      print('Documento não identificado.');
-    }
+    // if (visionText.text?.isNotEmpty ?? false) {
+    //   // Navega para `VerifiedScreen` com o caminho da imagem
+    //   Navigator.of(context).pushReplacement(
+    //     MaterialPageRoute(
+    //       builder: (_) => VerifiedScreen(
+    //           imagePath: imagePath, localstoreId: widget.localstoreId),
+    //     ),
+    //   );
+    // } else {
+    //   print('Documento não identificado.');
+    // }
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => VerifiedScreen(
+            imagePath: imagePath, localstoreId: widget.localstoreId),
+      ),
+    );
 
     // Finaliza o processamento
     setState(() {
@@ -94,7 +101,7 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
     });
 
     // Libera o reconhecedor de texto
-    textRecognizer.close();
+    // textRecognizer.close();
   }
 
   @override

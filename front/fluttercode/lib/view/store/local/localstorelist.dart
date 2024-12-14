@@ -77,7 +77,7 @@ class _LocalStoreListScreenState extends State<LocalStoreListScreen> {
                               return ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                itemCount: 2,
+                                itemCount: snapshot.data!.length,
                                 itemBuilder: (context, index) {
                                   var renders = snapshot.data![index];
                                   // Verificação se o idPlan não é nulo

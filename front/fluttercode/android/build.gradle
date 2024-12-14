@@ -1,8 +1,14 @@
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
+buildscript {
+   ext.kotlin_version = '1.8.22' //latest version
+   repositories {
+      google()
+      mavenCentral()
+   }
+
+   dependencies {
+      classpath 'com.android.tools.build:gradle:7.1.2'
+      classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+   }
 }
 
 rootProject.buildDir = "../build"
