@@ -80,9 +80,9 @@ class BankCard extends StatelessWidget {
               )
             else
               Expanded(
-                  child: logo != null
-                      ? Image.network(logo.toString())
-                      : SizedBox()),
+                child:
+                    logo != null ? Image.network(logo.toString()) : SizedBox(),
+              ),
           ],
         ),
       ),
